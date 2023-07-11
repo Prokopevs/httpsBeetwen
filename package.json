@@ -1,0 +1,22 @@
+{
+  "name": "httpsbetween",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./src/App.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "crypto": "^1.0.1",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
+    "js-big-decimal": "^1.4.1",
+    "pg": "^8.11.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
