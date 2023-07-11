@@ -53,6 +53,8 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
                     console.log(`не смог найти ${coins[j].symbol} в exchangeInfo в бирже ${exchangeName}`)
                 }
                 coins[j].exchangeName = exchangeName
+
+                // Fee(full name)
             }
             console.log(`добавил exchangeName: ${exchangeName} и брейкнул цикл на `+ i +' итерации')
             break

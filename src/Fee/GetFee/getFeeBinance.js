@@ -6,10 +6,10 @@ const apiSecretBinance = process.env.APISECRETBINANCE
 console.log(apiKeyBinance)
 
 const getFeeBinance = async () => {
-    const result = await signRequest('GET', '/sapi/v1/margin/isolated/allPairs', {}, 'https://api.binance.com', 'X-MBX-APIKEY', apiKeyBinance, apiSecretBinance)
+    const result = await signRequest('GET', '/sapi/v1/capital/config/getall', {}, 'https://api.binance.com', 'X-MBX-APIKEY', apiKeyBinance, apiSecretBinance)
 
-    console.log(result)
-    return result
+    console.log(result.data)
+    return result.data
 }
 
 module.exports = { getFeeBinance };

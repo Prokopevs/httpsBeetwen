@@ -1,3 +1,4 @@
 let binanceFee = {feeData: []}
+let mexcFee = {feeData: []}
 
-module.exports = { binanceFee, }
+module.exports = { binanceFee, mexcFee}
