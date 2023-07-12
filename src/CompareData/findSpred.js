@@ -40,6 +40,11 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             hedging = true
         }
 
+        let nameChecked = false
+        if(coinBuy?.name === coinSell?.name) {
+            nameChecked = true
+        }
+
         const obj = {
             symbol: symbol,
             buyFrom: buyFrom,
@@ -47,6 +52,7 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             nickName: `${symbol}_${buyFrom}_${sellTo}`,
             spred: Number(spred.toFixed(3)),
             hedging, 
+            nameChecked,
             time: dateTime,
             count: 1
         }

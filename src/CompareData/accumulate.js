@@ -1,4 +1,5 @@
-let { oldMilkyArr, currentMilkyArr } = require('../Data')
+let { oldMilkyArr, currentMilkyArr, preBuyArr } = require('../Data')
+const { fetchOrderBook } = require('../OrderBook/fetchOrderBook')
 const { logEvents } = require('../middleware/logger')
 
 const accumulate = () => {
@@ -10,7 +11,9 @@ const accumulate = () => {
             currentMilkyArr.splice(index, 1)
 
             if(oldMilkyArr[i].count === 5) {
-                logEvents(JSON.stringify(oldMilkyArr[i]), 'coins.log')
+                preBuyArr.data.push(oldMilkyArr[i])
+                // logEvents(JSON.stringify(oldMilkyArr[i]), 'coins.log') перенести в куда то
+
                 oldMilkyArr.splice(i, 1)
                 i--
             }
@@ -22,6 +25,10 @@ const accumulate = () => {
     }
     oldMilkyArr = [...oldMilkyArr, ...currentMilkyArr]
     currentMilkyArr.splice(0, currentMilkyArr.length)
+
+    if(preBuyArr.data.length) {
+        fetchOrderBook()
+    }
 }
 
 

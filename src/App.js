@@ -4,6 +4,7 @@ const { fetchExtraInfo } = require('./ExtraInfo/fetchExtraInfo')
 const { collectAllCoins } = require('./PrepareData/AfterPrepareData/collectAllCoins')
 const { fetchAllMargins } = require('./Margin/fetchAllMargins')
 const { fetchAllFees } = require('./Fee/fetchAllFees')
+const { mergeAllFeesAndExchangeInfo } = require('./Utils/mergeAllFeesAndExchangeInfo')
 
 
 // let time = 0
@@ -33,6 +34,7 @@ const starter = async() => {
     await fetchExtraInfo()
     await fetchAllMargins()
     await fetchAllFees()
+    mergeAllFeesAndExchangeInfo()
 
     setInterval(() => Stream(), 2000);
 }

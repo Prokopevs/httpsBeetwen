@@ -11,7 +11,6 @@ const fetchAllFees = async() => {
     ]).then(results => { 
         binanceFee.feeData = results[0]
         mexcFee.feeData = results[1]
-
     }) 
 }
 
