@@ -23,8 +23,8 @@ const findSpred = (allCoins, mainData) => {
             }
         }
     }
-    console.log(currentMilkyArr)
-    console.log('--------------')
+    // console.log(currentMilkyArr)
+    // console.log('--------------')
     accumulate()
 }
 

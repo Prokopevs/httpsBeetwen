@@ -1,39 +1,48 @@
-const { preBuyArr } = require("../Data")
+const { compareAsksAndBids } = require("./compareAsksAndBids")
 
-const urlsArr = []
 
-const fetchOrderBook = () => {
+const fetchOrderBook = (preBuyArr) => {
+    const urlsArr = []
+    const requestedCoinsArr = []
     const binanceFetch = 'https://api.binance.com/api/v3/depth?symbol='
     const mexcFetch = 'https://api.mexc.com/api/v3/depth?symbol='
 
-    for(let i=0; i<preBuyArr.data.length; i++) {
-        const coinObj = preBuyArr.data[i]
+    let count = 0
 
-        if(i==6) break
-        if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol) // обязательно с начала buyFrom
-        if(coinObj.buyFrom === 'mexc') createUrl(mexcFetch, coinObj.symbol)
+    for(let i=0; i<preBuyArr.length; i++) {
+        const coinObj = preBuyArr[i]
 
-        if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol)
-        if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol)
+        if(count == 4) {
+            console.log('break')
+            break
+        }
+        if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, urlsArr) // обязательно с начала buyFrom
+        if(coinObj.buyFrom === 'mexc') createUrl(mexcFetch, coinObj.symbol, urlsArr)
 
-        preBuyArr.data.splice(i, 1)
+        if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, urlsArr)
+        if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol, urlsArr)
+
+        requestedCoinsArr.push(coinObj)
+        preBuyArr.splice(i, 1)
         i--
+
+        count++
     }
-    console.log(urlsArr)
 
     let requests = urlsArr.map((url) => fetch(url).then((response) => response.json()))
 
     Promise.all(requests)
         .then(results => { 
-            results.forEach((result, num) => {
-                console.log(result)
-            })
-
+            compareAsksAndBids(results, requestedCoinsArr)
+            console.log(results.length, requestedCoinsArr.length)
         }) 
-
+    
+    if(preBuyArr.length) {
+        setTimeout(fetchOrderBook, 1100, preBuyArr)
+    }
 }
 
-const createUrl = (url, symbol) => {
+const createUrl = (url, symbol, urlsArr) => {
     const finalUrl = url+symbol+'&limit=40'
     urlsArr.push(finalUrl)
 } 

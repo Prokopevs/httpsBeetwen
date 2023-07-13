@@ -9,6 +9,4 @@ let mainData = {data: []}
 let oldMilkyArr = []
 let currentMilkyArr = []
 
-let preBuyArr = {data: []}
-
-module.exports = { urlsArr, oldMilkyArr, currentMilkyArr, allCoins, mainData, preBuyArr}
+module.exports = { urlsArr, oldMilkyArr, currentMilkyArr, allCoins, mainData }
