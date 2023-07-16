@@ -47,6 +47,8 @@ const checkPercent = (spred, coinBuy, coinSell) => {
 
         const obj = {
             symbol: symbol,
+            baseAsset: coinBuy.baseAsset,
+            quoteAsset: coinBuy.quoteAsset,
             buyFrom: buyFrom,
             sellTo: sellTo,
             nickName: `${symbol}_${buyFrom}_${sellTo}`,

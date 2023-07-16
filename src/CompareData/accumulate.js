@@ -13,7 +13,6 @@ const accumulate = () => {
 
             if(oldMilkyArr[i].count === 4) {
                 preBuyArr.push(oldMilkyArr[i])
-                // logEvents(JSON.stringify(oldMilkyArr[i]), 'coins.log') перенести в куда то
 
                 oldMilkyArr.splice(i, 1)
                 i--

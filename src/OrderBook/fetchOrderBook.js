@@ -13,7 +13,6 @@ const fetchOrderBook = (preBuyArr) => {
         const coinObj = preBuyArr[i]
 
         if(count == 4) {
-            console.log('break')
             break
         }
         if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, urlsArr) // обязательно с начала buyFrom
