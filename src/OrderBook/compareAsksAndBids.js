@@ -1,5 +1,6 @@
 const { isWithdrawEnable } = require("../Fee/isWithdrawEnable")
 const { logEvents } = require("../middleware/logger")
+let { spotFee } = require('./orderBookData')
 
 const compareAsksAndBids = (orders, requestedCoinsArr) => {
     let count = 0
@@ -93,15 +94,32 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             sumUSDTInSellEXchange = buyArr[buyArr.length-1].left * buyArr[buyArr.length-1].priceInAskArr + sumUSDT
         }
 
-        //--------------------------------------------------------//
+        //---------------------BlackList-------------------------//
         if(generalUSDTSpred < 0.0001) {            // также добавить в черный список на время
             continue
         }
-        //--------------------------------------------------------//
-        isWithdrawEnable(requestedCoinsArr[count])
+
+        //------------------------Fee----------------------------//
+        const transferInfo = isWithdrawEnable(requestedCoinsArr[count])
+
+        let commissionForWithdraw = 0
+        if(transferInfo?.betweenExchange) { // перевод через последника
+            commissionForWithdraw = Number(transferInfo.firstTransferArr.fee) + Number(transferInfo.secondTransferArr.fee)
+        } else if(transferInfo?.allNetworks) { // перевод без последника
+            commissionForWithdraw = Number(transferInfo.firstTransferArr.fee)
+        }
+
+        const sumQtyLength = getLength(sumQty)
+        const buyExchangeName = requestedCoinsArr[count].buyFrom
+        const feeForSpotInBuyExchange = sumQty*spotFee[buyExchangeName]/100
+        const sumQtyWithFeeForBuy = sumQty - feeForSpotInBuyExchange          // количество монет после отнятия комммисии за покупку(0.1%)
+
+        const sumQtyAfterTransfer = sumQtyWithFeeForBuy - commissionForWithdraw // количество монет после отправки
 
 
-        //--------------------------------------------------------//
+
+        // const sellExchangeName = requestedCoinsArr[count].sellTo
+        //---------------------StablePrices-----------------------//
         const arrSums = [50, 100, 150, 200, 250]
         const sumObj = {}
         for(let i=0; i<arrSums.length; i++) {
@@ -124,8 +142,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
                 sumObj[arrSums[i]] = Number(profit.toFixed(3))
             } 
         }
-        //--------------------------------------------------------//
-
+        //-----------------------Log-----------------------------//
         const priceLengthInBuyExchange = getLength(buyArr[0].priceInAskArr)
         const priceLengthInSellExchange = getLength(buyArr[0].priceInBidsArr)
 
@@ -136,30 +153,18 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         currentObj.avgPriceInBuyEx = avarageBuyPrice.toFixed(priceLengthInBuyExchange)
         currentObj.pricesInBuyEx = '['+buyArr[0].priceInAskArr+'-'+buyArr[buyArr.length-1].priceInAskArr+']'
         currentObj.maxDealInBuyEx = sumUSDT.toFixed(3) + '$'
-        currentObj.valueInBuyEx = sumQty
+        currentObj.valueInBuyEx = Number(sumQtyWithFeeForBuy.toFixed(sumQtyLength))
         currentObj.ordersInBuyEx = askCount
 
         currentObj.avgPriceInSellEx = avarageSellPrice.toFixed(priceLengthInSellExchange)
         currentObj.pricesInSellEx = '['+buyArr[0].priceInBidsArr+'-'+buyArr[buyArr.length-1].priceInBidsArr+']'
         currentObj.maxDealInSellEx = sumUSDTInSellEXchange.toFixed(3) + '$'
-        currentObj.valueInSellEx = sumQty
+        currentObj.valueInSellEx = Number(sumQtyAfterTransfer.toFixed(sumQtyLength))
         currentObj.ordersInSellEx = bidsCount
 
         currentObj.stablePrices = sumObj
-        // console.log(requestedCoinsArr[count])
+        console.log(requestedCoinsArr[count])
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
-
-
-        // console.log('+'+(generalUSDTSpred).toFixed(4)+'$'+'('+avaragePercent.toFixed(4)+'%'+')')
-        // console.log('BuyFrom: '+requestedCoinsArr[count].buyFrom)
-        // console.log('price: '+avarageBuyPrice+" ["+buyArr[0].priceInAskArr+'-'+buyArr[buyArr.length-1].priceInAskArr+']')
-        // console.log('value: '+(sumUSDT).toFixed(4)+'$'+', '+askCount+ ' orders')
-        // console.log(' ')
-        // console.log('SellTo: '+requestedCoinsArr[count].sellTo)
-        // console.log('price: '+avarageSellPrice+" ["+buyArr[0].priceInBidsArr+'-'+buyArr[buyArr.length-1].priceInBidsArr+']')
-        // console.log('value: '+(sumUSDTInSellEXchange).toFixed(4)+'$'+', '+bidsCount+ ' orders')
-        // console.log(sumObj)
-        // console.log('-----------------------------------')
 
         count++
     }
