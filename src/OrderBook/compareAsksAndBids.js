@@ -8,6 +8,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
     for(let i=0; i<orders.length; i+=2) {
         const asks = orders[i].asks
         const bids = orders[i+1].bids
+        const asksInSellArrForFee = orders[i+1].asks
 
         const buyArr = []
         let askCount = 0
@@ -84,7 +85,6 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         
         const avarageBuyPrice = (sumUSDT/sumQty)
         const avarageSellPrice = (sumSellUSDT/sumQty)
-        let avaragePercent = generalUSDTSpred*100/sumUSDT
 
         if(buyArr[buyArr.length-1].left == 0) {
             askCount = askCount+1
@@ -95,7 +95,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         //---------------------BlackList-------------------------//
-        if(generalUSDTSpred < 0.0001) {            // также добавить в черный список на время
+        if(generalUSDTSpred < 1) {            // также добавить в черный список на время
             continue
         }
 
@@ -110,21 +110,34 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         const sumQtyLength = getLength(sumQty)
-        const buyExchangeName = requestedCoinsArr[count].buyFrom
-        const feeForSpotInBuyExchange = sumQty*spotFee[buyExchangeName]/100
+        const buyExchangeName = requestedCoinsArr[count].buyFrom              // 'mexc'
+        const feeForSpotInBuyExchange = sumQty*spotFee[buyExchangeName]/100   // коммисия 0.1% за покупку
         const sumQtyWithFeeForBuy = sumQty - feeForSpotInBuyExchange          // количество монет после отнятия комммисии за покупку(0.1%)
 
         const sumQtyAfterTransfer = sumQtyWithFeeForBuy - commissionForWithdraw // количество монет после отправки
+        const sellExchangeName = requestedCoinsArr[count].sellTo                // 'binance'
+        const feeForSpotInSellExchange = sumQtyAfterTransfer*spotFee[sellExchangeName]/100 // комиссия 0.1% за продажу
 
+        const feeForSpotInBuyExchangeUSDT = feeForSpotInBuyExchange * Number(asks[0][0])
+        const feeForWithdrawUSDT = commissionForWithdraw * Number(asks[0][0])
+        const feeForSpotInSellExchangeUSDT = feeForSpotInSellExchange * Number(asksInSellArrForFee[0][0]) 
+        const totalFeeSpotUSDT = feeForSpotInBuyExchangeUSDT+feeForSpotInSellExchangeUSDT // объщая комиссия за спот ордера (0.1+0.1)
+        const totalFee = totalFeeSpotUSDT+feeForWithdrawUSDT //общая комиссия за все действия
 
+        generalUSDTSpred = generalUSDTSpred-totalFee        // вычитаем из зароботка комиссию
+        let avaragePercent = generalUSDTSpred*100/sumUSDT
 
-        // const sellExchangeName = requestedCoinsArr[count].sellTo
+    
+
         //---------------------StablePrices-----------------------//
         const arrSums = [50, 100, 150, 200, 250]
         const sumObj = {}
         for(let i=0; i<arrSums.length; i++) {
             let dollars = arrSums[i] // 50
             let profit = 0
+            const feeInBuyEx = arrSums[i]*spotFee[buyExchangeName]/100
+            const feeInSellEx = (arrSums[i]-feeInBuyEx)*spotFee[sellExchangeName]/100
+            const generalFeeStable = feeInBuyEx+feeInSellEx+feeForWithdrawUSDT
             
             for(let j=0; j<buyArr.length; j++) {
                 let sum = Number(buyArr[j].sum)
@@ -138,8 +151,11 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
                     profit += sum*buyArr[j].spred/100
                 }
             }
-            if(dollars == 0){
-                sumObj[arrSums[i]] = Number(profit.toFixed(3))
+            if(dollars == 0) {
+                const realProfit = profit-generalFeeStable
+                if(realProfit>0.01) {    // изменить на нормаьное число
+                    sumObj[arrSums[i]] = Number(realProfit.toFixed(3))
+                }
             } 
         }
         //-----------------------Log-----------------------------//
@@ -162,7 +178,11 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         currentObj.valueInSellEx = Number(sumQtyAfterTransfer.toFixed(sumQtyLength))
         currentObj.ordersInSellEx = bidsCount
 
+        currentObj.totalFeeSpot = totalFeeSpotUSDT
+        currentObj.feeWithdraw = feeForWithdrawUSDT
+
         currentObj.stablePrices = sumObj
+        currentObj.withdrawInfo = transferInfo
         console.log(requestedCoinsArr[count])
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
 

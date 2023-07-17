@@ -13,7 +13,7 @@ const mergeSingleFeeAndExchangeInfo = (ExchangeInfo, Fee) => {
     for(let i=0; i<ExchangeInfo.length; i++) {
         let elemFee = Fee.find((elem) => elem.coin == ExchangeInfo[i].baseAsset)
         if(elemFee !== undefined) {
-            ExchangeInfo[i].name = elemFee.name
+            ExchangeInfo[i].name = elemFee.name.toLowerCase()
 
             // if(ExchangeInfo[i].symbol == 'ETHUSDT') {
             //     console.log(ExchangeInfo[i])

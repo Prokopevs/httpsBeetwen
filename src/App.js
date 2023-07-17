@@ -36,6 +36,7 @@ const starter = async() => {
     mergeAllFeesAndExchangeInfo()
 
     setInterval(() => Stream(), 2000);
+    setInterval(() => fetchAllFees(), 120000);
 }
 
 starter()
