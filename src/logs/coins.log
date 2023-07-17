@@ -60,3 +60,9 @@
 
 {"symbol":"ACAUSDT","baseAsset":"ACA","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"ACAUSDT_mexc_binance","spred":0.573,"hedging":false,"nameChecked":true,"time":"20:41:44","count":1}
 
+{"symbol":"DUSKUSDT","baseAsset":"DUSK","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"DUSKUSDT_mexc_binance","spred":0.206,"hedging":true,"nameChecked":false,"time":"23:10:29","count":1}
+
+{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"USTCUSDT_mexc_binance","spred":0.257,"hedging":true,"nameChecked":false,"time":"23:15:12","count":2}
+
+{"symbol":"SPELLUSDT","baseAsset":"SPELL","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"SPELLUSDT_binance_mexc","spred":0.47,"hedging":false,"nameChecked":true,"time":"23:52:28","count":3}
+

@@ -4,7 +4,6 @@ let { spotFee } = require('./orderBookData')
 
 const compareAsksAndBids = (orders, requestedCoinsArr) => {
     let count = 0
-
     for(let i=0; i<orders.length; i+=2) {
         const asks = orders[i].asks
         const bids = orders[i+1].bids
@@ -96,9 +95,12 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
 
         //---------------------BlackList-------------------------//
         if(generalUSDTSpred < 1) {            // также добавить в черный список на время
+            console.log('не прошёл '+ requestedCoinsArr[count].symbol)
+            count++
             continue
         }
 
+        console.log('прошёл '+ requestedCoinsArr[count].symbol)
         //------------------------Fee----------------------------//
         const transferInfo = isWithdrawEnable(requestedCoinsArr[count])
 
@@ -124,6 +126,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         const totalFeeSpotUSDT = feeForSpotInBuyExchangeUSDT+feeForSpotInSellExchangeUSDT // объщая комиссия за спот ордера (0.1+0.1)
         const totalFee = totalFeeSpotUSDT+feeForWithdrawUSDT //общая комиссия за все действия
 
+        const generalUSDTSpredWithoutFee = generalUSDTSpred
         generalUSDTSpred = generalUSDTSpred-totalFee        // вычитаем из зароботка комиссию
         let avaragePercent = generalUSDTSpred*100/sumUSDT
 
