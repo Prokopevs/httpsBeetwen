@@ -30,7 +30,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
 
                 const spred = priceInBidsArr*100/priceInAskArr-100
 
-                if(spred >= 0.2) {
+                if(spred >= 0.4) {
                     // случай 1
                     if(qtyInAskArr < qtyInBidsArr) {
                         const left = qtyInBidsArr-qtyInAskArr
@@ -81,10 +81,18 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
                 }
             }
         }
+
+        //---------------------BlackList-------------------------//
+        if(generalUSDTSpred < 1) {            // также добавить в черный список на время
+            console.log('не прошёл '+ requestedCoinsArr[count].symbol)
+            count++
+            continue
+        }
+        console.log('прошёл '+ requestedCoinsArr[count].symbol)
+
         
         const avarageBuyPrice = (sumUSDT/sumQty)
         const avarageSellPrice = (sumSellUSDT/sumQty)
-
         if(buyArr[buyArr.length-1].left == 0) {
             askCount = askCount+1
             sumUSDTInSellEXchange = sumUSDT
@@ -93,14 +101,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             sumUSDTInSellEXchange = buyArr[buyArr.length-1].left * buyArr[buyArr.length-1].priceInAskArr + sumUSDT
         }
 
-        //---------------------BlackList-------------------------//
-        if(generalUSDTSpred < 1) {            // также добавить в черный список на время
-            console.log('не прошёл '+ requestedCoinsArr[count].symbol)
-            count++
-            continue
-        }
 
-        console.log('прошёл '+ requestedCoinsArr[count].symbol)
         //------------------------Fee----------------------------//
         const transferInfo = isWithdrawEnable(requestedCoinsArr[count])
 
@@ -126,7 +127,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         const totalFeeSpotUSDT = feeForSpotInBuyExchangeUSDT+feeForSpotInSellExchangeUSDT // объщая комиссия за спот ордера (0.1+0.1)
         const totalFee = totalFeeSpotUSDT+feeForWithdrawUSDT //общая комиссия за все действия
 
-        const generalUSDTSpredWithoutFee = generalUSDTSpred
+        const generalUSDTSpredWithoutWithdrawFee = generalUSDTSpred - feeForSpotInBuyExchangeUSDT - (feeForSpotInBuyExchange* Number(asksInSellArrForFee[0][0])) // прибыль если не выводить монеты, а отдавать только за спот 0.1%
         generalUSDTSpred = generalUSDTSpred-totalFee        // вычитаем из зароботка комиссию
         let avaragePercent = generalUSDTSpred*100/sumUSDT
 
@@ -183,6 +184,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
 
         currentObj.totalFeeSpot = totalFeeSpotUSDT
         currentObj.feeWithdraw = feeForWithdrawUSDT
+        currentObj.profitInUSDTIfNotWithdraw = generalUSDTSpredWithoutWithdrawFee
 
         currentObj.stablePrices = sumObj
         currentObj.withdrawInfo = transferInfo

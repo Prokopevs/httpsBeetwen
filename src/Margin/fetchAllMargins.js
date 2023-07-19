@@ -9,7 +9,6 @@ const fetchAllMargins = async() => {
 
     ]).then(results => { 
         binanceMargin.marginData = results[0]
-
     }) 
 }
 

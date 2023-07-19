@@ -1,17 +1,14 @@
-let { urlArray } = require('./ExchangeData')
-let { binanceExchangeInfo, mexcExchangeInfo } = require('./ExchangeData')
+const { getExchangeInfoBinance } = require('./GetExchangeInfo/getExchangeInfoBinance')
+const { getExchangeInfoBybit } = require('./GetExchangeInfo/getExchangeInfoBybit')
+const { getExchangeInfoMexc } = require('./GetExchangeInfo/getExchangeInfoMexc')
 
 const fetchExtraInfo = async() => {
     console.log('запрос на ExchangeInfo...')
-    let requests = urlArray.map((url) => fetch(url).then((response) => response.json()))
-    await Promise.all(requests)
-        .then(results => { 
-            results.forEach((result, num) => {
-                const data = result.symbols
-                if(num === 0) binanceExchangeInfo.exchangeData = [...data]
-                if(num === 1) mexcExchangeInfo.exchangeData = [...data]
-            })
-        })
+    await Promise.all([
+        getExchangeInfoBinance(),
+        getExchangeInfoMexc(),
+        getExchangeInfoBybit()
+    ])
 }
 
 module.exports = { fetchExtraInfo };

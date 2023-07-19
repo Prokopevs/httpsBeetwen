@@ -66,3 +66,7 @@
 
 {"symbol":"SPELLUSDT","baseAsset":"SPELL","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"SPELLUSDT_binance_mexc","spred":0.47,"hedging":false,"nameChecked":true,"time":"23:52:28","count":3}
 
+{"symbol":"FIDAUSDT","baseAsset":"FIDA","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"FIDAUSDT_mexc_binance","spred":0.256,"hedging":true,"nameChecked":true,"time":"17:35:58","count":1}
+
+{"symbol":"ORNUSDT","baseAsset":"ORN","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"ORNUSDT_mexc_binance","spred":0.245,"hedging":true,"nameChecked":true,"time":"00:29:32","count":1}
+

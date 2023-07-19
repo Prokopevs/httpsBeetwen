@@ -1,4 +1,5 @@
 let { binanceExchangeInfo } = require('../ExchangeData')
+const axios = require("axios")
 
 const getExchangeInfoBinance = async () => {
     const response = await axios.get('https://api.binance.com/api/v3/exchangeInfo')

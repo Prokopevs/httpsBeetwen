@@ -15,7 +15,7 @@ const mergeSingleFeeAndExchangeInfo = (ExchangeInfo, Fee) => {
         if(elemFee !== undefined) {
             ExchangeInfo[i].name = elemFee.name.toLowerCase()
 
-            // if(ExchangeInfo[i].symbol == 'ETHUSDT') {
+            // if(ExchangeInfo[i].symbol == 'USTCUSDT') {
             //     console.log(ExchangeInfo[i])
             //     console.log(elemFee)
             // }
