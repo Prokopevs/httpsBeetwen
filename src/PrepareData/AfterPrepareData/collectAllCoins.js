@@ -1,11 +1,11 @@
 let { createMainArr } = require('./createMainArr')
 const { findSpred } = require('../../CompareData/findSpred')
-let { flag, binanceArr, mexcArr } = require('../ExchangesArray')
+let { flag, binanceArr, mexcArr, bybitArr } = require('../ExchangesArray')
 let { allCoins, mainData } = require('../../Data')
 
 // склеивает allCoins и создаёт mainData
 const collectAllCoins = () => {
-    allCoins.data = [...binanceArr.data, ...mexcArr.data]
+    allCoins.data = [...binanceArr.data, ...mexcArr.data, ...bybitArr.data]
     if (flag.value === 1) {
         mainData.data = []
         createMainArr(allCoins.data, mainData.data)

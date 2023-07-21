@@ -3,11 +3,10 @@ const { logEvents } = require("../middleware/logger")
 let { spotFee } = require('./orderBookData')
 
 const compareAsksAndBids = (orders, requestedCoinsArr) => {
-    let count = 0
-    for(let i=0; i<orders.length; i+=2) {
-        const asks = orders[i].asks
-        const bids = orders[i+1].bids
-        const asksInSellArrForFee = orders[i+1].asks
+    for(let i=0; i<orders.length; i++) {
+        const asks = orders[i][0].asks
+        const bids = orders[i][1].bids
+        const asksInSellArrForFee = orders[i][1].asks
 
         const buyArr = []
         let askCount = 0
@@ -83,14 +82,13 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         //---------------------BlackList-------------------------//
-        if(generalUSDTSpred < 1) {            // также добавить в черный список на время
-            console.log('не прошёл '+ requestedCoinsArr[count].symbol)
-            count++
+        if(generalUSDTSpred < 0.9) {            // также добавить в черный список на время
+            console.log(generalUSDTSpred.toFixed(2) + ' не прошёл '+ requestedCoinsArr[i].symbol)
             continue
         }
-        console.log('прошёл '+ requestedCoinsArr[count].symbol)
+        console.log('прошёл '+ requestedCoinsArr[i].symbol)
 
-        
+
         const avarageBuyPrice = (sumUSDT/sumQty)
         const avarageSellPrice = (sumSellUSDT/sumQty)
         if(buyArr[buyArr.length-1].left == 0) {
@@ -103,7 +101,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
 
 
         //------------------------Fee----------------------------//
-        const transferInfo = isWithdrawEnable(requestedCoinsArr[count])
+        const transferInfo = isWithdrawEnable(requestedCoinsArr[i])
 
         let commissionForWithdraw = 0
         if(transferInfo?.betweenExchange) { // перевод через последника
@@ -113,12 +111,12 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         const sumQtyLength = getLength(sumQty)
-        const buyExchangeName = requestedCoinsArr[count].buyFrom              // 'mexc'
+        const buyExchangeName = requestedCoinsArr[i].buyFrom              // 'mexc'
         const feeForSpotInBuyExchange = sumQty*spotFee[buyExchangeName]/100   // коммисия 0.1% за покупку
         const sumQtyWithFeeForBuy = sumQty - feeForSpotInBuyExchange          // количество монет после отнятия комммисии за покупку(0.1%)
 
         const sumQtyAfterTransfer = sumQtyWithFeeForBuy - commissionForWithdraw // количество монет после отправки
-        const sellExchangeName = requestedCoinsArr[count].sellTo                // 'binance'
+        const sellExchangeName = requestedCoinsArr[i].sellTo                // 'binance'
         const feeForSpotInSellExchange = sumQtyAfterTransfer*spotFee[sellExchangeName]/100 // комиссия 0.1% за продажу
 
         const feeForSpotInBuyExchangeUSDT = feeForSpotInBuyExchange * Number(asks[0][0])
@@ -166,7 +164,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         const priceLengthInBuyExchange = getLength(buyArr[0].priceInAskArr)
         const priceLengthInSellExchange = getLength(buyArr[0].priceInBidsArr)
 
-        let currentObj = requestedCoinsArr[count]
+        let currentObj = requestedCoinsArr[i]
         currentObj.profitInUSDT = generalUSDTSpred.toFixed(3) + '$'
         currentObj.realPercent = avaragePercent.toFixed(3) + '%'
 
@@ -188,10 +186,9 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
 
         currentObj.stablePrices = sumObj
         currentObj.withdrawInfo = transferInfo
-        console.log(requestedCoinsArr[count])
-        // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
+        console.log(requestedCoinsArr[i])
 
-        count++
+        // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
     }
 }
 

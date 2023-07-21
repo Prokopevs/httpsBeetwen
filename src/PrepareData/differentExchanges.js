@@ -1,6 +1,6 @@
-let { binanceArr, mexcArr } = require('./ExchangesArray')
+let { binanceArr, mexcArr, bybitArr } = require('./ExchangesArray')
 let { commonExchange } = require('./commonExchange')
-let { binanceExchangeInfo, mexcExchangeInfo } = require('../ExtraInfo/ExchangeData')
+let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo } = require('../ExtraInfo/ExchangeData')
 let { binanceMargin } = require('.././Margin/marginData')
 
 
@@ -12,4 +12,8 @@ const changeMexc = (coins) => {
     commonExchange(coins, mexcArr, 'mexc', mexcExchangeInfo.exchangeData, [])
 }
 
-module.exports = { changeBinance, changeMexc, }
+const changeBybit = (coins) => {
+    commonExchange(coins, bybitArr, 'bybit', bybitExchangeInfo.exchangeData, [])
+}
+
+module.exports = { changeBinance, changeMexc, changeBybit}

@@ -1,72 +1,36 @@
-{"symbol":"FUNUSDT","baseAsset":"FUN","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"FUNUSDT_binance_mexc","spred":0.535,"hedging":false,"nameChecked":false,"time":"20:47:32","count":4,"profitInUSDT":"0.169$","realPercent":"0.515%","avgPriceInBuyEx":"0.004863","pricesInBuyEx":"[0.004862-0.004866]","maxDealInBuyEx":"32.698$","valueInBuyEx":6723.95,"ordersInBuyEx":2,"avgPriceInSellEx":"0.004888","pricesInSellEx":"[0.004888-0.004888]","maxDealInSellEx":"32.698$","valueInSellEx":6723.95,"ordersInSellEx":1,"stablePrices":{}}
+{"symbol":"ORTUSDT","baseAsset":"ORT","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"ORTUSDT_bybit_mexc","spred":0.451,"hedging":false,"nameChecked":false,"time":"22:46:29","count":2}
 
-{"symbol":"MDXUSDT","baseAsset":"MDX","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"MDXUSDT_mexc_binance","spred":8.17,"hedging":true,"nameChecked":false,"time":"20:47:32","count":4,"profitInUSDT":"119.460$","realPercent":"1.052%","avgPriceInBuyEx":"0.07006","pricesInBuyEx":"[0.06573-0.07044]","maxDealInBuyEx":"11351.546$","valueInBuyEx":162022.47,"ordersInBuyEx":21,"avgPriceInSellEx":"0.0708","pricesInSellEx":"[0.0711-0.0706]","maxDealInSellEx":"13691.593$","valueInSellEx":162022.47,"ordersInSellEx":6,"stablePrices":{"50":3.679,"100":7.04,"150":10.122,"200":13.181,"250":16.241}}
+{"symbol":"STRMUSDT","baseAsset":"STRM","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"STRMUSDT_bybit_mexc","spred":0.298,"hedging":false,"nameChecked":false,"time":"22:46:29","count":2}
 
-{"symbol":"MULTIUSDT","baseAsset":"MULTI","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"MULTIUSDT_mexc_binance","spred":1.703,"hedging":false,"nameChecked":true,"time":"20:47:32","count":4,"profitInUSDT":"45.944$","realPercent":"1.417%","avgPriceInBuyEx":"2.061","pricesInBuyEx":"[2.054-2.079]","maxDealInBuyEx":"3242.692$","valueInBuyEx":1573.51,"ordersInBuyEx":4,"avgPriceInSellEx":"2.09","pricesInSellEx":"[2.09-2.09]","maxDealInSellEx":"4969.002$","valueInSellEx":1573.51,"ordersInSellEx":1,"stablePrices":{"50":0.852,"100":1.58,"150":2.308,"200":3.036,"250":3.764}}
+{"symbol":"VINUUSDT","baseAsset":"VINU","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"VINUUSDT_bybit_mexc","spred":0.24,"hedging":false,"nameChecked":false,"time":"22:46:29","count":2}
 
-{"symbol":"PROSUSDT","baseAsset":"PROS","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"PROSUSDT_mexc_binance","spred":0.856,"hedging":false,"nameChecked":true,"time":"20:47:32","count":4,"profitInUSDT":"0.327$","realPercent":"0.764%","avgPriceInBuyEx":"0.328","pricesInBuyEx":"[0.327-0.3286]","maxDealInBuyEx":"42.839$","valueInBuyEx":130.49,"ordersInBuyEx":2,"avgPriceInSellEx":"0.3308","pricesInSellEx":"[0.3308-0.3308]","maxDealInSellEx":"429.440$","valueInSellEx":130.49,"ordersInSellEx":1,"stablePrices":{}}
+{"symbol":"VINUUSDT","baseAsset":"VINU","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"VINUUSDT_bybit_mexc","spred":0.251,"hedging":false,"nameChecked":false,"time":"22:46:35","count":2}
 
-{"symbol":"FUNUSDT","baseAsset":"FUN","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"FUNUSDT_binance_mexc","spred":0.328,"hedging":false,"nameChecked":false,"time":"20:50:13","count":1}
+{"symbol":"PSPUSDT","baseAsset":"PSP","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"bybit","nickName":"PSPUSDT_mexc_bybit","spred":0.289,"hedging":false,"nameChecked":false,"time":"22:46:36","count":1}
 
-{"symbol":"MDXUSDT","baseAsset":"MDX","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"MDXUSDT_mexc_binance","spred":8.17,"hedging":true,"nameChecked":false,"time":"20:50:10","count":4,"profitInUSDT":"97.332$","realPercent":"1.070%","avgPriceInBuyEx":"0.07003","pricesInBuyEx":"[0.06573-0.07044]","maxDealInBuyEx":"9099.579$","valueInBuyEx":129945.40000000002,"ordersInBuyEx":20,"avgPriceInSellEx":"0.0708","pricesInSellEx":"[0.0711-0.0706]","maxDealInSellEx":"9099.579$","valueInSellEx":129945.40000000002,"ordersInSellEx":6,"stablePrices":{"50":3.679,"100":7.04,"150":10.077,"200":13.062,"250":16.047}}
+{"symbol":"RAINUSDT","baseAsset":"RAIN","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"bybit","nickName":"RAINUSDT_mexc_bybit","spred":1.006,"hedging":false,"nameChecked":false,"time":"22:46:36","count":2}
 
-{"symbol":"MULTIUSDT","baseAsset":"MULTI","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"MULTIUSDT_mexc_binance","spred":1.604,"hedging":false,"nameChecked":true,"time":"20:50:10","count":4,"profitInUSDT":"46.484$","realPercent":"1.431%","avgPriceInBuyEx":"2.061","pricesInBuyEx":"[2.058-2.083]","maxDealInBuyEx":"3247.544$","valueInBuyEx":1576.09,"ordersInBuyEx":5,"avgPriceInSellEx":"2.09","pricesInSellEx":"[2.09-2.09]","maxDealInSellEx":"7829.431$","valueInSellEx":1576.09,"ordersInSellEx":1,"stablePrices":{"50":0.751,"100":1.479,"150":2.207,"200":2.935,"250":3.664}}
+{"symbol":"3PUSDT","baseAsset":"3P","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"3PUSDT_bybit_mexc","spred":0.741,"hedging":false,"nameChecked":true,"time":"22:52:40","count":3}
 
-{"symbol":"DASHBTC","baseAsset":"DASH","quoteAsset":"BTC","buyFrom":"binance","sellTo":"mexc","nickName":"DASHBTC_binance_mexc","spred":0.268,"hedging":false,"nameChecked":false,"time":"20:50:11","count":3}
+{"symbol":"STRMUSDT","baseAsset":"STRM","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"STRMUSDT_bybit_mexc","spred":0.216,"hedging":false,"nameChecked":true,"time":"22:52:47","count":1}
 
-{"symbol":"FUNUSDT","baseAsset":"FUN","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"FUNUSDT_binance_mexc","spred":0.206,"hedging":false,"nameChecked":false,"time":"22:03:32","count":1}
+{"symbol":"3PUSDT","baseAsset":"3P","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"3PUSDT_bybit_mexc","spred":0.81,"hedging":false,"nameChecked":true,"time":"22:53:50","count":1}
 
-{"symbol":"FUNUSDT","baseAsset":"FUN","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"FUNUSDT_binance_mexc","spred":0.206,"hedging":false,"nameChecked":false,"time":"22:03:38","count":1}
+{"symbol":"SAITAMAUSDT","baseAsset":"SAITAMA","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"SAITAMAUSDT_bybit_mexc","spred":0.297,"hedging":false,"nameChecked":false,"time":"23:08:25","count":1}
 
-{"symbol":"FUNUSDT","baseAsset":"FUN","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"FUNUSDT_binance_mexc","spred":0.206,"hedging":false,"nameChecked":false,"time":"22:09:47","count":1}
+{"symbol":"EOSBTC","baseAsset":"EOS","quoteAsset":"BTC","buyFrom":"mexc","sellTo":"binance","nickName":"EOSBTC_mexc_binance","spred":0.266,"hedging":true,"nameChecked":true,"time":"23:08:29","count":1}
 
-{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"USTCUSDT_mexc_binance","spred":0.453,"hedging":true,"nameChecked":false,"time":"12:51:37","count":1}
+{"symbol":"FTTUSDT","baseAsset":"FTT","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"FTTUSDT_bybit_mexc","spred":0.207,"hedging":false,"nameChecked":true,"time":"23:08:32","count":1}
 
-{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"USTCUSDT_mexc_binance","spred":0.292,"hedging":true,"nameChecked":false,"time":"12:54:32","count":1}
+{"symbol":"STRMUSDT","baseAsset":"STRM","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"STRMUSDT_bybit_mexc","spred":0.448,"hedging":false,"nameChecked":true,"time":"23:16:22","count":1}
 
-{"symbol":"ONGUSDT","baseAsset":"ONG","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"ONGUSDT_mexc_binance","spred":0.225,"hedging":true,"nameChecked":true,"time":"13:08:39","count":1}
+{"symbol":"RAINUSDT","baseAsset":"RAIN","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"bybit","nickName":"RAINUSDT_mexc_bybit","spred":0.437,"hedging":false,"nameChecked":true,"time":"23:16:26","count":1}
 
-{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"USTCUSDT_binance_mexc","spred":0.239,"hedging":false,"nameChecked":false,"time":"18:55:23","count":1}
+{"symbol":"RAINUSDT","baseAsset":"RAIN","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"bybit","nickName":"RAINUSDT_mexc_bybit","spred":0.434,"hedging":false,"nameChecked":false,"time":"23:18:14","count":2}
 
-{"symbol":"AGLDUSDT","baseAsset":"AGLD","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"AGLDUSDT_mexc_binance","spred":0.244,"hedging":true,"nameChecked":true,"time":"19:01:02","count":1}
+{"symbol":"3PUSDT","baseAsset":"3P","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"3PUSDT_bybit_mexc","spred":1.192,"hedging":false,"nameChecked":true,"time":"23:54:35","count":1}
 
-{"symbol":"ONGUSDT","baseAsset":"ONG","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"ONGUSDT_mexc_binance","spred":0.212,"hedging":true,"nameChecked":true,"time":"19:07:31","count":2}
+{"symbol":"3PUSDT","baseAsset":"3P","quoteAsset":"USDT","buyFrom":"bybit","sellTo":"mexc","nickName":"3PUSDT_bybit_mexc","spred":0.958,"hedging":false,"nameChecked":true,"time":"23:55:55","count":2}
 
-{"symbol":"RAYUSDT","baseAsset":"RAY","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"RAYUSDT_mexc_binance","spred":0.213,"hedging":false,"nameChecked":true,"time":"19:09:24","count":1}
-
-{"symbol":"HIFIUSDT","baseAsset":"HIFI","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"HIFIUSDT_mexc_binance","spred":1.149,"hedging":true,"nameChecked":false,"time":"20:13:04","count":1}
-
-{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"USTCUSDT_binance_mexc","spred":0.202,"hedging":false,"nameChecked":false,"time":"20:41:12","count":1}
-
-{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"USTCUSDT_mexc_binance","spred":0.441,"hedging":true,"nameChecked":false,"time":"21:02:31","count":1}
-
-{"symbol":"PROSUSDT","baseAsset":"PROS","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"PROSUSDT_binance_mexc","spred":0.251,"hedging":false,"nameChecked":true,"time":"22:14:59","count":2}
-
-{"symbol":"SOLUSDT","baseAsset":"SOL","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"SOLUSDT_binance_mexc","spred":0.326,"hedging":false,"nameChecked":true,"time":"22:33:49","count":1}
-
-{"symbol":"CLVUSDT","baseAsset":"CLV","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"CLVUSDT_mexc_binance","spred":0.217,"hedging":true,"nameChecked":false,"time":"19:40:18","count":2}
-
-{"symbol":"REIUSDT","baseAsset":"REI","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"REIUSDT_mexc_binance","spred":0.218,"hedging":true,"nameChecked":true,"time":"20:21:17","count":1}
-
-{"symbol":"BETAUSDT","baseAsset":"BETA","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"BETAUSDT_binance_mexc","spred":0.213,"hedging":false,"nameChecked":false,"time":"20:21:19","count":1}
-
-{"symbol":"RDNTUSDT","baseAsset":"RDNT","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"RDNTUSDT_binance_mexc","spred":0.255,"hedging":false,"nameChecked":false,"time":"20:21:19","count":1}
-
-{"symbol":"MBOXUSDT","baseAsset":"MBOX","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"MBOXUSDT_binance_mexc","spred":0.346,"hedging":false,"nameChecked":false,"time":"20:25:50","count":1}
-
-{"symbol":"FORTHUSDT","baseAsset":"FORTH","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"FORTHUSDT_binance_mexc","spred":0.627,"hedging":false,"nameChecked":false,"time":"20:25:50","count":3}
-
-{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"USTCUSDT_mexc_binance","spred":0.214,"hedging":true,"nameChecked":false,"time":"20:41:39","count":1}
-
-{"symbol":"ACAUSDT","baseAsset":"ACA","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"ACAUSDT_mexc_binance","spred":0.573,"hedging":false,"nameChecked":true,"time":"20:41:44","count":1}
-
-{"symbol":"DUSKUSDT","baseAsset":"DUSK","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"DUSKUSDT_mexc_binance","spred":0.206,"hedging":true,"nameChecked":false,"time":"23:10:29","count":1}
-
-{"symbol":"USTCUSDT","baseAsset":"USTC","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"USTCUSDT_mexc_binance","spred":0.257,"hedging":true,"nameChecked":false,"time":"23:15:12","count":2}
-
-{"symbol":"SPELLUSDT","baseAsset":"SPELL","quoteAsset":"USDT","buyFrom":"binance","sellTo":"mexc","nickName":"SPELLUSDT_binance_mexc","spred":0.47,"hedging":false,"nameChecked":true,"time":"23:52:28","count":3}
-
-{"symbol":"FIDAUSDT","baseAsset":"FIDA","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"FIDAUSDT_mexc_binance","spred":0.256,"hedging":true,"nameChecked":true,"time":"17:35:58","count":1}
-
-{"symbol":"ORNUSDT","baseAsset":"ORN","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"ORNUSDT_mexc_binance","spred":0.245,"hedging":true,"nameChecked":true,"time":"00:29:32","count":1}
+{"symbol":"PROSUSDT","baseAsset":"PROS","quoteAsset":"USDT","buyFrom":"mexc","sellTo":"binance","nickName":"PROSUSDT_mexc_binance","spred":0.491,"hedging":false,"nameChecked":true,"time":"23:56:07","count":1}
 

@@ -1,5 +1,6 @@
 require('dotenv').config({path:__dirname+'/../../.env'})
 let { signRequest, publicRequest } = require('../universalMarginRequest')
+let { binanceMargin } = require('../marginData')
 
 const apiKeyBinance = process.env.APIKEYBINANCE
 const apiSecretBinance = process.env.APISECRETBINANCE
@@ -35,7 +36,7 @@ const getMarginBinance = async () => {
         }  
     })
 
-    return [...isolated, ...cross]
+    binanceMargin.marginData = [...isolated, ...cross]
 }
 
 module.exports = { getMarginBinance };

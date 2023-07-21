@@ -1,9 +1,10 @@
-const { binanceExchangeInfo, mexcExchangeInfo } = require('../../ExtraInfo/ExchangeData')
+const { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo } = require('../../ExtraInfo/ExchangeData')
 let { getExchangeInfoBinance } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBinance')
+const { getExchangeInfoBybit } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBybit')
 let { getExchangeInfoMexc } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoMexc')
 const { getFeeBinance } = require('../../Fee/GetFee/getFeeBinance')
 const { getFeeMexc } = require('../../Fee/GetFee/getFeeMexc')
-const { binanceFee, mexcFee } = require('../../Fee/feeData')
+const { binanceFee, mexcFee, fullNameFromCMCArr } = require('../../Fee/feeData')
 const { mergeSingleFeeAndExchangeInfo } = require('../../Utils/mergeAllFeesAndExchangeInfo')
 
 const fetchExchangeInfo = async (exchangeName) => {
@@ -12,11 +13,8 @@ const fetchExchangeInfo = async (exchangeName) => {
             getExchangeInfoBinance(),
             getFeeBinance(),
     
-        ]).then(results => { 
-            binanceExchangeInfo.exchangeData = results[0]
-            binanceFee.feeData = results[1]
-            mergeSingleFeeAndExchangeInfo(binanceExchangeInfo.exchangeData, binanceFee.feeData)
-
+        ]).then(() => { 
+            mergeSingleFeeAndExchangeInfo(binanceExchangeInfo.exchangeData, binanceFee.feeData, 'coin')
             return binanceExchangeInfo.exchangeData
         }) 
     }
@@ -26,12 +24,19 @@ const fetchExchangeInfo = async (exchangeName) => {
             getExchangeInfoMexc(),
             getFeeMexc(),
     
-        ]).then(results => { 
-            mexcExchangeInfo.exchangeData = results[0]
-            mexcFee.feeData = results[1]
-            mergeSingleFeeAndExchangeInfo(mexcExchangeInfo.exchangeData, mexcFee.feeData)
-
+        ]).then(() => { 
+            mergeSingleFeeAndExchangeInfo(mexcExchangeInfo.exchangeData, mexcFee.feeData, 'coin')
             return mexcExchangeInfo.exchangeData
+        }) 
+    }
+
+    if(exchangeName === 'bybit') {
+        await Promise.all([
+            getExchangeInfoBybit()
+    
+        ]).then(() => { 
+            mergeSingleFeeAndExchangeInfo(bybitExchangeInfo.exchangeData, fullNameFromCMCArr, 'symbol')
+            return bybitExchangeInfo.exchangeData
         }) 
     }
 }

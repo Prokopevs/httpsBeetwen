@@ -20,13 +20,16 @@ const getRequestInstance = (config) => {
 }
 
 const createRequest = (config) => {
-    const { baseURL, method, url, header, apiKey, proxy } = config
+    const { baseURL, method, url, apiKey, proxy, signature, timestamp } = config
     return getRequestInstance({
       baseURL,
       proxy,
       headers: {
         'Content-Type': 'application/json',
-        [header]: apiKey,
+        "X-BAPI-API-KEY": apiKey,
+        "X-BAPI-SIGN":signature,
+        "X-BAPI-TIMESTAMP":parseInt(timestamp),
+        "X-BAPI-RECV-WINDOW":7000
       }
     }).request({
       method,
@@ -34,9 +37,10 @@ const createRequest = (config) => {
     })
 }
 
-const signRequest = (method, path, params, baseURL, header, apiKey, apiSecret) => {
-    const timestamp = Date.now()
-    const queryString = buildQueryString({ ...params, timestamp })
+const bybitSignRequest = (method, path, params, baseURL, apiKey, apiSecret) => {
+    const timestamp = Date.now().toString()
+    const recvWindow = 7000;
+    const queryString = timestamp+apiKey+recvWindow.toString()
 
     let signature = crypto
         .createHmac('sha256', apiSecret)
@@ -46,29 +50,12 @@ const signRequest = (method, path, params, baseURL, header, apiKey, apiSecret) =
     return createRequest({
       baseURL,
       method,
-      url: `${path}?${queryString}&signature=${signature}`,
-      header,
+      url: `${path}`,
       apiKey: apiKey,
       proxy: false,
+      signature,
+      timestamp
     })
 }
 
-const publicRequest = (method, path, params, baseURL, header, apiKey ) => {
-    params = buildQueryString(params)
-    if (params !== '') {
-      path = `${path}?${params}`
-    }
-
-    return createRequest({
-        baseURL,
-        method,
-        url: path,
-        header,
-        apiKey: apiKey,
-        proxy: false,
-    })
-}
-
-module.exports = { signRequest, publicRequest };
-
-// 'X-MEXC-APIKEY': apiKey,
+module.exports = { bybitSignRequest };

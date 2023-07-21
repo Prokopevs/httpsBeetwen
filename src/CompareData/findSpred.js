@@ -1,4 +1,4 @@
-let { currentMilkyArr } = require('../Data')
+let { currentMilkyArr, superBlackArr } = require('../Data')
 let { accumulate } = require('./accumulate')
 const { format } = require('date-fns')
 
@@ -29,7 +29,7 @@ const findSpred = (allCoins, mainData) => {
 }
 
 const checkPercent = (spred, coinBuy, coinSell) => {
-    if(spred > 0.2) {
+    if(spred > 0.4) {
         const dateTime = format(new Date(), 'HH:mm:ss')
         const symbol = coinBuy.symbol
         const buyFrom = coinBuy.exchangeName
@@ -41,10 +41,12 @@ const checkPercent = (spred, coinBuy, coinSell) => {
         }
 
         let nameChecked = false
-        if(coinBuy?.name === coinSell?.name) {
-            nameChecked = true
+        if(coinBuy.name !== undefined) {
+            if(coinBuy.name === coinSell.name) {
+                nameChecked = true
+            }
         }
-
+        
         const obj = {
             symbol: symbol,
             baseAsset: coinBuy.baseAsset,
@@ -58,7 +60,10 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             time: dateTime,
             count: 1
         }
-        currentMilkyArr.push(obj)
+
+        if(!superBlackArr.includes(obj.nickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов
+            currentMilkyArr.push(obj)
+        }
     }
 }
 
