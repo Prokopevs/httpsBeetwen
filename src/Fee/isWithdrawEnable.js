@@ -28,7 +28,7 @@ const isWithdrawEnable = (obj) => {
     if((withdrawNetworkList?.length && depositNetworkList?.length)) { // если нашли в биржах хоть какие либо networks(Важная проверка)
         NetworkArrAndFee = findChain(withdrawNetworkList, depositNetworkList, wordsInExchangeBuyArr, wordsInExchangeSellArr, obj.buyFrom, obj.sellTo) // может вернуться пустой массив если нет одикаковых networks
     } else {
-        console.log('не смог найти монету '+coinName+' в биржах '+obj.buyFrom+' '+obj.sellTo)
+        console.log('не смог найти вывод или ввод монеты '+coinName+' в одной из бирж '+obj.buyFrom+' '+obj.sellTo)
         return {}
     }  // далее на 91 строчку
 

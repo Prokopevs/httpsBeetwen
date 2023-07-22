@@ -1,4 +1,4 @@
-let { currentMilkyArr, superBlackArr } = require('../Data')
+let { currentMilkyArr, superBlackArr, temporary5minBlackArr } = require('../Data')
 let { accumulate } = require('./accumulate')
 const { format } = require('date-fns')
 
@@ -23,8 +23,6 @@ const findSpred = (allCoins, mainData) => {
             }
         }
     }
-    // console.log(currentMilkyArr)
-    // console.log('--------------')
     accumulate()
 }
 
@@ -34,6 +32,7 @@ const checkPercent = (spred, coinBuy, coinSell) => {
         const symbol = coinBuy.symbol
         const buyFrom = coinBuy.exchangeName
         const sellTo = coinSell.exchangeName
+        const nickName = `${symbol}_${buyFrom}_${sellTo}`
 
         let hedging = false
         if(coinSell.isolated || coinSell.cross) {
@@ -53,7 +52,7 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             quoteAsset: coinBuy.quoteAsset,
             buyFrom: buyFrom,
             sellTo: sellTo,
-            nickName: `${symbol}_${buyFrom}_${sellTo}`,
+            nickName: nickName,
             spred: Number(spred.toFixed(3)),
             hedging, 
             nameChecked,
@@ -62,10 +61,12 @@ const checkPercent = (spred, coinBuy, coinSell) => {
         }
 
         if(!superBlackArr.includes(obj.nickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов
-            currentMilkyArr.push(obj)
+            if(!temporary5minBlackArr.data.some(item => item.nickName === nickName)) {
+                currentMilkyArr.push(obj)
+            }
         }
     }
 }
-
+// format(new Date(), 'HH:mm:ss')
 
 module.exports = { findSpred }

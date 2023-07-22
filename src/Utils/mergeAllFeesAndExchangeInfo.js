@@ -22,6 +22,7 @@ const mergeSingleFeeAndExchangeInfo = (ExchangeInfo, Fee, key) => {
     }
 }
 
+
 const getFullCoinNameFromCMC = async () => {
     let urlsArr = [
         'https://web-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=5000',

@@ -70,5 +70,3 @@ const publicRequest = (method, path, params, baseURL, header, apiKey ) => {
 }
 
 module.exports = { signRequest, publicRequest };
-
-// 'X-MEXC-APIKEY': apiKey,

@@ -1,3 +1,4 @@
 let binanceMargin = {marginData: []}
+let gateIoMargin = {marginData: []}
 
-module.exports = { binanceMargin, }
+module.exports = { binanceMargin, gateIoMargin}

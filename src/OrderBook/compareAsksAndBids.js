@@ -1,3 +1,4 @@
+const { temporary5minBlackArr } = require("../Data")
 const { isWithdrawEnable } = require("../Fee/isWithdrawEnable")
 const { logEvents } = require("../middleware/logger")
 let { spotFee } = require('./orderBookData')
@@ -82,8 +83,11 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         //---------------------BlackList-------------------------//
-        if(generalUSDTSpred < 0.9) {            // также добавить в черный список на время
+        if(generalUSDTSpred < 0.8) {            // также добавить в черный список на время
             console.log(generalUSDTSpred.toFixed(2) + ' не прошёл '+ requestedCoinsArr[i].symbol)
+
+            requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
+            temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
             continue
         }
         console.log('прошёл '+ requestedCoinsArr[i].symbol)

@@ -1,4 +1,6 @@
 const axios = require("axios")
+const { format } = require('date-fns')
+
 
 // https://api.mexc.com/api/v3/exchangeInfo
 const foo = async () => {
@@ -17,6 +19,10 @@ const foo = async () => {
     }
     
 }
-foo()
+// foo()
 
 // setInterval(() => foo(), 2000)
+
+const dateTime = format(new Date(), 'HH:mm:ss')
+
+console.log('13:04:32' > '13:04:12')

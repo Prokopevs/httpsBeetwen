@@ -11,5 +11,6 @@ let oldMilkyArr = []
 let currentMilkyArr = []
 
 let superBlackArr = ['PLTUSDT_bybit_mexc', 'HEROUSDT_mexc_bybit', 'DFIUSDT_mexc_bybit', 'MCTUSDT_mexc_bybit', 'GMTUSDT_mexc_bybit', 'GMTUSDT_mexc_binance', 'GASUSDT_mexc_binance', 'QIUSDT_binance_mexc', 'MDTUSDT_mexc_binance']
+let temporary5minBlackArr =  {data: []}
 
-module.exports = { urlsArr, oldMilkyArr, currentMilkyArr, allCoins, mainData, superBlackArr, }
+module.exports = { urlsArr, oldMilkyArr, currentMilkyArr, allCoins, mainData, superBlackArr, temporary5minBlackArr}
