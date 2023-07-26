@@ -6,10 +6,12 @@ const getMarginGateIo = async () => {
     let data = response.data
     
     for(let i=0; i<data.length; i++) {
-        data[i].symbol = data[i].id
+        data[i].symbol = data[i].id.replace(/_/g, "")
         data[i].isolated = true
         data[i].cross = false
     }
+
+    gateIoMargin.marginData = [...data]
 }
 
 module.exports = { getMarginGateIo };

@@ -1,17 +1,19 @@
 const { searchLargestSubstr } = require('../Utils/searchLargestSubstr')
-let { binanceFee, mexcFee, bybitFee } = require('./feeData')
+let { binanceFee, mexcFee, bybitFee, gateIoFee,  } = require('./feeData')
 
 const isWithdrawEnable = (obj) => {
     const unicNames = {
         'binance': ['networkList', 'name', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
         'mexc': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
-        'bybit': ['chains', 'chainType', 'depositEnable', 'withdrawEnable', 'withdrawFee']
+        'bybit': ['chains', 'chainType', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
+        'gateIo': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
     }
     
     const feeObj = {
         binance: binanceFee.feeData,
         mexc: mexcFee.feeData,
-        bybit: bybitFee.feeData
+        bybit: bybitFee.feeData,
+        gateIo: gateIoFee.feeData
     }
     const coinName = obj.baseAsset            // BTC
     const withdrawArr = feeObj[obj.buyFrom]   // feeObj['mexc'] 
@@ -24,12 +26,18 @@ const isWithdrawEnable = (obj) => {
     const withdrawNetworkList = withdrawArr.find((elem) => elem.coin === coinName)?.[wordsInExchangeBuyArr[0]].filter((elem) => elem[wordsInExchangeBuyArr[3]] == true).sort((a, b) => parseFloat(a[wordsInExchangeBuyArr[4]]) - parseFloat(b[wordsInExchangeBuyArr[4]]))
     const depositNetworkList = depositArr.find((elem) => elem.coin === coinName)?.[wordsInExchangeSellArr[0]].filter((elem) => elem[wordsInExchangeSellArr[2]] == true)
 
+    const AvailableNetworksInWithdrawArr = withdrawNetworkList.map((elem) => networkName(elem, wordsInExchangeBuyArr[1], obj.buyFrom))
+    const AvailableNetworksInDepositArr = depositNetworkList.map((elem) => networkName(elem, wordsInExchangeSellArr[1], obj.sellTo))
+
     let NetworkArrAndFee
     if((withdrawNetworkList?.length && depositNetworkList?.length)) { // если нашли в биржах хоть какие либо networks(Важная проверка)
         NetworkArrAndFee = findChain(withdrawNetworkList, depositNetworkList, wordsInExchangeBuyArr, wordsInExchangeSellArr, obj.buyFrom, obj.sellTo) // может вернуться пустой массив если нет одикаковых networks
     } else {
-        console.log('не смог найти вывод или ввод монеты '+coinName+' в одной из бирж '+obj.buyFrom+' '+obj.sellTo)
-        return {}
+        return {
+            data: {},
+            availableWithdraw: AvailableNetworksInWithdrawArr,
+            availableDeposit: AvailableNetworksInDepositArr
+        }
     }  // далее на 91 строчку
 
     // --------------------------------Кросс поиск в дургих биржах ---------------------------------------//
@@ -83,7 +91,12 @@ const isWithdrawEnable = (obj) => {
         }
 
         if(allExchanges.length) resultObj.allExchanges = allExchanges // если есть биржы с которыми можно крутануть кросс перевод
-        return resultObj
+        
+        return {
+            data: resultObj,
+            availableWithdraw: AvailableNetworksInWithdrawArr,
+            availableDeposit: AvailableNetworksInDepositArr
+        }
     } 
     // -----------------------------------------------------------------------------//
 
@@ -95,11 +108,11 @@ const isWithdrawEnable = (obj) => {
         firstTransferArr: NetworkArrAndFee[0],
         allNetworks
     }
-    // console.log(finalObj)
-    // console.log(withdrawNetworkList)
-    // console.log(depositNetworkList)
-    // console.log('---------------------------')
-    return finalObj
+    return {
+        data: finalObj,
+        availableWithdraw: AvailableNetworksInWithdrawArr,
+        availableDeposit: AvailableNetworksInDepositArr
+    }
 }
 
 
@@ -111,7 +124,8 @@ const findChain = (withdrawNetworkList, depositNetworkList, wordsInExchangeBuyAr
 
         for(let j=0; j<depositNetworkList.length; j++) {
             const InNetwork = networkName(depositNetworkList[j], wordsInExchangeSellArr[1], sellTo) // BEP20
-            const sameString = searchLargestSubstr([OutNetwork, InNetwork]) // сравниваем BNB Smart Chain(BEP20) с BEP20
+            let sameString = searchLargestSubstr([OutNetwork, InNetwork]) // сравниваем BNB Smart Chain(BEP20) с BEP20
+            if((OutNetwork == 'AE') && (InNetwork == 'AE')) sameString = 'AE ' // исключение AE
             if(sameString.length>2) { // если нашли совпадение которое больше 2 символов
                 const fee = withdrawNetworkList[i][wordsInExchangeBuyArr[4]]
                 const successObj = {network: sameString, fee: fee}
@@ -125,7 +139,7 @@ const findChain = (withdrawNetworkList, depositNetworkList, wordsInExchangeBuyAr
 const networkName = (withdrawOrDepositNetwork, wordInExchangeBuyOrSellArr, exchange) => {
     if(exchange === 'binance') {
         // const Network = POLYGON + ' ' + MATIC
-        const Network = withdrawOrDepositNetwork[wordInExchangeBuyOrSellArr].toUpperCase()+' '+withdrawOrDepositNetwork.network.toUpperCase()
+        const Network = withdrawOrDepositNetwork[wordInExchangeBuyOrSellArr].toUpperCase()+'/'+withdrawOrDepositNetwork.network.toUpperCase()
         return Network
     } else {
         const Network = withdrawOrDepositNetwork[wordInExchangeBuyOrSellArr].toUpperCase()

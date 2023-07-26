@@ -1,5 +1,5 @@
-let { changeBinance, changeMexc, changeBybit } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList } = require('./ExchangesArray')
+let { changeBinance, changeMexc, changeBybit, changeGateIo } = require('./differentExchanges')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList } = require('./ExchangesArray')
 
 const addInfo = (coins, num) => {
     if(num == 0) {  //binance
@@ -64,6 +64,41 @@ const addInfo = (coins, num) => {
         }
         const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
         changeBybit(sortedArray)
+    }
+
+    if(num == 3) {   //gateIo
+        for(let i=0; i<coins.length; i++) {
+            coins[i].symbol = coins[i].currency_pair.replace(/_/g, "")
+            coins[i].askPrice = coins[i].lowest_ask
+            coins[i].bidPrice = coins[i].highest_bid
+            if(gateIoBlackList.includes(coins[i].symbol)) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+            if (coins[i].symbol.indexOf('3L') > -1) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+            if (coins[i].symbol.indexOf('3S') > -1) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+            if (coins[i].symbol.indexOf('5L') > -1) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+            if (coins[i].symbol.indexOf('5S') > -1) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+        }
+        const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
+        changeGateIo(sortedArray)
     }
 }
 

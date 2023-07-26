@@ -1,3 +1,4 @@
+const { bybitMargin } = require('../../Margin/marginData')
 let { bybitExchangeInfo } = require('../ExchangeData')
 const axios = require("axios")
 
@@ -16,7 +17,10 @@ const getExchangeInfoBybit = async () => {
             data[i].cross = false
             data[i].isolated = false
         }
+ 
     }
+
+    bybitMargin.marginData = [...data]
 
     bybitExchangeInfo.exchangeData = [...data]
     return bybitExchangeInfo.exchangeData

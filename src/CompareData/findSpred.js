@@ -67,6 +67,5 @@ const checkPercent = (spred, coinBuy, coinSell) => {
         }
     }
 }
-// format(new Date(), 'HH:mm:ss')
 
 module.exports = { findSpred }

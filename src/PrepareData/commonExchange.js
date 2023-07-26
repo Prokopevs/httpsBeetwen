@@ -40,10 +40,8 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
                         coins[j].cross = false
                     }
                 } else {
-                    if(coins[j].isolated == undefined) { //если есть свойство isolated, то оставляем как есть(bybit)
-                        coins[j].isolated = false
-                        coins[j].cross = false
-                    }
+                    coins[j].isolated = false
+                    coins[j].cross = false
                 }
 
                 // exchangeInfo
@@ -54,6 +52,7 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
                     coins[j].name = coinInfo.name
                 } else {
                     console.log(`не смог найти ${coins[j].symbol} в exchangeInfo в бирже ${exchangeName}`)
+                    throw error
                 }
                 coins[j].exchangeName = exchangeName
             }
@@ -62,8 +61,8 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
         }
     }
     
-
     if(localFlag === 1) oldCoinsArr.data = [...coins]
+    // console.log(oldCoinsArr.data)
 }
 
 module.exports = { commonExchange }

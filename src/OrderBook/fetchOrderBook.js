@@ -1,14 +1,23 @@
+const { requestFlag } = require("../Data")
 const { compareAsksAndBids } = require("./compareAsksAndBids")
 
 const fetchOrderBook = (preBuyArr) => {
+    console.log(preBuyArr.length)
     const urlsArr = []
     const requestedCoinsArr = []
     const binanceFetch = 'https://api.binance.com/api/v3/depth?symbol='
     const mexcFetch = 'https://api.mexc.com/api/v3/depth?symbol='
     const bybitFetch = 'https://api.bybit.com/v5/market/orderbook?category=spot&symbol='
+    const gateIoFetch = 'https://api.gateio.ws/api/v4/spot/order_book?currency_pair='
 
     let count = 0
-    // console.log(preBuyArr.length)
+    
+    //-------------------подготавливаем строки для запроса----------------------------------------//
+    const createUrl = (url, symbol, urlsArr) => {
+        const finalUrl = url+symbol+'&limit=40'
+        urlsArr.push(finalUrl)
+    } 
+
     for(let i=0; i<preBuyArr.length; i++) {
         const coinObj = preBuyArr[i]
 
@@ -18,36 +27,38 @@ const fetchOrderBook = (preBuyArr) => {
         if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, urlsArr) // обязательно с начала buyFrom
         if(coinObj.buyFrom === 'mexc') createUrl(mexcFetch, coinObj.symbol, urlsArr)
         if(coinObj.buyFrom === 'bybit') createUrl(bybitFetch, coinObj.symbol, urlsArr)
+        if(coinObj.buyFrom === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, urlsArr)
 
         if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, urlsArr)
         if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol, urlsArr)
         if(coinObj.sellTo === 'bybit') createUrl(bybitFetch, coinObj.symbol, urlsArr)
+        if(coinObj.sellTo === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, urlsArr)
 
-        requestedCoinsArr.push(coinObj)
+        requestedCoinsArr.push(coinObj)  // пощим в массив те монеты, на которые сделаем запрос
         preBuyArr.splice(i, 1)
         i--
 
         count++
     }
+    
+    //-------------------------------------------------------------
 
+    //------------------------делаем запрос-----------------------
     let requests = urlsArr.map((url) => fetch(url).then((response) => response.json()))
-
     Promise.all(requests)
         .then(results => { 
             const newResult = combineOrderBooks(results, requestedCoinsArr)
             compareAsksAndBids(newResult, requestedCoinsArr)
-            console.log(results.length, requestedCoinsArr.length)
         }) 
     
+    // если элементы в массиве остались, то через 1000 запрашиваем снова
     if(preBuyArr.length) {
-        setTimeout(fetchOrderBook, 1100, preBuyArr)
+        setTimeout(fetchOrderBook, 1000, preBuyArr)
+    } else {
+        requestFlag.data = true
     }
+    //-------------------------------------------------------------
 }
-
-const createUrl = (url, symbol, urlsArr) => {
-    const finalUrl = url+symbol+'&limit=40'
-    urlsArr.push(finalUrl)
-} 
 
 
 const combineOrderBooks = (orderBooks, requestedCoinsArr) => {

@@ -1,4 +1,4 @@
-let { urlsArr } = require('./Data')
+let { urlsArr, requestFlag } = require('./Data')
 const { addInfo } = require('./PrepareData/addInfo')
 const { fetchExtraInfo } = require('./ExtraInfo/fetchExtraInfo')
 const { collectAllCoins } = require('./PrepareData/AfterPrepareData/collectAllCoins')
@@ -34,9 +34,13 @@ const starter = async() => {
     await fetchAllMargins()
     await fetchAllFees()
     mergeAllFeesAndExchangeInfo()
-
-    // setInterval(() => Stream(), 2000);
-    // setInterval(() => fetchAllFees(), 120000);
+    
+    setInterval(() => {
+        if(requestFlag.data === true) {
+            Stream()
+        }
+    }, 2000);
+    setInterval(() => fetchAllFees(), 120000);
 }
 
 starter()
