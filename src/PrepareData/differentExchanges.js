@@ -1,6 +1,6 @@
-let { binanceArr, mexcArr, bybitArr, gateIoArr } = require('./ExchangesArray')
+let { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr } = require('./ExchangesArray')
 let { commonExchange } = require('./commonExchange')
-let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo } = require('../ExtraInfo/ExchangeData')
+let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo } = require('../ExtraInfo/ExchangeData')
 let { binanceMargin, gateIoMargin, bybitMargin } = require('.././Margin/marginData')
 
 
@@ -20,4 +20,12 @@ const changeGateIo = (coins) => {
     commonExchange(coins, gateIoArr, 'gateIo', gateIoExchangeInfo.exchangeData, gateIoMargin.marginData)
 }
 
-module.exports = { changeBinance, changeMexc, changeBybit, changeGateIo}
+const changeCoinbase = (coins) => {
+    // commonExchange(coins, coinbaseArr, 'coinbase', coinbaseExchangeInfo.exchangeData, [])
+}
+
+const changeLBank = (coins) => {
+    commonExchange(coins, lbankArr, 'lbank', lbankExchangeInfo.exchangeData, [])
+}
+
+module.exports = { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank}

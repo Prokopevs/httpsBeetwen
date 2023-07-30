@@ -56,8 +56,11 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             spred: Number(spred.toFixed(3)),
             hedging, 
             nameChecked,
+            names: [coinBuy.name, coinSell.name],
             time: dateTime,
-            count: 1
+            count: 1,
+            ...(coinBuy.originalSymbol && {originalCoinbaseSymbol: coinBuy.originalSymbol}),
+            ...(coinSell.originalSymbol && {originalCoinbaseSymbol: coinSell.originalSymbol})
         }
 
         if(!superBlackArr.includes(obj.nickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов

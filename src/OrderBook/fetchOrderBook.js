@@ -1,4 +1,5 @@
 const { requestFlag } = require("../Data")
+const { getOrderBookCoinbase } = require("../ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase")
 const { compareAsksAndBids } = require("./compareAsksAndBids")
 
 const fetchOrderBook = (preBuyArr) => {
@@ -9,32 +10,37 @@ const fetchOrderBook = (preBuyArr) => {
     const mexcFetch = 'https://api.mexc.com/api/v3/depth?symbol='
     const bybitFetch = 'https://api.bybit.com/v5/market/orderbook?category=spot&symbol='
     const gateIoFetch = 'https://api.gateio.ws/api/v4/spot/order_book?currency_pair='
+    const lbankFetch = 'https://api.lbkex.com/v2/depth.do?symbol='
 
     let count = 0
-    
+    const arrForCoinbase = []
     //-------------------подготавливаем строки для запроса----------------------------------------//
-    const createUrl = (url, symbol, urlsArr) => {
-        const finalUrl = url+symbol+'&limit=40'
+    const createUrl = (url, symbol, limit) => {
+        const finalUrl = url+symbol+`&${limit}=40`
         urlsArr.push(finalUrl)
-    } 
+    }
 
     for(let i=0; i<preBuyArr.length; i++) {
         const coinObj = preBuyArr[i]
 
-        if(count == 10) {
+        if(count == 8) {
             break
         }
-        if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, urlsArr) // обязательно с начала buyFrom
-        if(coinObj.buyFrom === 'mexc') createUrl(mexcFetch, coinObj.symbol, urlsArr)
-        if(coinObj.buyFrom === 'bybit') createUrl(bybitFetch, coinObj.symbol, urlsArr)
-        if(coinObj.buyFrom === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, urlsArr)
+        if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit') // обязательно с начала buyFrom
+        if(coinObj.buyFrom === 'mexc') createUrl(mexcFetch, coinObj.symbol, 'limit')
+        if(coinObj.buyFrom === 'bybit') createUrl(bybitFetch, coinObj.symbol, 'limit')
+        if(coinObj.buyFrom === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'limit')
+        if(coinObj.buyFrom === 'coinbase') arrForCoinbase.push({req: getOrderBookCoinbase(coinObj.originalCoinbaseSymbol, 40), index: urlsArr.length})
+        if(coinObj.buyFrom === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
 
-        if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, urlsArr)
-        if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol, urlsArr)
-        if(coinObj.sellTo === 'bybit') createUrl(bybitFetch, coinObj.symbol, urlsArr)
-        if(coinObj.sellTo === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, urlsArr)
+        if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit')
+        if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol, 'limit')
+        if(coinObj.sellTo === 'bybit') createUrl(bybitFetch, coinObj.symbol, 'limit')
+        if(coinObj.sellTo === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'limit')
+        if(coinObj.sellTo === 'coinbase') arrForCoinbase.push({req: getOrderBookCoinbase(coinObj.originalCoinbaseSymbol, 40), index: urlsArr.length}) 
+        if(coinObj.sellTo === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
 
-        requestedCoinsArr.push(coinObj)  // пощим в массив те монеты, на которые сделаем запрос
+        requestedCoinsArr.push(coinObj)  // пушим в массив те монеты, на которые сделаем запрос
         preBuyArr.splice(i, 1)
         i--
 
@@ -45,6 +51,11 @@ const fetchOrderBook = (preBuyArr) => {
 
     //------------------------делаем запрос-----------------------
     let requests = urlsArr.map((url) => fetch(url).then((response) => response.json()))
+    for(let i=0; i<arrForCoinbase.length; i++) {
+        requests.splice(arrForCoinbase[i].index+i, 0, arrForCoinbase[i].req)
+    }
+
+
     Promise.all(requests)
         .then(results => { 
             const newResult = combineOrderBooks(results, requestedCoinsArr)
@@ -73,12 +84,16 @@ const combineOrderBooks = (orderBooks, requestedCoinsArr) => {
         //------------------------------//
         if(buyFrom=='bybit') {
             createCorrectOrderBook(orderBooks[count], 'bybit', arr)
+        } else if(buyFrom=='lbank') {
+            createCorrectOrderBook(orderBooks[count], 'lbank', arr)
         } else {
             arr.push(orderBooks[count])
         }
 
         if(sellTo=='bybit') {
             createCorrectOrderBook(orderBooks[count+1], 'bybit', arr)
+        } else if(sellTo=='lbank') {
+            createCorrectOrderBook(orderBooks[count+1], 'lbank', arr)
         } else {
             arr.push(orderBooks[count+1])
         }
@@ -94,6 +109,9 @@ const createCorrectOrderBook = (book, exchangeName, arr) => {
         book.result.asks = book.result.a
         book.result.bids = book.result.b
         arr.push(book.result)
+    }
+    if(exchangeName == 'lbank') {
+        arr.push(book.data)
     }
 }
 

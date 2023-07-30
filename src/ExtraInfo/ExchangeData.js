@@ -2,5 +2,7 @@ let binanceExchangeInfo = {exchangeData: []}
 let mexcExchangeInfo = {exchangeData: []}
 let bybitExchangeInfo = {exchangeData: []}
 let gateIoExchangeInfo = {exchangeData: []}
+let coinbaseExchangeInfo = {exchangeData: []}
+let lbankExchangeInfo = {exchangeData: []}
 
-module.exports = { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo}
+module.exports = { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo}

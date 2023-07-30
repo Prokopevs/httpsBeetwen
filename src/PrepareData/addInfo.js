@@ -1,5 +1,5 @@
-let { changeBinance, changeMexc, changeBybit, changeGateIo } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList } = require('./ExchangesArray')
+let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank } = require('./differentExchanges')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList } = require('./ExchangesArray')
 
 const addInfo = (coins, num) => {
     if(num == 0) {  //binance
@@ -25,12 +25,8 @@ const addInfo = (coins, num) => {
                 i--
                 continue
             }
-            if (coins[i].symbol.indexOf('3L') > -1) {
-                coins.splice(i, 1)
-                i--
-                continue
-            }
-            if (coins[i].symbol.indexOf('3S') > -1) {
+            const check = check3L(coins[i].symbol)
+            if(check) {
                 coins.splice(i, 1)
                 i--
                 continue
@@ -51,12 +47,8 @@ const addInfo = (coins, num) => {
                 i--
                 continue
             }
-            if (coins[i].symbol.indexOf('3L') > -1) {
-                coins.splice(i, 1)
-                i--
-                continue
-            }
-            if (coins[i].symbol.indexOf('3S') > -1) {
+            const check = check3L(coins[i].symbol)
+            if(check) {
                 coins.splice(i, 1)
                 i--
                 continue
@@ -76,22 +68,8 @@ const addInfo = (coins, num) => {
                 i--
                 continue
             }
-            if (coins[i].symbol.indexOf('3L') > -1) {
-                coins.splice(i, 1)
-                i--
-                continue
-            }
-            if (coins[i].symbol.indexOf('3S') > -1) {
-                coins.splice(i, 1)
-                i--
-                continue
-            }
-            if (coins[i].symbol.indexOf('5L') > -1) {
-                coins.splice(i, 1)
-                i--
-                continue
-            }
-            if (coins[i].symbol.indexOf('5S') > -1) {
+            const check = check3L(coins[i].symbol)
+            if(check) {
                 coins.splice(i, 1)
                 i--
                 continue
@@ -100,6 +78,59 @@ const addInfo = (coins, num) => {
         const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
         changeGateIo(sortedArray)
     }
+    if(num == 4) {   //coinbase
+        for(let i=0; i<coins.length; i++) {
+            const symbolArr = coins[i].product_id.split('-')
+            if(symbolArr[1] === 'USDC') {
+                coins[i].symbol = symbolArr[0]+'USDT'
+            } else {
+                coins[i].symbol = symbolArr[0]+symbolArr[1]
+            }
+            coins[i].askPrice = coins[i].asks[0].price
+            coins[i].askQty = coins[i].asks[0].size
+            coins[i].bidPrice = coins[i].bids[0].price
+            coins[i].bidQty = coins[i].bids[0].size
+        }
+        const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
+        changeCoinbase(sortedArray)
+    }
+    if(num == 5) {   //LBank
+        coins = coins.data
+        for(let i=0; i<coins.length; i++) {
+            coins[i].symbol = coins[i].symbol.replace(/_/g, "").toUpperCase()
+            coins[i].askPrice = coins[i].price
+            coins[i].bidPrice = coins[i].price
+            if(lbankBlackList.includes(coins[i].symbol)) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+            const check = check3L(coins[i].symbol)
+            if(check) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+        }  
+        changeLBank(coins)
+    }
 }
+
+
+function check3L(symbol) {
+    if (symbol.indexOf('3L') > -1) {
+        return true
+    }
+    if (symbol.indexOf('3S') > -1) {
+        return true
+    }
+    if (symbol.indexOf('5L') > -1) {
+        return true
+    }
+    if (symbol.indexOf('5S') > -1) {
+        return true
+    }
+    return false
+} 
 
 module.exports = { addInfo }

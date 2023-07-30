@@ -144,19 +144,21 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
             continue
         } else if(Object.keys(transferInfo.data).length == 0) {  // проверка на вывод монеты
-            continue  
-            if((transferInfo.availableDeposit.length == 0) || (transferInfo.availableWithdraw.length == 0)) {
-                requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
-                requestedCoinsArr[i].timeInBlock = 15
-                temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
+            if(buyExchangeName !== 'coinbase' && sellExchangeName!== 'coinbase') { //не баним coinbase т.к не знаем о выводе
                 continue
+            //     if((transferInfo.availableDeposit.length == 0) || (transferInfo.availableWithdraw.length == 0)) {
+            //         requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
+            //         requestedCoinsArr[i].timeInBlock = 15
+            //         temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
+            //         continue
+            //     }
             }
         }
         //------------------------------------------------------//
 
 
         //---------------------StablePrices-----------------------//
-        const arrSums = [50, 80, 100, 150, 200, 250]
+        const arrSums = [50, 80, 100, 150, 200, 250, 1000, 1500, 2000]
         const sumObj = {}
         for(let i=0; i<arrSums.length; i++) {
             let dollars = arrSums[i] // 50
@@ -213,10 +215,11 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         currentObj.availableWithdraw = transferInfo.availableWithdraw
         currentObj.availableDeposit = transferInfo.availableDeposit
         
-        //  if(requestedCoinsArr[i].spred > 10) {
-            
+        //  if(requestedCoinsArr[i].symbol === 'VGXUSDT') {
+        //     console.log(requestedCoinsArr[i])   
         //  }
-         console.log(requestedCoinsArr[i])
+        console.log(requestedCoinsArr[i])
+
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
     }
 }

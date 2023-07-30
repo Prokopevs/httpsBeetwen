@@ -45,16 +45,22 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
                 }
 
                 // exchangeInfo
-                const coinInfo = exchangeInfo.find((elem) => elem.symbol === coins[j].symbol)
+                let coinInfo
+                if(exchangeName === 'coinbase'){
+                    coinInfo = exchangeInfo.find((elem) => elem.originalSymbol === coins[j].product_id)
+                } else {
+                    coinInfo = exchangeInfo.find((elem) => elem.symbol === coins[j].symbol)
+                }
                 if(coinInfo !== undefined) {
+                    coins[j].exchangeName = exchangeName
                     coins[j].baseAsset = coinInfo.baseAsset
                     coins[j].quoteAsset = coinInfo.quoteAsset
                     coins[j].name = coinInfo.name
+                    if(exchangeName === 'coinbase') coins[j].originalSymbol = coinInfo.originalSymbol
                 } else {
                     console.log(`не смог найти ${coins[j].symbol} в exchangeInfo в бирже ${exchangeName}`)
                     throw error
                 }
-                coins[j].exchangeName = exchangeName
             }
             console.log(`добавил exchangeName: ${exchangeName} и брейкнул цикл на `+ i +' итерации')
             break

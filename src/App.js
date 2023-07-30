@@ -5,11 +5,12 @@ const { collectAllCoins } = require('./PrepareData/AfterPrepareData/collectAllCo
 const { fetchAllMargins } = require('./Margin/fetchAllMargins')
 const { fetchAllFees } = require('./Fee/fetchAllFees')
 const { mergeAllFeesAndExchangeInfo } = require('./Utils/mergeAllFeesAndExchangeInfo')
+const { getBestBidsAsksCoinbase } = require('./ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase')
 
 // let time = 0
 
 const Stream = () => {
-    let requests = urlsArr.map((url) => fetch(url).then((response) => response.json()))
+    const requests = createRequest()
     Promise.allSettled(requests)
         .then(results => { 
             const start= new Date().getTime();
@@ -44,3 +45,11 @@ const starter = async() => {
 }
 
 starter()
+
+
+
+function createRequest() {
+    let arrRequest = urlsArr.map((url) => fetch(url).then((response) => response.json()))
+    arrRequest.splice(4,0,getBestBidsAsksCoinbase())
+    return arrRequest
+}
