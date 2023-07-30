@@ -20,6 +20,7 @@ const mergeSingleFeeAndExchangeInfo = (ExchangeInfo, Fee, key) => {
     //         // console.log(ExchangeInfo[i].baseAsset)
     //     }
     // }
+    
     function check3L(symbol) {
         if (symbol.indexOf('3L') > -1) {
             return true
@@ -35,7 +36,6 @@ const mergeSingleFeeAndExchangeInfo = (ExchangeInfo, Fee, key) => {
         }
         return false
     } 
-
     for(let i=0; i<ExchangeInfo.length; i++) {
         const check = check3L(ExchangeInfo[i].symbol)
             if(check) {
@@ -44,6 +44,8 @@ const mergeSingleFeeAndExchangeInfo = (ExchangeInfo, Fee, key) => {
                 continue
             }
     }
+
+
 
     const arr = []
     for(let i=0; i<ExchangeInfo.length; i++) {
