@@ -2,6 +2,7 @@ const { temporary5minBlackArr } = require("../Data")
 const { isWithdrawEnable } = require("../Fee/isWithdrawEnable")
 const { logEvents } = require("../middleware/logger")
 const { extraFeeFunc } = require("./extraFeeFunc")
+const { logReadyChain } = require("./logReadyChain")
 let { spotFee } = require('./orderBookData')
 
 const compareAsksAndBids = (orders, requestedCoinsArr) => {
@@ -84,7 +85,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         //---------------------BlackList 1-------------------------//
-        if(generalUSDTSpred < 0.7) {            // если профит меньше 0.7 долларов без учета коммисии
+        if(generalUSDTSpred < 0.6) {            // если профит меньше 0.7 долларов без учета коммисии
             requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
             requestedCoinsArr[i].timeInBlock = 5
             temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
@@ -136,29 +137,8 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         generalUSDTSpred = generalUSDTSpred-totalFee        // вычитаем из зароботка комиссию
         let avaragePercent = generalUSDTSpred*100/sumUSDT
 
-
-        //---------------------BlackList 2-------------------------//
-        if(generalUSDTSpred < 0.2) {            // если профит меньше 0.2 долларов c учетом коммисии
-            requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
-            requestedCoinsArr[i].timeInBlock = 5
-            temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
-            continue
-        } else if(Object.keys(transferInfo.data).length == 0) {  // проверка на вывод монеты
-            if(buyExchangeName !== 'coinbase' && sellExchangeName!== 'coinbase') { //не баним coinbase т.к не знаем о выводе
-                continue
-            //     if((transferInfo.availableDeposit.length == 0) || (transferInfo.availableWithdraw.length == 0)) {
-            //         requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
-            //         requestedCoinsArr[i].timeInBlock = 15
-            //         temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
-            //         continue
-            //     }
-            }
-        }
-        //------------------------------------------------------//
-
-
         //---------------------StablePrices-----------------------//
-        const arrSums = [50, 80, 100, 150, 200, 250, 1000, 1500, 2000]
+        const arrSums = [50, 80, 100, 125, 150, 200]
         const sumObj = {}
         for(let i=0; i<arrSums.length; i++) {
             let dollars = arrSums[i] // 50
@@ -181,28 +161,29 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             }
             if(dollars == 0) {
                 const realProfit = profit-generalFeeStable
-                if(realProfit>0.01) {    // изменить на нормаьное число
+                if(realProfit>0.2) { 
                     sumObj[arrSums[i]] = Number(realProfit.toFixed(3))
                 }
             } 
         }
+
         //-----------------------Log-----------------------------//
         const priceLengthInBuyExchange = getLength(buyArr[0].priceInAskArr)
         const priceLengthInSellExchange = getLength(buyArr[0].priceInBidsArr)
 
         let currentObj = requestedCoinsArr[i]
-        currentObj.profitInUSDT = generalUSDTSpred.toFixed(3) + '$'
-        currentObj.realPercent = avaragePercent.toFixed(3) + '%'
+        currentObj.profitInUSDT = generalUSDTSpred.toFixed(3)
+        currentObj.realPercent = avaragePercent.toFixed(3)
 
         currentObj.avgPriceInBuyEx = avarageBuyPrice.toFixed(priceLengthInBuyExchange)
         currentObj.pricesInBuyEx = '['+buyArr[0].priceInAskArr+'-'+buyArr[buyArr.length-1].priceInAskArr+']'
-        currentObj.maxDealInBuyEx = sumUSDT.toFixed(3) + '$'
+        currentObj.maxDealInBuyEx = sumUSDT.toFixed(3)
         currentObj.valueInBuyEx = Number(sumQtyWithFeeForBuy.toFixed(sumQtyLength))
         currentObj.ordersInBuyEx = askCount
 
         currentObj.avgPriceInSellEx = avarageSellPrice.toFixed(priceLengthInSellExchange)
         currentObj.pricesInSellEx = '['+buyArr[0].priceInBidsArr+'-'+buyArr[buyArr.length-1].priceInBidsArr+']'
-        currentObj.maxDealInSellEx = sumUSDTInSellEXchange.toFixed(3) + '$'
+        currentObj.maxDealInSellEx = sumUSDTInSellEXchange.toFixed(3)
         currentObj.valueInSellEx = Number(sumQtyAfterTransfer.toFixed(sumQtyLength))
         currentObj.ordersInSellEx = bidsCount
 
@@ -218,7 +199,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         //  if(requestedCoinsArr[i].symbol === 'VGXUSDT') {
         //     console.log(requestedCoinsArr[i])   
         //  }
-        console.log(requestedCoinsArr[i])
+        logReadyChain(requestedCoinsArr[i])
 
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
     }
