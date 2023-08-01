@@ -1,8 +1,8 @@
-let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo  } = require('../ExtraInfo/ExchangeData')
-let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, lbankFee } = require('../Fee/feeData')
+let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo  } = require('../ExtraInfo/ExchangeData')
+let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, lbankFee, kucoinFee } = require('../Fee/feeData')
 
 
-const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [bybitExchangeInfo, fullNameFromCMCArr, 'symbol'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], ]
+const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [bybitExchangeInfo, fullNameFromCMCArr, 'symbol'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], [kucoinExchangeInfo, kucoinFee, 'coin'], ] 
 
 // [lbankExchangeInfo, lbankFee, 'coin']
 const mergeAllFeesAndExchangeInfo = async () => {

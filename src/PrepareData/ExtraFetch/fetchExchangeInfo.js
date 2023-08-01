@@ -1,4 +1,4 @@
-const { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo } = require('../../ExtraInfo/ExchangeData')
+const { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo } = require('../../ExtraInfo/ExchangeData')
 let { getExchangeInfoBinance } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBinance')
 const { getExchangeInfoBybit } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBybit')
 const { getExchangeInfoCoinbase } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase')
@@ -72,6 +72,10 @@ const fetchExchangeInfo = async (exchangeName) => {
             mergeSingleFeeAndExchangeInfo(lbankExchangeInfo.exchangeData, fullNameFromCMCArr, 'symbol')
             return lbankExchangeInfo.exchangeData
         }) 
+    }
+
+    if(exchangeName === 'kucoin') {
+        return kucoinExchangeInfo.exchangeData
     }
 }
 

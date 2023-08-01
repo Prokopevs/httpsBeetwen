@@ -161,7 +161,8 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             }
             if(dollars == 0) {
                 const realProfit = profit-generalFeeStable
-                if(realProfit>0.2) { 
+                const realPercent = realProfit*100/dollars
+                if(realPercent>0.3) { 
                     sumObj[arrSums[i]] = Number(realProfit.toFixed(3))
                 }
             } 

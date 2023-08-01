@@ -1,5 +1,5 @@
 require('dotenv').config({path:__dirname+'/../../.env'})
-let { signRequest, publicRequest } = require('../universalMarginRequest')
+let { signRequest, publicRequest } = require('../MarginRequests/universalMarginRequest')
 let { binanceMargin } = require('../marginData')
 
 const apiKeyBinance = process.env.APIKEYBINANCE

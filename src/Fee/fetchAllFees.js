@@ -3,6 +3,7 @@ let { getFeeMexc } = require('./GetFee/getFeeMexc')
 let { getFeeBybit } = require('./GetFee/getFeeBybit')
 const { getFeeGateIo } = require('./GetFee/getFeeGateIo')
 const { getFeeLBank } = require('./GetFee/getFeeLBank')
+const { getFeeKuCoin } = require('./GetFee/getFeeKuCoin')
 
 const fetchAllFees = async() => {
     console.log('запрос на Fee...')
@@ -11,7 +12,8 @@ const fetchAllFees = async() => {
         getFeeMexc(),
         getFeeBybit(),
         getFeeGateIo(),
-        getFeeLBank()
+        getFeeLBank(),
+        getFeeKuCoin(),
     ])
 }
 

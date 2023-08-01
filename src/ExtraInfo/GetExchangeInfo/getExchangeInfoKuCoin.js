@@ -9,7 +9,6 @@ const getExchangeInfoKuCoin = async () => {
         data[i].baseAsset = data[i].baseCurrency
         data[i].quoteAsset = data[i].quoteCurrency
     }
-    console.log(data)
     kucoinExchangeInfo.exchangeData = [...data]
     return kucoinExchangeInfo.exchangeData
 }

@@ -1,5 +1,5 @@
-let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList } = require('./ExchangesArray')
+let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin } = require('./differentExchanges')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr } = require('./ExchangesArray')
 
 const addInfo = (coins, num) => {
     if(num == 0) {  //binance
@@ -113,6 +113,28 @@ const addInfo = (coins, num) => {
             }
         }  
         changeLBank(coins)
+    }
+    if(num == 6) {   //KuCoin
+        coins = coins.data.ticker
+        for(let i=0; i<coins.length; i++) {
+            coins[i].symbol = coins[i].symbol.replace(/-/g, "")
+            coins[i].askPrice = coins[i].sell
+            coins[i].bidPrice = coins[i].buy
+            if(kucoinBlackList.includes(coins[i].symbol)) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
+            if(kucoinArr.data.length) {
+                const exiedCoin = kucoinArr.data.find((item) => item.symbol === coins[i].symbol)
+                if(!exiedCoin) {
+                    coins.splice(i, 1)
+                    i--
+                }
+            }
+        }  
+
+        changeKuCoin(coins)
     }
 }
 
