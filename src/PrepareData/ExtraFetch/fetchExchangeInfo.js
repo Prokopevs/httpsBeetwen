@@ -1,16 +1,18 @@
-const { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo } = require('../../ExtraInfo/ExchangeData')
+const { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo } = require('../../ExtraInfo/ExchangeData')
 let { getExchangeInfoBinance } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBinance')
 const { getExchangeInfoBybit } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBybit')
 const { getExchangeInfoCoinbase } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase')
 const { getExchangeInfoGateIo } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoGateIo')
 const { getExchangeInfoLBank } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoLBank')
 let { getExchangeInfoMexc } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoMexc')
+const { getExchangeInfoOKX } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoOKX')
 const { getFeeBinance } = require('../../Fee/GetFee/getFeeBinance')
 const { getFeeBybit } = require('../../Fee/GetFee/getFeeBybit')
 const { getFeeGateIo } = require('../../Fee/GetFee/getFeeGateIo')
 const { getFeeLBank } = require('../../Fee/GetFee/getFeeLBank')
 const { getFeeMexc } = require('../../Fee/GetFee/getFeeMexc')
-const { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee } = require('../../Fee/feeData')
+const { getFeeOKX } = require('../../Fee/GetFee/getFeeOKX')
+const { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, okxFee } = require('../../Fee/feeData')
 const { mergeSingleFeeAndExchangeInfo } = require('../../Utils/mergeAllFeesAndExchangeInfo')
 
 const fetchExchangeInfo = async (exchangeName) => {
@@ -76,6 +78,16 @@ const fetchExchangeInfo = async (exchangeName) => {
 
     if(exchangeName === 'kucoin') {
         return kucoinExchangeInfo.exchangeData
+    }
+
+    if(exchangeName === 'okx') {
+        await Promise.all([
+            getExchangeInfoOKX(),
+            getFeeOKX()
+        ]).then(() => { 
+            mergeSingleFeeAndExchangeInfo(okxExchangeInfo.exchangeData, okxFee.feeData, 'coin')
+            return okxExchangeInfo.exchangeData
+        }) 
     }
 }
 

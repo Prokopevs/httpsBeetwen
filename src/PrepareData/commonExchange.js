@@ -59,7 +59,7 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
                     if(exchangeName === 'coinbase') coins[j].originalSymbol = coinInfo.originalSymbol
                 } else {
                     console.log(`не смог найти ${coins[j].symbol} в exchangeInfo в бирже ${exchangeName}`)
-                    // throw error
+                    throw error
                 }
             }
             console.log(`добавил exchangeName: ${exchangeName} и брейкнул цикл на `+ i +' итерации')

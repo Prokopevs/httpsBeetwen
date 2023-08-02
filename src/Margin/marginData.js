@@ -2,5 +2,6 @@ let binanceMargin = {marginData: []}
 let gateIoMargin = {marginData: []}
 let bybitMargin = {marginData: []}
 let kucoinMargin = {marginData: []}
+let okxMargin = {marginData: []}
 
-module.exports = { binanceMargin, gateIoMargin, bybitMargin, kucoinMargin}
+module.exports = { binanceMargin, gateIoMargin, bybitMargin, kucoinMargin, okxMargin}

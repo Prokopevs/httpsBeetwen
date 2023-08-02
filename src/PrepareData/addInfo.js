@@ -1,7 +1,8 @@
-let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin } = require('./differentExchanges')
+let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX } = require('./differentExchanges')
 let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr } = require('./ExchangesArray')
-
-const addInfo = (coins, num) => {
+const axios = require("axios")
+let kuCoinFlag = 0
+const addInfo = async(coins, num) => {
     if(num == 0) {  //binance
         for(let i=0; i<coins.length; i++) {
             if(coins[i].askPrice == 0) {
@@ -116,6 +117,12 @@ const addInfo = (coins, num) => {
     }
     if(num == 6) {   //KuCoin
         coins = coins.data.ticker
+        // if(kuCoinFlag === 0) {
+        //     const result = await axios.get('https://api.kucoin.com/api/v1/market/allTickers')
+        //     coins = result.data.data.ticker
+        //     kuCoinFlag = 1
+        //     console.log('here')
+        // }
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].symbol.replace(/-/g, "")
             coins[i].askPrice = coins[i].sell
@@ -135,6 +142,15 @@ const addInfo = (coins, num) => {
         }  
 
         changeKuCoin(coins)
+    }
+    if(num == 7) {   //OKX
+        coins = coins.data
+        for(let i=0; i<coins.length; i++) {
+            coins[i].symbol = coins[i].instId.replace(/-/g, "")
+            coins[i].askPrice = coins[i].askPx
+            coins[i].bidPrice = coins[i].bidPx
+        }  
+        changeOKX(coins)
     }
 }
 

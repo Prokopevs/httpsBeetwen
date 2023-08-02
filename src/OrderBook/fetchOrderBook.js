@@ -12,6 +12,7 @@ const fetchOrderBook = (preBuyArr) => {
     const gateIoFetch = 'https://api.gateio.ws/api/v4/spot/order_book?currency_pair='
     const lbankFetch = 'https://api.lbkex.com/v2/depth.do?symbol='
     const kucoinFetch = 'https://api.kucoin.com/api/v1/market/orderbook/level2_100?symbol='
+    const okxFetch = 'https://www.okx.cab/api/v5/market/books?instId='
 
     let count = 0
     const arrForCoinbase = []
@@ -25,7 +26,7 @@ const fetchOrderBook = (preBuyArr) => {
     for(let i=0; i<preBuyArr.length; i++) {
         const coinObj = preBuyArr[i]
 
-        if(count == 8) {
+        if(count == 12) {
             break
         }
         if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit') // обязательно с начала buyFrom
@@ -35,6 +36,7 @@ const fetchOrderBook = (preBuyArr) => {
         if(coinObj.buyFrom === 'coinbase') arrForCoinbase.push({req: getOrderBookCoinbase(coinObj.originalCoinbaseSymbol, 40), index: urlsArr.length})
         if(coinObj.buyFrom === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
         if(coinObj.buyFrom === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
+        if(coinObj.buyFrom === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
 
         if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit')
         if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol, 'limit')
@@ -43,6 +45,7 @@ const fetchOrderBook = (preBuyArr) => {
         if(coinObj.sellTo === 'coinbase') arrForCoinbase.push({req: getOrderBookCoinbase(coinObj.originalCoinbaseSymbol, 40), index: urlsArr.length}) 
         if(coinObj.sellTo === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
         if(coinObj.sellTo === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
+        if(coinObj.sellTo === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
 
         requestedCoinsArr.push(coinObj)  // пушим в массив те монеты, на которые сделаем запрос
         preBuyArr.splice(i, 1)
@@ -58,7 +61,6 @@ const fetchOrderBook = (preBuyArr) => {
     for(let i=0; i<arrForCoinbase.length; i++) {
         requests.splice(arrForCoinbase[i].index+i, 0, arrForCoinbase[i].req)
     }
-
 
     Promise.all(requests)
         .then(results => { 
@@ -92,6 +94,8 @@ const combineOrderBooks = (orderBooks, requestedCoinsArr) => {
             createCorrectOrderBook(orderBooks[count], 'lbank', arr)
         } else if(buyFrom=='kucoin') {
             createCorrectOrderBook(orderBooks[count], 'kucoin', arr)
+        } else if(buyFrom=='okx') {
+            createCorrectOrderBook(orderBooks[count], 'okx', arr)
         } else {
             arr.push(orderBooks[count])
         }
@@ -102,6 +106,8 @@ const combineOrderBooks = (orderBooks, requestedCoinsArr) => {
             createCorrectOrderBook(orderBooks[count+1], 'lbank', arr)
         } else if(sellTo=='kucoin') {
             createCorrectOrderBook(orderBooks[count+1], 'kucoin', arr)
+        } else if(sellTo=='okx') {
+            createCorrectOrderBook(orderBooks[count+1], 'okx', arr)
         } else {
             arr.push(orderBooks[count+1])
         }
@@ -126,6 +132,9 @@ const createCorrectOrderBook = (book, exchangeName, arr) => {
         data.bids = data.bids.slice(0, 40)
         data.asks = data.asks.slice(0, 40)
         arr.push(data)
+    }
+    if(exchangeName == 'okx') {
+        arr.push(book.data[0])
     }
 }
 

@@ -11,7 +11,7 @@ const accumulate = () => {
             oldMilkyArr[i].count++
             currentMilkyArr.splice(index, 1)
 
-            if(oldMilkyArr[i].count === 4) {
+            if(oldMilkyArr[i].count === 6) {
                 preBuyArr.push(oldMilkyArr[i])
 
                 oldMilkyArr.splice(i, 1)

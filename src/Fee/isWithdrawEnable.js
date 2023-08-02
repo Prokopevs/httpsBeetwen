@@ -1,5 +1,5 @@
 const { searchLargestSubstr } = require('../Utils/searchLargestSubstr')
-let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee} = require('./feeData')
+let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee} = require('./feeData')
 
 const isWithdrawEnable = (obj) => {
     const unicNames = {
@@ -10,6 +10,7 @@ const isWithdrawEnable = (obj) => {
         'coinbase': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
         'lbank': ['networkList', 'name', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
         'kucoin': ['chains', 'chainName', 'isDepositEnabled', 'isWithdrawEnabled:', 'withdrawalMinFee'],
+        'okx': ['networkList', 'network', 'withdrawEnable', 'depositEnable:', 'withdrawFee'],
     }
     
     const feeObj = {
@@ -20,6 +21,7 @@ const isWithdrawEnable = (obj) => {
         coinbase: [],
         lbank: lbankFee.feeData,
         kucoin: kucoinFee.feeData,
+        okx: okxFee.feeData,
     }
     const coinName = obj.baseAsset            // BTC
     const withdrawArr = feeObj[obj.buyFrom]   // feeObj['mexc'] 

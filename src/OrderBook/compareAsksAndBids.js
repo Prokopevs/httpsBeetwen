@@ -161,7 +161,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             }
             if(dollars == 0) {
                 const realProfit = profit-generalFeeStable
-                const realPercent = realProfit*100/dollars
+                const realPercent = realProfit*100/arrSums[i]
                 if(realPercent>0.3) { 
                     sumObj[arrSums[i]] = Number(realProfit.toFixed(3))
                 }
@@ -197,9 +197,9 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         currentObj.availableWithdraw = transferInfo.availableWithdraw
         currentObj.availableDeposit = transferInfo.availableDeposit
         
-        //  if(requestedCoinsArr[i].symbol === 'VGXUSDT') {
-        //     console.log(requestedCoinsArr[i])   
-        //  }
+         if((requestedCoinsArr[i].byFrom === 'okx') || (requestedCoinsArr[i].sellTo === 'okx')) {
+            console.log(requestedCoinsArr[i])   
+         }
         logReadyChain(requestedCoinsArr[i])
 
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')

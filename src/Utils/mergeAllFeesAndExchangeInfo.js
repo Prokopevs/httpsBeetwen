@@ -1,10 +1,9 @@
-let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo  } = require('../ExtraInfo/ExchangeData')
-let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, lbankFee, kucoinFee } = require('../Fee/feeData')
+let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo } = require('../ExtraInfo/ExchangeData')
+let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, kucoinFee, okxFee } = require('../Fee/feeData')
 
 
-const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [bybitExchangeInfo, fullNameFromCMCArr, 'symbol'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], [kucoinExchangeInfo, kucoinFee, 'coin'], ] 
+const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [bybitExchangeInfo, fullNameFromCMCArr, 'symbol'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], [kucoinExchangeInfo, kucoinFee, 'coin'], [okxExchangeInfo, okxFee, 'coin'],] 
 
-// [lbankExchangeInfo, lbankFee, 'coin']
 const mergeAllFeesAndExchangeInfo = async () => {
     await getFullCoinNameFromCMC()
     for(let i=0; i<fullArr.length; i++) {
@@ -21,60 +20,6 @@ const mergeSingleFeeAndExchangeInfo = (ExchangeInfo, Fee, key) => {
             // console.log(ExchangeInfo[i].baseAsset)
         }
     }
-    
-    // function check3L(symbol) {
-    //     if (symbol.indexOf('3L') > -1) {
-    //         return true
-    //     }
-    //     if (symbol.indexOf('3S') > -1) {
-    //         return true
-    //     }
-    //     if (symbol.indexOf('5L') > -1) {
-    //         return true
-    //     }
-    //     if (symbol.indexOf('5S') > -1) {
-    //         return true
-    //     }
-    //     return false
-    // } 
-    // for(let i=0; i<ExchangeInfo.length; i++) {
-    //     const check = check3L(ExchangeInfo[i].symbol)
-    //         if(check) {
-    //             ExchangeInfo.splice(i, 1)
-    //             i--
-    //             continue
-    //         }
-    // }
-
-
-
-    // const arr = []
-    // for(let i=0; i<ExchangeInfo.length; i++) {
-    //     let elemFee = Fee.find((elem) => elem[key] == ExchangeInfo[i].baseAsset)
-    //     if(elemFee) {
-    //         for(let j=0; j<elemFee.networkList.length; j++) {
-    //             if(!elemFee.networkList[j].withdrawFee) {
-    //                 arr.push(elemFee.coin)
-    //             }
-    //         }
-    //     }
-    // }
-    // console.log(arr.length)
-
-    // const obj = {}
-    // for(let i=0; i<ExchangeInfo.length; i++) {
-    //     let elemFee = Fee.find((elem) => elem[key] == ExchangeInfo[i].baseAsset)
-    //     if(elemFee) {
-    //         for(let j=0; j<elemFee.networkList.length; j++) {
-    //             if(!elemFee.networkList[j].withdrawFee) {
-    //                 const network = elemFee.networkList[j].name
-    //                 obj[elemFee.coin] = {...obj[elemFee.coin], [network]:0}
-    //             }
-    //         }
-    //     }
-    // }
-    // console.log(obj)
-    // logEvents(JSON.stringify(obj), 'coins.log')
 }
 
 
