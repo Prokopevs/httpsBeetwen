@@ -62,7 +62,6 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
                     throw error
                 }
             }
-            console.log(`добавил exchangeName: ${exchangeName} и брейкнул цикл на `+ i +' итерации')
             break
         }
     }

@@ -8,6 +8,7 @@ let coinbaseArr = {data: []}
 let lbankArr = {data: []}
 let kucoinArr = {data: []}
 let okxArr = {data: []}
+let bitgetArr = {data: []}
 
 const mexcBlackList = ['MULTIUSDT', 'RUNEUSDT', 'MDXUSDT', ]
 const binanceBlackList = ['AXSBIDR', 'NBTBIDR', 'NBTUSDT', 'MULTIUSDT', 'RUNEUSDT', 'MDXUSDT', ]
@@ -18,4 +19,4 @@ const kucoinBlackList = ["JUPETH","POWRUSDT","ALBTUSDT","GOUSDT","CHSBBTC","TKOB
 
 // расбанить RUNEUSDT, MULTIUSDT, 'MDXUSDT'
 
-module.exports = { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr,    flag, mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList}
+module.exports = { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr, bitgetArr,    flag, mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList}

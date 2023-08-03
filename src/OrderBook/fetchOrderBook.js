@@ -13,6 +13,7 @@ const fetchOrderBook = (preBuyArr) => {
     const lbankFetch = 'https://api.lbkex.com/v2/depth.do?symbol='
     const kucoinFetch = 'https://api.kucoin.com/api/v1/market/orderbook/level2_100?symbol='
     const okxFetch = 'https://www.okx.cab/api/v5/market/books?instId='
+    const bitgetFetch = 'https://api.bitget.com/api/spot/v1/market/depth?symbol='
 
     let count = 0
     const arrForCoinbase = []
@@ -37,6 +38,7 @@ const fetchOrderBook = (preBuyArr) => {
         if(coinObj.buyFrom === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
         if(coinObj.buyFrom === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
         if(coinObj.buyFrom === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
+        if(coinObj.buyFrom === 'bitget') createUrl(bitgetFetch, coinObj.symbol+'_SPBL', 'limit')
 
         if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit')
         if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol, 'limit')
@@ -46,6 +48,7 @@ const fetchOrderBook = (preBuyArr) => {
         if(coinObj.sellTo === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
         if(coinObj.sellTo === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
         if(coinObj.sellTo === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
+        if(coinObj.sellTo === 'bitget') createUrl(bitgetFetch, coinObj.symbol+'_SPBL', 'limit')
 
         requestedCoinsArr.push(coinObj)  // пушим в массив те монеты, на которые сделаем запрос
         preBuyArr.splice(i, 1)
@@ -96,6 +99,8 @@ const combineOrderBooks = (orderBooks, requestedCoinsArr) => {
             createCorrectOrderBook(orderBooks[count], 'kucoin', arr)
         } else if(buyFrom=='okx') {
             createCorrectOrderBook(orderBooks[count], 'okx', arr)
+        } else if(buyFrom=='bitget') {
+            createCorrectOrderBook(orderBooks[count], 'bitget', arr)
         } else {
             arr.push(orderBooks[count])
         }
@@ -108,7 +113,9 @@ const combineOrderBooks = (orderBooks, requestedCoinsArr) => {
             createCorrectOrderBook(orderBooks[count+1], 'kucoin', arr)
         } else if(sellTo=='okx') {
             createCorrectOrderBook(orderBooks[count+1], 'okx', arr)
-        } else {
+        } else if(sellTo=='bitget') {
+            createCorrectOrderBook(orderBooks[count+1], 'bitget', arr)
+        }  else {
             arr.push(orderBooks[count+1])
         }
 
@@ -135,6 +142,9 @@ const createCorrectOrderBook = (book, exchangeName, arr) => {
     }
     if(exchangeName == 'okx') {
         arr.push(book.data[0])
+    }
+    if(exchangeName == 'bitget') {
+        arr.push(book.data)
     }
 }
 

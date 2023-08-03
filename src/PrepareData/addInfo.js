@@ -1,4 +1,4 @@
-let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX } = require('./differentExchanges')
+let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget } = require('./differentExchanges')
 let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr } = require('./ExchangesArray')
 const axios = require("axios")
 let kuCoinFlag = 0
@@ -140,8 +140,8 @@ const addInfo = async(coins, num) => {
                 }
             }
         }  
-
-        changeKuCoin(coins)
+        const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
+        changeKuCoin(sortedArray)
     }
     if(num == 7) {   //OKX
         coins = coins.data
@@ -151,6 +151,14 @@ const addInfo = async(coins, num) => {
             coins[i].bidPrice = coins[i].bidPx
         }  
         changeOKX(coins)
+    }
+    if(num == 8) {   //Bitget
+        coins = coins.data
+        for(let i=0; i<coins.length; i++) {
+            coins[i].askPrice = coins[i].sellOne
+            coins[i].bidPrice = coins[i].buyOne
+        }  
+        changeBitget(coins)
     }
 }
 

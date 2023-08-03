@@ -1,5 +1,5 @@
 const { searchLargestSubstr } = require('../Utils/searchLargestSubstr')
-let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee} = require('./feeData')
+let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee} = require('./feeData')
 
 const isWithdrawEnable = (obj) => {
     const unicNames = {
@@ -9,10 +9,11 @@ const isWithdrawEnable = (obj) => {
         'gateIo': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
         'coinbase': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
         'lbank': ['networkList', 'name', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
-        'kucoin': ['chains', 'chainName', 'isDepositEnabled', 'isWithdrawEnabled:', 'withdrawalMinFee'],
-        'okx': ['networkList', 'network', 'withdrawEnable', 'depositEnable:', 'withdrawFee'],
+        'kucoin': ['chains', 'chainName', 'isDepositEnabled', 'isWithdrawEnabled', 'withdrawalMinFee'],
+        'okx': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
+        'bitget': ['chains', 'chain', 'rechargeable', 'withdrawable', 'withdrawFee'],
     }
-    
+
     const feeObj = {
         binance: binanceFee.feeData,
         mexc: mexcFee.feeData,
@@ -22,6 +23,7 @@ const isWithdrawEnable = (obj) => {
         lbank: lbankFee.feeData,
         kucoin: kucoinFee.feeData,
         okx: okxFee.feeData,
+        bitget: bitgetFee.feeData,
     }
     const coinName = obj.baseAsset            // BTC
     const withdrawArr = feeObj[obj.buyFrom]   // feeObj['mexc'] 
@@ -33,7 +35,7 @@ const isWithdrawEnable = (obj) => {
     //1) находим в массиве fee монету(btc) 2)фильтруем массив network по withdrawEnable==true 3)сортируем по withdrawFee
     let withdrawNetworkList = withdrawArr.find((elem) => elem.coin === coinName)?.[wordsInExchangeBuyArr[0]].filter((elem) => elem[wordsInExchangeBuyArr[3]] == true).sort((a, b) => parseFloat(a[wordsInExchangeBuyArr[4]]) - parseFloat(b[wordsInExchangeBuyArr[4]]))
     let depositNetworkList = depositArr.find((elem) => elem.coin === coinName)?.[wordsInExchangeSellArr[0]].filter((elem) => elem[wordsInExchangeSellArr[2]] == true)
-    
+
     if(withdrawNetworkList === undefined) withdrawNetworkList = []
     if(depositNetworkList === undefined) depositNetworkList = []
 

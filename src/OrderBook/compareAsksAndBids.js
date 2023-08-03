@@ -197,9 +197,9 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         currentObj.availableWithdraw = transferInfo.availableWithdraw
         currentObj.availableDeposit = transferInfo.availableDeposit
         
-         if((requestedCoinsArr[i].byFrom === 'okx') || (requestedCoinsArr[i].sellTo === 'okx')) {
-            console.log(requestedCoinsArr[i])   
-         }
+        //  if((requestedCoinsArr[i].byFrom === 'bitget') || (requestedCoinsArr[i].sellTo === 'bitget')) {
+        //     console.log(requestedCoinsArr[i])   
+        //  }
         logReadyChain(requestedCoinsArr[i])
 
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')

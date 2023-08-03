@@ -6,6 +6,7 @@ const { getExchangeInfoCoinbase } = require('./GetExchangeInfo/getExchangeInfoCo
 const { getExchangeInfoLBank } = require('./GetExchangeInfo/getExchangeInfoLBank')
 const { getExchangeInfoKuCoin } = require('./GetExchangeInfo/getExchangeInfoKuCoin')
 const { getExchangeInfoOKX } = require('./GetExchangeInfo/getExchangeInfoOKX')
+const { getExchangeInfoBitget } = require('./GetExchangeInfo/getExchangeInfoBitget')
 
 const fetchExtraInfo = async() => {
     console.log('запрос на ExchangeInfo...')
@@ -18,6 +19,7 @@ const fetchExtraInfo = async() => {
         getExchangeInfoLBank(),
         getExchangeInfoKuCoin(),
         getExchangeInfoOKX(),
+        getExchangeInfoBitget(),
     ])
 }
 

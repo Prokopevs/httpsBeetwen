@@ -49,6 +49,7 @@ const getFeeKuCoin = async () => {
 
     // kucoinFee.feeData = fullArr
     // return fullArr
+    
     kucoinFee.feeData = feeKuCoinStable
 }
  

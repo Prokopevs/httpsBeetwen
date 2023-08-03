@@ -1,4 +1,4 @@
-const { extraFeeMexc, extraFeeLbank } = require("./orderBookData")
+const { extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo } = require("./orderBookData")
 
 const extraFeeFunc = (buyExchangeName, sellExchangeName, requestedCoin) => {
     if(buyExchangeName == 'mexc') {
@@ -13,6 +13,7 @@ const extraFeeFunc = (buyExchangeName, sellExchangeName, requestedCoin) => {
             return coin.deposit
         }
     }
+
     if(buyExchangeName == 'lbank') {
         const coin = extraFeeLbank.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
@@ -21,6 +22,32 @@ const extraFeeFunc = (buyExchangeName, sellExchangeName, requestedCoin) => {
     }
     if(sellExchangeName == 'lbank') {
         const coin = extraFeeLbank.find((item) => item.coin === requestedCoin.baseAsset)
+        if(coin) {
+            return coin.deposit
+        }
+    }
+
+    if(buyExchangeName == 'bitget') {
+        const coin = extraFeeBitget.find((item) => item.coin === requestedCoin.baseAsset)
+        if(coin) {
+            return coin.withdraw
+        }
+    }
+    if(sellExchangeName == 'bitget') {
+        const coin = extraFeeBitget.find((item) => item.coin === requestedCoin.baseAsset)
+        if(coin) {
+            return coin.deposit
+        }
+    }
+
+    if(buyExchangeName == 'gateIo') {
+        const coin = extraFeeGateIo.find((item) => item.coin === requestedCoin.baseAsset)
+        if(coin) {
+            return coin.withdraw
+        }
+    }
+    if(sellExchangeName == 'gateIo') {
+        const coin = extraFeeGateIo.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
             return coin.deposit
         }

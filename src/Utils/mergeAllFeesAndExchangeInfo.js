@@ -1,8 +1,8 @@
-let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo } = require('../ExtraInfo/ExchangeData')
-let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, kucoinFee, okxFee } = require('../Fee/feeData')
+let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo } = require('../ExtraInfo/ExchangeData')
+let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, kucoinFee, okxFee, allInFullNameFromBitget } = require('../Fee/feeData')
 
 
-const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [bybitExchangeInfo, fullNameFromCMCArr, 'symbol'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], [kucoinExchangeInfo, kucoinFee, 'coin'], [okxExchangeInfo, okxFee, 'coin'],] 
+const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], [kucoinExchangeInfo, kucoinFee, 'coin'], [okxExchangeInfo, okxFee, 'coin'], [bitgetExchangeInfo, fullNameFromCMCArr, 'symbol'],] 
 
 const mergeAllFeesAndExchangeInfo = async () => {
     await getFullCoinNameFromCMC()
@@ -33,7 +33,7 @@ const getFullCoinNameFromCMC = async () => {
     let requests = urlsArr.map((url) => fetch(url).then((response) => response.json()))
     await Promise.all(requests)
         .then(results => { 
-            fullNameFromCMCArr.feeData = [...results[0].data, ...results[1].data, ...results[2].data]
+            fullNameFromCMCArr.feeData = [...results[0].data, ...results[1].data, ...results[2].data, ...allInFullNameFromBitget]
         })
 }
 
