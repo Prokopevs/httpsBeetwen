@@ -10,10 +10,11 @@ const getFeeBybit = async () => {
     const data = result.data.result.rows
     for(let i=0; i<data.length; i++) {
         for(let j=0; j<data[i].chains.length; j++) {
-            data[i].chains[j].depositEnable = true
-            data[i].chains[j].withdrawEnable = true
+            data[i].chains[j].depositEnable = data[i].chains[j].chainDeposit === '1' ? true : false
+            data[i].chains[j].withdrawEnable = data[i].chains[j].chainWithdraw === '1' ? true : false
         }
     }
+
     bybitFee.feeData = data
     return data
 }

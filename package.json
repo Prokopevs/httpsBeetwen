@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/App.js"
+    "start": "nodemon ./src/App.js",
+    "bot": "nodemon ./src/TgBot/bot.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +15,8 @@
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "js-big-decimal": "^1.4.1",
-    "pg": "^8.11.1"
+    "pg": "^8.11.1",
+    "telegraf": "^4.12.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

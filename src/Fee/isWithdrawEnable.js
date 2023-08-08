@@ -1,5 +1,5 @@
 const { searchLargestSubstr } = require('../Utils/searchLargestSubstr')
-let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee} = require('./feeData')
+let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee} = require('./feeData')
 
 const isWithdrawEnable = (obj) => {
     const unicNames = {
@@ -12,6 +12,7 @@ const isWithdrawEnable = (obj) => {
         'kucoin': ['chains', 'chainName', 'isDepositEnabled', 'isWithdrawEnabled', 'withdrawalMinFee'],
         'okx': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
         'bitget': ['chains', 'chain', 'rechargeable', 'withdrawable', 'withdrawFee'],
+        'huobi': ['chains', 'network', 'depositStatus', 'withdrawStatus', 'withdrawFee'],
     }
 
     const feeObj = {
@@ -24,6 +25,7 @@ const isWithdrawEnable = (obj) => {
         kucoin: kucoinFee.feeData,
         okx: okxFee.feeData,
         bitget: bitgetFee.feeData,
+        huobi: huobiFee.feeData
     }
     const coinName = obj.baseAsset            // BTC
     const withdrawArr = feeObj[obj.buyFrom]   // feeObj['mexc'] 
@@ -138,6 +140,9 @@ const findChain = (withdrawNetworkList, depositNetworkList, wordsInExchangeBuyAr
         for(let j=0; j<depositNetworkList.length; j++) {
             const InNetwork = networkName(depositNetworkList[j], wordsInExchangeSellArr[1], sellTo) // BEP20
             let sameString = searchLargestSubstr([OutNetwork, InNetwork]) // сравниваем BNB Smart Chain(BEP20) с BEP20
+            if( sameString.substr(-1) === "/" ) sameString = sameString.slice(0, -1)
+            if( sameString.substr(0) === "/" ) sameString = sameString.slice(1)
+            if(sameString === 'RC20') sameString = '' // исключаем RC20
             if((OutNetwork == 'AE') && (InNetwork == 'AE')) sameString = 'AE ' // исключение AE
             if(sameString.length>2) { // если нашли совпадение которое больше 2 символов
                 const fee = withdrawNetworkList[i][wordsInExchangeBuyArr[4]]

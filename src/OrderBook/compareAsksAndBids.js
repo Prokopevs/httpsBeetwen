@@ -105,9 +105,10 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
 
         const buyExchangeName = requestedCoinsArr[i].buyFrom              // 'mexc'
         const sellExchangeName = requestedCoinsArr[i].sellTo                // 'binance'
-        const extraFee = extraFeeFunc(buyExchangeName, sellExchangeName, requestedCoinsArr[i])
-        let spotFeeInBuyExchange = spotFee[buyExchangeName] + extraFee
-        let spotFeeInSellExchange = spotFee[sellExchangeName] + extraFee
+        const extraFeeBuy = extraFeeFunc(buyExchangeName, requestedCoinsArr[i], 'buy')
+        const extraFeeSell = extraFeeFunc(sellExchangeName, requestedCoinsArr[i], 'sell')
+        let spotFeeInBuyExchange = spotFee[buyExchangeName] + extraFeeBuy
+        let spotFeeInSellExchange = spotFee[sellExchangeName] + extraFeeSell
 
 
         //------------------------Fee----------------------------//
@@ -162,7 +163,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             if(dollars == 0) {
                 const realProfit = profit-generalFeeStable
                 const realPercent = realProfit*100/arrSums[i]
-                if(realPercent>0.3) { 
+                if(realPercent>0.2) { 
                     sumObj[arrSums[i]] = Number(realProfit.toFixed(3))
                 }
             } 
@@ -200,7 +201,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         //  if((requestedCoinsArr[i].byFrom === 'bitget') || (requestedCoinsArr[i].sellTo === 'bitget')) {
         //     console.log(requestedCoinsArr[i])   
         //  }
-        logReadyChain(requestedCoinsArr[i])
+        if(requestedCoinsArr[i].baseAsset !== 'GMT') logReadyChain(requestedCoinsArr[i])
 
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
     }

@@ -1,4 +1,4 @@
-let { currentMilkyArr, superBlackArr, temporary5minBlackArr } = require('../Data')
+let { currentMilkyArr, superBlackArr, temporary5minBlackArr, fiatFilter } = require('../Data')
 let { accumulate } = require('./accumulate')
 const { format } = require('date-fns')
 
@@ -65,7 +65,9 @@ const checkPercent = (spred, coinBuy, coinSell) => {
 
         if(!superBlackArr.includes(obj.nickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов
             if(!temporary5minBlackArr.data.some(item => item.nickName === nickName)) {
-                currentMilkyArr.push(obj)
+                if(!fiatFilter.includes(obj.quoteAsset)) { // проверка на фиатные связки (eur и.т.д)
+                    currentMilkyArr.push(obj)
+                }
             }
         }
     }

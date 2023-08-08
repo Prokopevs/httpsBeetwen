@@ -1,7 +1,7 @@
-let { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr, bitgetArr } = require('./ExchangesArray')
+let { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr, bitgetArr, huobiArr } = require('./ExchangesArray')
 let { commonExchange } = require('./commonExchange')
-let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo } = require('../ExtraInfo/ExchangeData')
-let { binanceMargin, gateIoMargin, bybitMargin, kucoinMargin, okxMargin, bitgetMargin } = require('.././Margin/marginData')
+let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo, huobiExchangeInfo } = require('../ExtraInfo/ExchangeData')
+let { binanceMargin, gateIoMargin, bybitMargin, kucoinMargin, okxMargin, bitgetMargin, huobiMargin } = require('.././Margin/marginData')
 
 
 const changeBinance = (coins) => {
@@ -40,4 +40,8 @@ const changeBitget = (coins) => {
     commonExchange(coins, bitgetArr, 'bitget', bitgetExchangeInfo.exchangeData, bitgetMargin.marginData)
 }
 
-module.exports = { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget}
+const changeHuobi = (coins) => {
+    commonExchange(coins, huobiArr, 'huobi', huobiExchangeInfo.exchangeData, huobiMargin.marginData)
+}
+
+module.exports = { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi}

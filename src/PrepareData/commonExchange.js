@@ -4,7 +4,6 @@ const { fetchExchangeInfo } = require('./ExtraFetch/fetchExchangeInfo')
 const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, margin) => {
     const oldArrLength = oldCoinsArr.data.length
     let localFlag = 0
-
     if(oldArrLength !== coins.length) { // если длина массива старого и нового разная, то пременную flag.value делаем 1
         flag.value = 1
         localFlag = 1

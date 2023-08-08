@@ -50,6 +50,6 @@ starter()
 
 function createRequest() {
     let arrRequest = urlsArr.map((url) => fetch(url).then((response) => response.json()))
-    arrRequest.splice(4,0,getBestBidsAsksCoinbase())
+    // arrRequest.splice(4,0,getBestBidsAsksCoinbase())
     return arrRequest
 }

@@ -1,5 +1,5 @@
-let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr } = require('./ExchangesArray')
+let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi } = require('./differentExchanges')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList } = require('./ExchangesArray')
 const axios = require("axios")
 let kuCoinFlag = 0
 const addInfo = async(coins, num) => {
@@ -80,20 +80,20 @@ const addInfo = async(coins, num) => {
         changeGateIo(sortedArray)
     }
     if(num == 4) {   //coinbase
-        for(let i=0; i<coins.length; i++) {
-            const symbolArr = coins[i].product_id.split('-')
-            if(symbolArr[1] === 'USDC') {
-                coins[i].symbol = symbolArr[0]+'USDT'
-            } else {
-                coins[i].symbol = symbolArr[0]+symbolArr[1]
-            }
-            coins[i].askPrice = coins[i].asks[0].price
-            coins[i].askQty = coins[i].asks[0].size
-            coins[i].bidPrice = coins[i].bids[0].price
-            coins[i].bidQty = coins[i].bids[0].size
-        }
-        const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
-        changeCoinbase(sortedArray)
+        // for(let i=0; i<coins.length; i++) {
+        //     const symbolArr = coins[i].product_id.split('-')
+        //     if(symbolArr[1] === 'USDC') {
+        //         coins[i].symbol = symbolArr[0]+'USDT'
+        //     } else {
+        //         coins[i].symbol = symbolArr[0]+symbolArr[1]
+        //     }
+        //     coins[i].askPrice = coins[i].asks[0].price
+        //     coins[i].askQty = coins[i].asks[0].size
+        //     coins[i].bidPrice = coins[i].bids[0].price
+        //     coins[i].bidQty = coins[i].bids[0].size
+        // }
+        // const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
+        // changeCoinbase(sortedArray)
     }
     if(num == 5) {   //LBank
         coins = coins.data
@@ -159,6 +159,19 @@ const addInfo = async(coins, num) => {
             coins[i].bidPrice = coins[i].buyOne
         }  
         changeBitget(coins)
+    }
+    if(num == 9) {   //Huobi
+        coins = coins.data
+        for(let i=0; i<coins.length; i++) {
+            coins[i].symbol = coins[i].symbol.toUpperCase()
+            coins[i].askPrice = coins[i].ask
+            coins[i].bidPrice = coins[i].bid
+            if(huobiBlackList.includes(coins[i].symbol)) {
+                coins.splice(i, 1)
+                i--
+            }
+        }  
+        changeHuobi(coins)
     }
 }
 

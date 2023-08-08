@@ -1,58 +1,38 @@
-const { extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo } = require("./orderBookData")
+const { extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo, extraFeeHuobi } = require("./orderBookData")
 
-const extraFeeFunc = (buyExchangeName, sellExchangeName, requestedCoin) => {
-    if(buyExchangeName == 'mexc') {
+const extraFeeFunc = (ExchangeName, requestedCoin, side) => {
+    if(ExchangeName == 'mexc') {
         const coin = extraFeeMexc.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
-            return coin.withdraw
+            return side === 'buy' ? coin.withdraw : coin.deposit
         }
     }
-    if(sellExchangeName == 'mexc') {
-        const coin = extraFeeMexc.find((item) => item.coin === requestedCoin.baseAsset)
-        if(coin) {
-            return coin.deposit
-        }
-    }
-
-    if(buyExchangeName == 'lbank') {
+    if(ExchangeName == 'lbank') {
         const coin = extraFeeLbank.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
-            return coin.withdraw
+            return side === 'buy' ? coin.withdraw : coin.deposit
         }
     }
-    if(sellExchangeName == 'lbank') {
-        const coin = extraFeeLbank.find((item) => item.coin === requestedCoin.baseAsset)
-        if(coin) {
-            return coin.deposit
-        }
-    }
-
-    if(buyExchangeName == 'bitget') {
+    if(ExchangeName == 'bitget') {
         const coin = extraFeeBitget.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
-            return coin.withdraw
+            return side === 'buy' ? coin.withdraw : coin.deposit
         }
     }
-    if(sellExchangeName == 'bitget') {
-        const coin = extraFeeBitget.find((item) => item.coin === requestedCoin.baseAsset)
-        if(coin) {
-            return coin.deposit
-        }
-    }
-
-    if(buyExchangeName == 'gateIo') {
+    if(ExchangeName == 'gateIo') {
         const coin = extraFeeGateIo.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
-            return coin.withdraw
+            return side === 'buy' ? coin.withdraw : coin.deposit
         }
     }
-    if(sellExchangeName == 'gateIo') {
-        const coin = extraFeeGateIo.find((item) => item.coin === requestedCoin.baseAsset)
+    if(ExchangeName == 'huobi') {
+        const coin = extraFeeHuobi.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
-            return coin.deposit
+            return side === 'buy' ? coin.withdraw : coin.deposit
         }
     }
     return 0
+    
 }
 
 

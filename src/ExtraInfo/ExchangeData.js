@@ -7,5 +7,6 @@ let lbankExchangeInfo = {exchangeData: []}
 let kucoinExchangeInfo = {exchangeData: []}
 let okxExchangeInfo = {exchangeData: []}
 let bitgetExchangeInfo = {exchangeData: []}
+let huobiExchangeInfo = {exchangeData: []}
 
-module.exports = { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo}
+module.exports = { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo, huobiExchangeInfo}
