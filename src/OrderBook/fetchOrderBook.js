@@ -2,7 +2,7 @@ const { requestFlag } = require("../Data")
 const { getOrderBookCoinbase } = require("../ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase")
 const { compareAsksAndBids } = require("./compareAsksAndBids")
 
-const fetchOrderBook = (preBuyArr) => {
+const fetchOrderBook = (preBuyArr, status) => {
     console.log(preBuyArr.length)
     const urlsArr = []
     const requestedCoinsArr = []
@@ -22,14 +22,18 @@ const fetchOrderBook = (preBuyArr) => {
     const createUrl = (url, symbol, limit) => {
         let finalUrl = url+symbol+`&${limit}=40`
         if(limit === 'kucoin') finalUrl = url+symbol
-        if(limit === 'huobi') finalUrl = url+symbol+'&type=step0'
+        if(limit === 'huobi') {
+            finalUrl = url+symbol+'&type=step0'
+            console.log(finalUrl)
+        }
+
         urlsArr.push(finalUrl)
     }
 
     for(let i=0; i<preBuyArr.length; i++) {
         const coinObj = preBuyArr[i]
 
-        if(count == 12) {
+        if(count == 10) {
             break
         }
         if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit') // обязательно с начала buyFrom
@@ -41,7 +45,7 @@ const fetchOrderBook = (preBuyArr) => {
         if(coinObj.buyFrom === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
         if(coinObj.buyFrom === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
         if(coinObj.buyFrom === 'bitget') createUrl(bitgetFetch, coinObj.symbol+'_SPBL', 'limit')
-        if(coinObj.buyFrom === 'huobi') createUrl(huobiFetch, coinObj.symbol.toLowerCase(), 'huobi')
+        if(coinObj.buyFrom === 'huobi') createUrl(huobiFetch, coinObj.originalHuobiSymbol, 'huobi')
         
 
         if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit')
@@ -53,7 +57,7 @@ const fetchOrderBook = (preBuyArr) => {
         if(coinObj.sellTo === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
         if(coinObj.sellTo === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
         if(coinObj.sellTo === 'bitget') createUrl(bitgetFetch, coinObj.symbol+'_SPBL', 'limit')
-        if(coinObj.sellTo === 'huobi') createUrl(huobiFetch, coinObj.symbol.toLowerCase(), 'huobi')
+        if(coinObj.sellTo === 'huobi') createUrl(huobiFetch, coinObj.originalHuobiSymbol, 'huobi')
 
 
         requestedCoinsArr.push(coinObj)  // пушим в массив те монеты, на которые сделаем запрос
@@ -74,12 +78,15 @@ const fetchOrderBook = (preBuyArr) => {
     Promise.all(requests)
         .then(results => { 
             const newResult = combineOrderBooks(results, requestedCoinsArr)
-            compareAsksAndBids(newResult, requestedCoinsArr)
+            compareAsksAndBids(newResult, requestedCoinsArr, status)
+        }) 
+        .catch(error => {
+            console.log(error)
         }) 
     
     // если элементы в массиве остались, то через 1000 запрашиваем снова
     if(preBuyArr.length) {
-        setTimeout(fetchOrderBook, 1000, preBuyArr)
+        setTimeout(fetchOrderBook, 1000, preBuyArr, 'ordinary')
     } else {
         requestFlag.data = true
     }

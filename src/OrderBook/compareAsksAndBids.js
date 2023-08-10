@@ -5,7 +5,7 @@ const { extraFeeFunc } = require("./extraFeeFunc")
 const { logReadyChain } = require("./logReadyChain")
 let { spotFee } = require('./orderBookData')
 
-const compareAsksAndBids = (orders, requestedCoinsArr) => {
+const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
     for(let i=0; i<orders.length; i++) {
         const asks = orders[i][0].asks
         const bids = orders[i][1].bids
@@ -19,8 +19,13 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         let sumSellUSDT = 0
         let sumQty = 0
         let sumUSDTInSellEXchange
-
         let generalUSDTSpred = 0
+
+        const buyExchangeName = requestedCoinsArr[i].buyFrom              // 'mexc'
+        const sellExchangeName = requestedCoinsArr[i].sellTo                // 'binance'
+        const extraFeeBuy = extraFeeFunc(buyExchangeName, requestedCoinsArr[i], 'buy')
+        const extraFeeSell = extraFeeFunc(sellExchangeName, requestedCoinsArr[i], 'sell')
+        const sumExtraFee = Number(extraFeeBuy) + Number(extraFeeSell)
 
         for(let j=0; j<asks.length; j++) {
             const priceInAskArr = Number(asks[j][0])
@@ -32,7 +37,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
 
                 const spred = priceInBidsArr*100/priceInAskArr-100
 
-                if(spred >= 0.3) {
+                if(spred >= 0.3+sumExtraFee) {
                     // случай 1
                     if(qtyInAskArr < qtyInBidsArr) {
                         const left = qtyInBidsArr-qtyInAskArr
@@ -85,14 +90,16 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         //---------------------BlackList 1-------------------------//
-        if(generalUSDTSpred < 0.6) {            // если профит меньше 0.7 долларов без учета коммисии
-            requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
-            requestedCoinsArr[i].timeInBlock = 5
-            temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
-            continue
+        if(status === 'ordinary') { // спатус ordinary когда идут простые запросы и в них проверяем что профит нужен больше 1
+            if(generalUSDTSpred < 1) {            // если профит меньше 0.7 долларов без учета коммисии
+                requestedCoinsArr[i].blockingTime = new Date() // сохраняем время блокировки
+                requestedCoinsArr[i].timeInBlock = 5
+                temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
+                continue
         }
         //----------------------------------------------------------//
-
+        }
+            
         const avarageBuyPrice = (sumUSDT/sumQty)
         const avarageSellPrice = (sumSellUSDT/sumQty)
         if(buyArr[buyArr.length-1].left == 0) {
@@ -103,10 +110,6 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             sumUSDTInSellEXchange = buyArr[buyArr.length-1].left * buyArr[buyArr.length-1].priceInAskArr + sumUSDT
         }
 
-        const buyExchangeName = requestedCoinsArr[i].buyFrom              // 'mexc'
-        const sellExchangeName = requestedCoinsArr[i].sellTo                // 'binance'
-        const extraFeeBuy = extraFeeFunc(buyExchangeName, requestedCoinsArr[i], 'buy')
-        const extraFeeSell = extraFeeFunc(sellExchangeName, requestedCoinsArr[i], 'sell')
         let spotFeeInBuyExchange = spotFee[buyExchangeName] + extraFeeBuy
         let spotFeeInSellExchange = spotFee[sellExchangeName] + extraFeeSell
 
@@ -121,9 +124,11 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
             commissionForWithdraw = Number(transferInfo.data.firstTransferArr.fee)
         }
 
-        const sumQtyLength = getLength(sumQty)
-        const feeForSpotInBuyExchange = sumQty*spotFeeInBuyExchange/100   // коммисия 0.1% за покупку
-        const sumQtyWithFeeForBuy = sumQty - feeForSpotInBuyExchange          // количество монет после отнятия комммисии за покупку(0.1%)
+        // const sumQtyLength = getLength(sumQty)
+        const feeSpotInSellExForWithoutWithdrawFeeUSDT = (sumQty*spotFeeInSellExchange/100) * Number(asksInSellArrForFee[0][0]) // комиссия в долларах 0.1% за продажу для случая когда считаем generalUSDTSpredWithoutWithdrawFee
+
+        const feeForSpotInBuyExchange = sumQty*spotFeeInBuyExchange/100   // коммисия в монетах 0.1% за покупку
+        const sumQtyWithFeeForBuy = sumQty - feeForSpotInBuyExchange      // количество монет после отнятия комммисии за покупку(0.1%)
 
         const sumQtyAfterTransfer = sumQtyWithFeeForBuy - commissionForWithdraw // количество монет после отправки
         const feeForSpotInSellExchange = sumQtyAfterTransfer*spotFeeInSellExchange/100 // комиссия 0.1% за продажу
@@ -131,15 +136,17 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         const feeForSpotInBuyExchangeUSDT = feeForSpotInBuyExchange * Number(asks[0][0])
         const feeForWithdrawUSDT = commissionForWithdraw * Number(asks[0][0])
         const feeForSpotInSellExchangeUSDT = feeForSpotInSellExchange * Number(asksInSellArrForFee[0][0]) 
+
         const totalFeeSpotUSDT = feeForSpotInBuyExchangeUSDT+feeForSpotInSellExchangeUSDT // объщая комиссия за спот ордера (0.1+0.1)
         const totalFee = totalFeeSpotUSDT+feeForWithdrawUSDT //общая комиссия за все действия
 
-        const generalUSDTSpredWithoutWithdrawFee = generalUSDTSpred - feeForSpotInBuyExchangeUSDT - (feeForSpotInBuyExchange* Number(asksInSellArrForFee[0][0])) // прибыль если не выводить монеты, а отдавать только за спот 0.1%
+        const generalUSDTSpredWithoutWithdrawFee = generalUSDTSpred-feeForSpotInBuyExchangeUSDT-feeSpotInSellExForWithoutWithdrawFeeUSDT 
+        // прибыль если не выводить монеты, а отдавать только за спот 0.1%
         generalUSDTSpred = generalUSDTSpred-totalFee        // вычитаем из зароботка комиссию
         let avaragePercent = generalUSDTSpred*100/sumUSDT
 
         //---------------------StablePrices-----------------------//
-        const arrSums = [50, 80, 100, 125, 150, 200]
+        const arrSums = [50, 75, 100, 125, 150, 200]
         const sumObj = {}
         for(let i=0; i<arrSums.length; i++) {
             let dollars = arrSums[i] // 50
@@ -170,27 +177,42 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         }
 
         //-----------------------Log-----------------------------//
-        const priceLengthInBuyExchange = getLength(buyArr[0].priceInAskArr)
-        const priceLengthInSellExchange = getLength(buyArr[0].priceInBidsArr)
-
+        let avarageCutBuyPrice
+        let avarageCutSellPrice
+        if(String(buyArr[0].priceInAskArr).includes('e')) {
+            const eArrBuyPrice = String(avarageBuyPrice).split('e') // [ '7.9432237', '-7' ]
+            const eArrSellPrice = String(avarageSellPrice).split('e') 
+            eArrBuyPrice.splice(0, 1, Number(eArrBuyPrice[0]).toFixed(4)) // [ '7.9443', '-7' ]
+            eArrSellPrice.splice(0, 1, Number(eArrSellPrice[0]).toFixed(4))
+            avarageCutBuyPrice = eArrBuyPrice.join('e')  // 7.9443e-7
+            avarageCutSellPrice = eArrSellPrice.join('e')
+        } else {
+            const priceLengthInBuyExchange = getLength(buyArr[0].priceInAskArr)
+            const priceLengthInSellExchange = getLength(buyArr[0].priceInBidsArr)
+            avarageCutBuyPrice = avarageBuyPrice.toFixed(priceLengthInBuyExchange)
+            avarageCutSellPrice = avarageSellPrice.toFixed(priceLengthInSellExchange)
+        }
+        
         let currentObj = requestedCoinsArr[i]
         currentObj.profitInUSDT = generalUSDTSpred.toFixed(3)
         currentObj.realPercent = avaragePercent.toFixed(3)
 
-        currentObj.avgPriceInBuyEx = avarageBuyPrice.toFixed(priceLengthInBuyExchange)
-        currentObj.pricesInBuyEx = '['+buyArr[0].priceInAskArr+'-'+buyArr[buyArr.length-1].priceInAskArr+']'
+        currentObj.avgPriceInBuyEx = avarageCutBuyPrice
+        currentObj.pricesInBuyEx = [buyArr[0].priceInAskArr, buyArr[buyArr.length-1].priceInAskArr]
         currentObj.maxDealInBuyEx = sumUSDT.toFixed(3)
-        currentObj.valueInBuyEx = Number(sumQtyWithFeeForBuy.toFixed(sumQtyLength))
+        currentObj.valueInBuyEx = Number(sumQtyWithFeeForBuy.toFixed(4))  //было sumQtyLength
         currentObj.ordersInBuyEx = askCount
 
-        currentObj.avgPriceInSellEx = avarageSellPrice.toFixed(priceLengthInSellExchange)
-        currentObj.pricesInSellEx = '['+buyArr[0].priceInBidsArr+'-'+buyArr[buyArr.length-1].priceInBidsArr+']'
+        currentObj.avgPriceInSellEx = avarageCutSellPrice
+        currentObj.pricesInSellEx = [buyArr[0].priceInBidsArr, buyArr[buyArr.length-1].priceInBidsArr]
         currentObj.maxDealInSellEx = sumUSDTInSellEXchange.toFixed(3)
-        currentObj.valueInSellEx = Number(sumQtyAfterTransfer.toFixed(sumQtyLength))
+        currentObj.valueInSellEx = Number(sumQtyAfterTransfer.toFixed(4))
         currentObj.ordersInSellEx = bidsCount
 
-        currentObj.totalFeeSpot = totalFeeSpotUSDT
-        currentObj.feeWithdraw = feeForWithdrawUSDT
+        currentObj.totalFeeSpot = totalFeeSpotUSDT.toFixed(2)
+        currentObj.feeWithdraw = feeForWithdrawUSDT.toFixed(2)
+        currentObj.feeWithdrawInCoins = commissionForWithdraw.toString()
+        currentObj.extraFee = sumExtraFee
         currentObj.profitInUSDTIfNotWithdraw = generalUSDTSpredWithoutWithdrawFee.toFixed(3)
 
         currentObj.stablePrices = sumObj
@@ -201,8 +223,11 @@ const compareAsksAndBids = (orders, requestedCoinsArr) => {
         //  if((requestedCoinsArr[i].byFrom === 'bitget') || (requestedCoinsArr[i].sellTo === 'bitget')) {
         //     console.log(requestedCoinsArr[i])   
         //  }
-        if(requestedCoinsArr[i].baseAsset !== 'GMT') logReadyChain(requestedCoinsArr[i])
-
+        if(status === 'refetch') { // если нажали на кнопку обновить
+            return requestedCoinsArr[i]
+        } else {
+            logReadyChain(requestedCoinsArr[i])
+        }
         // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
     }
 }

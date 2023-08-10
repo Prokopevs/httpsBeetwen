@@ -1,4 +1,5 @@
 const { searchLargestSubstr } = require('../Utils/searchLargestSubstr')
+const { checkSameStr } = require('./checkSameStr')
 let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee} = require('./feeData')
 
 const isWithdrawEnable = (obj) => {
@@ -140,10 +141,7 @@ const findChain = (withdrawNetworkList, depositNetworkList, wordsInExchangeBuyAr
         for(let j=0; j<depositNetworkList.length; j++) {
             const InNetwork = networkName(depositNetworkList[j], wordsInExchangeSellArr[1], sellTo) // BEP20
             let sameString = searchLargestSubstr([OutNetwork, InNetwork]) // сравниваем BNB Smart Chain(BEP20) с BEP20
-            if( sameString.substr(-1) === "/" ) sameString = sameString.slice(0, -1)
-            if( sameString.substr(0) === "/" ) sameString = sameString.slice(1)
-            if(sameString === 'RC20') sameString = '' // исключаем RC20
-            if((OutNetwork == 'AE') && (InNetwork == 'AE')) sameString = 'AE ' // исключение AE
+            sameString = checkSameStr(sameString, OutNetwork, InNetwork)
             if(sameString.length>2) { // если нашли совпадение которое больше 2 символов
                 const fee = withdrawNetworkList[i][wordsInExchangeBuyArr[4]]
                 const successObj = {network: sameString, fee: fee}

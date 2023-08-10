@@ -1,12 +1,22 @@
 require('dotenv').config({path:__dirname+'/../.env'})
 const { Telegraf } = require('telegraf');
+const { fetchOrderBook } = require('../OrderBook/fetchOrderBook');
 const botToken = process.env.bot
 const bot = new Telegraf(botToken);
-module.exports = bot
-bot.start((ctx) => {
-    ctx.reply('you are in')
-    console.log(ctx.update.message)
+
+bot.on('callback_query', (ctx) => {
+    const data = ctx.callbackQuery.data;
+    // const res = fetchOrderBook([JSON.parse(data)], 'refetch')
+    ctx.answerCbQuery()
+    // console.log(res)
+    console.log(JSON.parse(data))
 })
+
+module.exports = bot
+// bot.start((ctx) => {
+//     ctx.reply('you are in')
+//     console.log(ctx.update.message)
+// })
 
 // на сообщение /test, /Test вернет hello
 // bot.command(['test', 'Test'], (ctx) => {
@@ -54,7 +64,7 @@ bot.start((ctx) => {
 //                     {text: 'click me', callback_data: 'one'}
 //                 ]
 //             ]
-//         }
+//      }
 //     })
 // })
 
@@ -67,6 +77,10 @@ bot.start((ctx) => {
 //     }
 //   });
 
-    // bot.telegram.sendMessage(518918480, 'Привет, только для тебя!');
+// отправить сообщение
+// bot.telegram.sendMessage(518918480, 'here\nhhello')
+// for(let i=0; i<usersId.length; i++) {
+//     bot.telegram.sendMessage(usersId[i], 'here')
+// }
 
-bot.launch()
+// bot.launch()

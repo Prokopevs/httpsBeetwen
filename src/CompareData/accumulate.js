@@ -28,7 +28,7 @@ const accumulate = () => {
 
     if(preBuyArr.length) {
         requestFlag.data = false
-        fetchOrderBook(preBuyArr)
+        fetchOrderBook(preBuyArr, 'ordinary')
     }
 
     clear5minBlackArr()

@@ -1,11 +1,14 @@
 const { temporary5minBlackArr } = require("../Data")
-const bot = require('./bot')
+const { chatId } = require("../TgBot/botData")
+const bot = require('../TgBot/bot')
+const { createStrForTG } = require("./createStrForTG")
 
 const logReadyChain = (chain) => {
-    const sumObjLength = Object.keys(chain.stablePrices).length
+    const keysArr = Object.keys(chain.stablePrices)
+    const workArr = ['50', '75', '100']
     let flag = 0
-    if(sumObjLength !== 0) { // если длина объекта stablePrices равна нулю
-        if((Number(chain.profitInUSDT) < 0.5) || (Number(chain.realPercent) < 0.4)) {   // если профит меньше 0.3 долларов c учетом коммисии или спред < 0.3
+    if(workArr.includes(keysArr[0])) { // если длина объекта stablePrices не равна нулю
+        if((Number(chain.profitInUSDT) < 1) || (Number(chain.realPercent) < 0.4)) {   // если профит меньше 0.3 долларов c учетом коммисии или спред < 0.3
             chain.blockingTime = new Date() // сохраняем время блокировки
             chain.timeInBlock = 5
             temporary5minBlackArr.data.push(chain) // пушим в 5 минутный блокировочный массив
@@ -21,13 +24,19 @@ const logReadyChain = (chain) => {
         }
         if(flag === 0) {
             console.log(chain)
-
-            bot.command('send', (ctx) => {
-                if (true) {
-                    bot.telegram.sendMessage(targetUserId, 'Привет, только для тебя!');
-                }
-            })
-            
+            const MessageStr = createStrForTG(chain)
+            bot.telegram.sendMessage(chatId, MessageStr, 
+                {
+                reply_markup: {
+                    inline_keyboard:
+                    [
+                        [
+                            {text: 'обновить', callback_data: `${JSON.stringify(chain)}`}
+                        ]
+                    ]
+                },
+                parse_mode: 'Markdown'
+                })
         }
     } 
     // else {  // проверка на вывод монеты
@@ -47,5 +56,4 @@ const logReadyChain = (chain) => {
 }
 
 bot.launch()
-
 module.exports = { logReadyChain }

@@ -1,5 +1,5 @@
 let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList } = require('./ExchangesArray')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList } = require('./ExchangesArray')
 const axios = require("axios")
 let kuCoinFlag = 0
 const addInfo = async(coins, num) => {
@@ -157,12 +157,17 @@ const addInfo = async(coins, num) => {
         for(let i=0; i<coins.length; i++) {
             coins[i].askPrice = coins[i].sellOne
             coins[i].bidPrice = coins[i].buyOne
+            if(bitgetBlackList.includes(coins[i].symbol)) {
+                coins.splice(i, 1)
+                i--
+            }
         }  
         changeBitget(coins)
     }
     if(num == 9) {   //Huobi
         coins = coins.data
         for(let i=0; i<coins.length; i++) {
+            coins[i].originalHuobiSymbol = coins[i].symbol
             coins[i].symbol = coins[i].symbol.toUpperCase()
             coins[i].askPrice = coins[i].ask
             coins[i].bidPrice = coins[i].bid
