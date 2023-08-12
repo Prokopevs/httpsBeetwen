@@ -25,13 +25,14 @@ const logReadyChain = (chain) => {
         if(flag === 0) {
             console.log(chain)
             const MessageStr = createStrForTG(chain)
+            
             bot.telegram.sendMessage(chatId, MessageStr, 
                 {
                 reply_markup: {
                     inline_keyboard:
                     [
                         [
-                            {text: 'обновить', callback_data: `${JSON.stringify(chain)}`}
+                            {text: 'обновить', callback_data: chain.nickName}
                         ]
                     ]
                 },

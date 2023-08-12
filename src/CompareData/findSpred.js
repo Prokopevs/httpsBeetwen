@@ -61,8 +61,6 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             count: 1,
             ...(coinBuy.originalSymbol && {originalCoinbaseSymbol: coinBuy.originalSymbol}),
             ...(coinSell.originalSymbol && {originalCoinbaseSymbol: coinSell.originalSymbol}),
-            ...(coinBuy.originalHuobiSymbol && {originalHuobiSymbol: coinBuy.originalHuobiSymbol}),
-            ...(coinSell.originalHuobiSymbol && {originalHuobiSymbol: coinSell.originalHuobiSymbol}),
         }
 
         if(!superBlackArr.includes(obj.nickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов

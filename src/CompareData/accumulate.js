@@ -1,5 +1,5 @@
 let { oldMilkyArr, currentMilkyArr, temporary5minBlackArr, requestFlag } = require('../Data')
-const { fetchOrderBook } = require('../OrderBook/fetchOrderBook')
+const fetchOrderBookMain  = require('../OrderBook/fetchOrderBook.js')
 const { logEvents } = require('../middleware/logger')
 
 const accumulate = () => {
@@ -11,7 +11,7 @@ const accumulate = () => {
             oldMilkyArr[i].count++
             currentMilkyArr.splice(index, 1)
 
-            if(oldMilkyArr[i].count === 6) {
+            if(oldMilkyArr[i].count === 10) {
                 preBuyArr.push(oldMilkyArr[i])
 
                 oldMilkyArr.splice(i, 1)
@@ -28,7 +28,7 @@ const accumulate = () => {
 
     if(preBuyArr.length) {
         requestFlag.data = false
-        fetchOrderBook(preBuyArr, 'ordinary')
+        fetchOrderBookMain.fetchOrderBook(preBuyArr, 'ordinary')
     }
 
     clear5minBlackArr()

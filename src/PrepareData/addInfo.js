@@ -167,7 +167,6 @@ const addInfo = async(coins, num) => {
     if(num == 9) {   //Huobi
         coins = coins.data
         for(let i=0; i<coins.length; i++) {
-            coins[i].originalHuobiSymbol = coins[i].symbol
             coins[i].symbol = coins[i].symbol.toUpperCase()
             coins[i].askPrice = coins[i].ask
             coins[i].bidPrice = coins[i].bid

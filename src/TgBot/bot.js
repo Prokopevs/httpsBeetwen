@@ -1,18 +1,56 @@
 require('dotenv').config({path:__dirname+'/../.env'})
 const { Telegraf } = require('telegraf');
-const { fetchOrderBook } = require('../OrderBook/fetchOrderBook');
+const { format } = require('date-fns')
+const fetchOrderBookMain = require('../OrderBook/fetchOrderBook.js');
+const { createStrForTG } = require('../OrderBook/createStrForTG.js');
+const { chatId } = require('./botData.js');
 const botToken = process.env.bot
 const bot = new Telegraf(botToken);
 
-bot.on('callback_query', (ctx) => {
-    const data = ctx.callbackQuery.data;
-    // const res = fetchOrderBook([JSON.parse(data)], 'refetch')
+bot.on('callback_query', async (ctx) => {
+    const dataArr = ctx.update.callback_query.message.text.split('\n')
+
+    const parts = dataArr[0].split('/')[1].split('[')[1].split(']')[0].split('|')
+    const names = parts.map(part => part.trim()) // ['babydogecoin', 'babydogecoin']
+
+    const nickName = ctx.update.callback_query.data
+    const callback_dataArr = ctx.update.callback_query.data.split('_') // [XETAUSDT, gateIo, bitget]
+
+    let baseAsset = dataArr[0].split('/')[0].slice(2)
+    if(baseAsset[0] === ' ') baseAsset = baseAsset.slice(1)
+    const quoteAsset = dataArr[0].split('/')[1].split(' ')[0]
+
+    const dateTime = format(new Date(), 'HH:mm:ss')
+
+    const finalObj = {
+        symbol: callback_dataArr[0],
+        baseAsset: baseAsset,
+        quoteAsset: quoteAsset,
+        buyFrom: callback_dataArr[1],
+        sellTo: callback_dataArr[2],
+        nickName: nickName,
+        names: names,
+        time: dateTime,
+    } 
+
+    const chain = await fetchOrderBookMain.fetchOrderBook([finalObj], 'refetch')
+    const NewMessageStr = createStrForTG(chain)
+    const messageId = ctx.update.callback_query.message.message_id
+
+    bot.telegram.editMessageText(chatId, messageId, null, NewMessageStr, {
+        reply_markup: {
+            inline_keyboard:
+            [
+                [
+                    {text: 'обновить', callback_data: nickName}
+                ]
+            ]
+        },
+        parse_mode: 'Markdown'
+        })
     ctx.answerCbQuery()
-    // console.log(res)
-    console.log(JSON.parse(data))
 })
 
-module.exports = bot
 // bot.start((ctx) => {
 //     ctx.reply('you are in')
 //     console.log(ctx.update.message)
@@ -77,10 +115,25 @@ module.exports = bot
 //     }
 //   });
 
+// bot.telegram.sendMessage(chatId, 'here', 
+//     {
+//     reply_markup: {
+//         inline_keyboard:
+//         [
+//             [
+//                 {text: 'обновить', callback_data: 'f'}
+//             ]
+//         ]
+//     },
+//     parse_mode: 'Markdown'
+//     })
+
 // отправить сообщение
 // bot.telegram.sendMessage(518918480, 'here\nhhello')
 // for(let i=0; i<usersId.length; i++) {
 //     bot.telegram.sendMessage(usersId[i], 'here')
 // }
+module.exports = bot
+
 
 // bot.launch()

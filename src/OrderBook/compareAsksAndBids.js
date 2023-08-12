@@ -1,6 +1,5 @@
 const { temporary5minBlackArr } = require("../Data")
 const { isWithdrawEnable } = require("../Fee/isWithdrawEnable")
-const { logEvents } = require("../middleware/logger")
 const { extraFeeFunc } = require("./extraFeeFunc")
 const { logReadyChain } = require("./logReadyChain")
 let { spotFee } = require('./orderBookData')
@@ -228,7 +227,6 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         } else {
             logReadyChain(requestedCoinsArr[i])
         }
-        // logEvents(JSON.stringify(requestedCoinsArr[count]), 'coins.log')
     }
 }
 

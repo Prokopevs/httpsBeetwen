@@ -1,6 +1,6 @@
 
 const createStrForTG = (chain) => {
-    const symbol = `🟡 ${chain.symbol} [[${chain.names[0]} | ${chain.names[1]}]]\n\n`
+    const symbol = `🟡 ${chain.baseAsset}/${chain.quoteAsset} [[${chain.names[0]} | ${chain.names[1]}]]\n\n`
 
     const byFrom = `🏢| *${chain.buyFrom}* |\n`
     const priceInBuyExchange = `Цена: ${chain.avgPriceInBuyEx} [[${chain.pricesInBuyEx[0]}--${chain.pricesInBuyEx[1]}]]\n`
@@ -18,18 +18,24 @@ const createStrForTG = (chain) => {
     if(chain.withdrawInfo.secondTransferArr) {
         thirdExchange = `➡️ ${chain.withdrawInfo.betweenExchange} ➡️ ${chain.withdrawInfo.secondTransferArr.network}`
     }
-    const spred = `\n💰 Чистый спред: *${chain.profitInUSDT}*💵 *(${chain.realPercent}%)*\n\n`
+    const spred = `\n💰 Чистый спред: *${chain.profitInUSDT}*💵 *(${chain.realPercent}%)*\n`
+    let hedging = '\n'
+    if(chain.hedging) {
+        hedging = `✅ Хеджирование\n\n`
+    }
+
     let stablePrisesStr = ''
     for (let key in chain.stablePrices) {
         const oneStable = `${key}: ${chain.stablePrices[key]}💲`
         if(stablePrisesStr === '') {
-            stablePrisesStr = stablePrisesStr + oneStable
+            stablePrisesStr = 'Фикс: ' + oneStable
         } else {
             stablePrisesStr = stablePrisesStr + ', ' + oneStable
         }
     }
+    let time = `\n\n${chain.time}`
 
-    const str = symbol+byFrom+priceInBuyExchange+volumeInBuyExchange+sellTo+priceInSellExchange+volumeInSellExchange+commission+network+thirdExchange+spred+stablePrisesStr
+    const str = symbol+byFrom+priceInBuyExchange+volumeInBuyExchange+sellTo+priceInSellExchange+volumeInSellExchange+commission+network+thirdExchange+spred+hedging+stablePrisesStr+time
     return str
 }
 
