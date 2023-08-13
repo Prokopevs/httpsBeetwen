@@ -15,6 +15,7 @@ const fetchOrderBook = async (preBuyArr, status) => {
     const okxFetch = 'https://www.okx.cab/api/v5/market/books?instId='
     const bitgetFetch = 'https://api.bitget.com/api/spot/v1/market/depth?symbol='
     const huobiFetch = 'https://api.huobi.pro/market/depth?symbol='
+    const poloniexFetch = 'https://api.poloniex.com/markets/'
 
     let count = 0
     const arrForCoinbase = []
@@ -25,6 +26,9 @@ const fetchOrderBook = async (preBuyArr, status) => {
         if(limit === 'huobi') {
             finalUrl = url+symbol+'&type=step0'
         }
+        if(limit === 'poloniex') {
+            finalUrl = url+symbol+'/orderBook?limit=50'
+        }
 
         urlsArr.push(finalUrl)
     }
@@ -32,7 +36,7 @@ const fetchOrderBook = async (preBuyArr, status) => {
     for(let i=0; i<preBuyArr.length; i++) {
         const coinObj = preBuyArr[i]
 
-        if(count == 10) {
+        if(count == 15) {
             break
         }
         if(coinObj.buyFrom === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit') // обязательно с начала buyFrom
@@ -45,6 +49,7 @@ const fetchOrderBook = async (preBuyArr, status) => {
         if(coinObj.buyFrom === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
         if(coinObj.buyFrom === 'bitget') createUrl(bitgetFetch, coinObj.symbol+'_SPBL', 'limit')
         if(coinObj.buyFrom === 'huobi') createUrl(huobiFetch, coinObj.symbol.toLowerCase(), 'huobi')
+        if(coinObj.buyFrom === 'poloniex') createUrl(poloniexFetch, coinObj.baseAsset.toUpperCase()+'_'+coinObj.quoteAsset.toUpperCase(), 'poloniex')
         
 
         if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit')
@@ -57,7 +62,7 @@ const fetchOrderBook = async (preBuyArr, status) => {
         if(coinObj.sellTo === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
         if(coinObj.sellTo === 'bitget') createUrl(bitgetFetch, coinObj.symbol+'_SPBL', 'limit')
         if(coinObj.sellTo === 'huobi') createUrl(huobiFetch, coinObj.symbol.toLowerCase(), 'huobi')
-
+        if(coinObj.sellTo === 'poloniex') createUrl(poloniexFetch, coinObj.baseAsset.toUpperCase()+'_'+coinObj.quoteAsset.toUpperCase(), 'poloniex')
 
         requestedCoinsArr.push(coinObj)  // пушим в массив те монеты, на которые сделаем запрос
         preBuyArr.splice(i, 1)
@@ -128,6 +133,8 @@ const combineOrderBooks = (orderBooks, requestedCoinsArr) => {
             createCorrectOrderBook(orderBooks[count], 'bitget', arr)
         } else if(buyFrom=='huobi') {
             createCorrectOrderBook(orderBooks[count], 'huobi', arr)
+        } else if(buyFrom=='poloniex') {
+            createCorrectOrderBook(orderBooks[count], 'poloniex', arr)
         } else {
             arr.push(orderBooks[count])
         }
@@ -144,6 +151,8 @@ const combineOrderBooks = (orderBooks, requestedCoinsArr) => {
             createCorrectOrderBook(orderBooks[count+1], 'bitget', arr)
         } else if(sellTo=='huobi') {
             createCorrectOrderBook(orderBooks[count+1], 'huobi', arr)
+        } else if(sellTo=='poloniex') {
+            createCorrectOrderBook(orderBooks[count+1], 'poloniex', arr)
         } else {
             arr.push(orderBooks[count+1])
         }
@@ -181,8 +190,19 @@ const createCorrectOrderBook = (book, exchangeName, arr) => {
         data.asks = data.asks.slice(0, 40)
         arr.push(data)
     }
+    if(exchangeName == 'poloniex') {
+        const asks = []
+        const bids = []
+        for (let i=0; i<book.asks.length; i+= 2) {
+            asks.push([book.asks[i], book.asks[i + 1]])
+        }
+        for (let i=0; i<book.bids.length; i+= 2) {
+            bids.push([book.bids[i], book.bids[i + 1]])
+        }
+        book.asks = asks.slice(0, 40)
+        book.bids = bids.slice(0, 40)
+        arr.push(book)
+    }
 }
 
-
-// module.exports = { fetchOrderBook }
 exports.fetchOrderBook = fetchOrderBook

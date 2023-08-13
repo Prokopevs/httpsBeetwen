@@ -16,7 +16,7 @@ const getExchangeInfoHuobi = async () => {
     for(let i=0; i<data.length; i++) {
         const fullName = currencies.find((item) => item.cc === data[i].bc)
         if(fullName) {
-            data[i].name = fullName.fn
+            data[i].name = fullName.fn.toLowerCase()
         }
         data[i].symbol = data[i].sc.toUpperCase()
         data[i].baseAsset = data[i].bcdn

@@ -1,4 +1,4 @@
-const { extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo, extraFeeHuobi } = require("./orderBookData")
+const { extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo, extraFeeHuobi, extraFeePoloniex } = require("./orderBookData")
 
 const extraFeeFunc = (ExchangeName, requestedCoin, side) => {
     if(ExchangeName == 'mexc') {
@@ -27,6 +27,12 @@ const extraFeeFunc = (ExchangeName, requestedCoin, side) => {
     }
     if(ExchangeName == 'huobi') {
         const coin = extraFeeHuobi.find((item) => item.coin === requestedCoin.baseAsset)
+        if(coin) {
+            return side === 'buy' ? coin.withdraw : coin.deposit
+        }
+    }
+    if(ExchangeName == 'poloniex') {
+        const coin = extraFeePoloniex.find((item) => item.coin === requestedCoin.baseAsset)
         if(coin) {
             return side === 'buy' ? coin.withdraw : coin.deposit
         }

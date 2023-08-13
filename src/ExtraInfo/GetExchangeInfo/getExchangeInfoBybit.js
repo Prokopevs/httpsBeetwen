@@ -18,7 +18,7 @@ const getExchangeInfoBybit = async () => {
     for(let i=0; i<data.length; i++) {
         const name = symbol_list.find((item) => item.baseTokenId === data[i].baseCoin)
         if(name) {
-            data[i].name = name.tokenFullName
+            data[i].name = name.tokenFullName.toLowerCase()
         }
         data[i].baseAsset = data[i].baseCoin
         data[i].quoteAsset = data[i].quoteCoin

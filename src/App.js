@@ -43,7 +43,7 @@ const starter = async() => {
         }
     }, 2000);
     setInterval(() => fetchAllFees(), 120000);
-    setInterval(() => logReadyChain(), 1500);
+    setInterval(() => logReadyChain(), 1200);
 }
 
 starter()

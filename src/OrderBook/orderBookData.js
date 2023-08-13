@@ -10,6 +10,7 @@ let spotFee = {
     okx: 0.1,
     bitget: 0.08,
     huobi: 0.15,
+    poloniex: 0.14,
 }
 
 const extraFeeMexc = [{coin:'LOOP', withdraw:10, deposit:10}, {coin:'KISHU', withdraw:2, deposit:4}, {coin:'QUACK', withdraw:12, deposit:24}, {coin:'BRISE', withdraw:12, deposit:24}, {coin:'FLOKICEO', withdraw:10, deposit:20}, {coin:'PIT', withdraw:4, deposit:8}, {coin:'SAFEMARS', withdraw:4, deposit:8}, {coin:'PIG', withdraw:5, deposit:10}, {coin: 'SQUIDGROW', withdraw:8, deposit:8}, {coin: 'SHIRYO', withdraw:10, deposit:20}, {coin: 'ASS', withdraw:10, deposit:20}, {coin: 'BABYDOGE', withdraw:10, deposit:0},]
@@ -20,6 +21,8 @@ const extraFeeBitget = [{coin:'OGGY', withdraw:10, deposit:0}, {coin:'BABYDOGE',
 
 const extraFeeGateIo = [{coin:'BABYDOGE', withdraw:10, deposit:0},]
 
+const extraFeePoloniex = [{coin:'BABYDOGE', withdraw:10, deposit:0},]
+
 const extraFeeHuobi = [{coin:'LUNC', withdraw:1.25, deposit:0}, {coin:'SOLO', withdraw:0.02, deposit:0}, {coin:'USTC', withdraw:1.25, deposit:0},]
 
-module.exports = { chains, spotFee, extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo, extraFeeHuobi}
+module.exports = { chains, spotFee, extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo, extraFeeHuobi, extraFeePoloniex}

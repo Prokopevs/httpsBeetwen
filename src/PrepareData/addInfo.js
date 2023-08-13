@@ -1,5 +1,5 @@
-let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList } = require('./ExchangesArray')
+let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi, changePoloniex } = require('./differentExchanges')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList } = require('./ExchangesArray')
 const axios = require("axios")
 let kuCoinFlag = 0
 const addInfo = async(coins, num) => {
@@ -117,12 +117,6 @@ const addInfo = async(coins, num) => {
     }
     if(num == 6) {   //KuCoin
         coins = coins.data.ticker
-        // if(kuCoinFlag === 0) {
-        //     const result = await axios.get('https://api.kucoin.com/api/v1/market/allTickers')
-        //     coins = result.data.data.ticker
-        //     kuCoinFlag = 1
-        //     console.log('here')
-        // }
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].symbol.replace(/-/g, "")
             coins[i].askPrice = coins[i].sell
@@ -176,6 +170,18 @@ const addInfo = async(coins, num) => {
             }
         }  
         changeHuobi(coins)
+    }
+    if(num == 10) {   //Poloniex
+        for(let i=0; i<coins.length; i++) {
+            coins[i].symbol = coins[i].symbol.replace(/_/g, "")
+            coins[i].askPrice = coins[i].ask
+            coins[i].bidPrice = coins[i].bid
+            if(poloniexBlackList.includes(coins[i].symbol)) {
+                coins.splice(i, 1)
+                i--
+            }
+        }  
+        changePoloniex(coins)
     }
 }
 

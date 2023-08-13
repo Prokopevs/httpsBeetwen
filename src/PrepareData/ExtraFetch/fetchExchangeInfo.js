@@ -1,4 +1,4 @@
-const { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo } = require('../../ExtraInfo/ExchangeData')
+const { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeInfo, coinbaseExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo, poloniexExchangeInfo } = require('../../ExtraInfo/ExchangeData')
 let { getExchangeInfoBinance } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBinance')
 const { getExchangeInfoBitget } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBitget')
 const { getExchangeInfoBybit } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoBybit')
@@ -7,6 +7,7 @@ const { getExchangeInfoGateIo } = require('../../ExtraInfo/GetExchangeInfo/getEx
 const { getExchangeInfoLBank } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoLBank')
 let { getExchangeInfoMexc } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoMexc')
 const { getExchangeInfoOKX } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoOKX')
+const { getExchangeInfoPoloniex } = require('../../ExtraInfo/GetExchangeInfo/getExchangeInfoPoloniex')
 const { getFeeBinance } = require('../../Fee/GetFee/getFeeBinance')
 const { getFeeBitget } = require('../../Fee/GetFee/getFeeBitget')
 const { getFeeBybit } = require('../../Fee/GetFee/getFeeBybit')
@@ -14,7 +15,8 @@ const { getFeeGateIo } = require('../../Fee/GetFee/getFeeGateIo')
 const { getFeeLBank } = require('../../Fee/GetFee/getFeeLBank')
 const { getFeeMexc } = require('../../Fee/GetFee/getFeeMexc')
 const { getFeeOKX } = require('../../Fee/GetFee/getFeeOKX')
-const { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, okxFee, bitgetFee } = require('../../Fee/feeData')
+const { getFeePoloniex } = require('../../Fee/GetFee/getFeePoloniex')
+const { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, okxFee, bitgetFee, poloniexFee } = require('../../Fee/feeData')
 const { mergeSingleFeeAndExchangeInfo } = require('../../Utils/mergeAllFeesAndExchangeInfo')
 
 const fetchExchangeInfo = async (exchangeName) => {
@@ -97,6 +99,15 @@ const fetchExchangeInfo = async (exchangeName) => {
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(bitgetExchangeInfo.exchangeData, bitgetFee.feeData, 'symbol')
             return bitgetExchangeInfo.exchangeData
+        }) 
+    }
+    if(exchangeName === 'poloniex') {
+        await Promise.all([
+            getExchangeInfoPoloniex(),
+            getFeePoloniex()
+        ]).then(() => { 
+            mergeSingleFeeAndExchangeInfo(poloniexExchangeInfo.exchangeData, poloniexFee.feeData, 'coin')
+            return poloniexExchangeInfo.exchangeData
         }) 
     }
 }
