@@ -1,5 +1,6 @@
 const { temporary5minBlackArr } = require("../Data")
 const { isWithdrawEnable } = require("../Fee/isWithdrawEnable")
+const { checkSpred } = require("./checkSpred")
 const { extraFeeFunc } = require("./extraFeeFunc")
 const { logReadyChain } = require("./logReadyChain")
 let { spotFee, chains } = require('./orderBookData')
@@ -224,7 +225,10 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         if(status === 'refetch') { // если нажали на кнопку обновить
             return requestedCoinsArr[i]
         } else {
-            chains.data.push(requestedCoinsArr[i])
+            if(requestedCoinsArr[i].symbol == 'BABYDOGEUSDT') {
+                console.log(requestedCoinsArr[i])
+            }
+            checkSpred(requestedCoinsArr[i])
         }
     }
 }

@@ -4,6 +4,7 @@ const { format } = require('date-fns')
 const fetchOrderBookMain = require('../OrderBook/fetchOrderBook.js');
 const { createStrForTG } = require('../OrderBook/createStrForTG.js');
 const { chatId } = require('./botData.js');
+const { telegramBlaskList } = require('../Data.js');
 const botToken = process.env.bot
 const bot = new Telegraf(botToken);
 
@@ -51,6 +52,18 @@ bot.on('callback_query', async (ctx) => {
         parse_mode: 'Markdown'
         })
     ctx.answerCbQuery()
+})
+
+// на сообщение CBL очистит черный лист
+bot.command('cbl', (ctx) => {
+    const arr = telegramBlaskList.data 
+    arr.splice(0,arr.length) // очищаем массив
+    ctx.reply('successfully cleared telegramBlaskList')
+})
+
+// на сообщение test ответит 
+bot.command('test', (ctx) => {
+    ctx.reply('everything is fine')
 })
 
 // bot.start((ctx) => {
