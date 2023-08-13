@@ -2,7 +2,7 @@ const { temporary5minBlackArr } = require("../Data")
 const { isWithdrawEnable } = require("../Fee/isWithdrawEnable")
 const { extraFeeFunc } = require("./extraFeeFunc")
 const { logReadyChain } = require("./logReadyChain")
-let { spotFee } = require('./orderBookData')
+let { spotFee, chains } = require('./orderBookData')
 
 const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
     for(let i=0; i<orders.length; i++) {
@@ -95,18 +95,17 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
                 requestedCoinsArr[i].timeInBlock = 5
                 temporary5minBlackArr.data.push(requestedCoinsArr[i]) // пушим в 5 минутный блокировочный массив
                 continue
+            }
         }
         //----------------------------------------------------------//
-        }
-            
         const avarageBuyPrice = (sumUSDT/sumQty)
         const avarageSellPrice = (sumSellUSDT/sumQty)
-        if(buyArr[buyArr.length-1].left == 0) {
+        if(buyArr[buyArr.length-1]?.left == 0) {
             askCount = askCount+1
             sumUSDTInSellEXchange = sumUSDT
         } else {
             bidsCount = bidsCount+1
-            sumUSDTInSellEXchange = buyArr[buyArr.length-1].left * buyArr[buyArr.length-1].priceInAskArr + sumUSDT
+            sumUSDTInSellEXchange = buyArr[buyArr.length-1]?.left * buyArr[buyArr.length-1]?.priceInAskArr + sumUSDT
         }
 
         let spotFeeInBuyExchange = spotFee[buyExchangeName] + extraFeeBuy
@@ -178,7 +177,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         //-----------------------Log-----------------------------//
         let avarageCutBuyPrice
         let avarageCutSellPrice
-        if(String(buyArr[0].priceInAskArr).includes('e')) {
+        if(String(buyArr[0]?.priceInAskArr).includes('e')) {
             const eArrBuyPrice = String(avarageBuyPrice).split('e') // [ '7.9432237', '-7' ]
             const eArrSellPrice = String(avarageSellPrice).split('e') 
             eArrBuyPrice.splice(0, 1, Number(eArrBuyPrice[0]).toFixed(4)) // [ '7.9443', '-7' ]
@@ -186,8 +185,8 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
             avarageCutBuyPrice = eArrBuyPrice.join('e')  // 7.9443e-7
             avarageCutSellPrice = eArrSellPrice.join('e')
         } else {
-            const priceLengthInBuyExchange = getLength(buyArr[0].priceInAskArr)
-            const priceLengthInSellExchange = getLength(buyArr[0].priceInBidsArr)
+            const priceLengthInBuyExchange = getLength(buyArr[0]?.priceInAskArr)
+            const priceLengthInSellExchange = getLength(buyArr[0]?.priceInBidsArr)
             avarageCutBuyPrice = avarageBuyPrice.toFixed(priceLengthInBuyExchange)
             avarageCutSellPrice = avarageSellPrice.toFixed(priceLengthInSellExchange)
         }
@@ -197,13 +196,13 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         currentObj.realPercent = avaragePercent.toFixed(3)
 
         currentObj.avgPriceInBuyEx = avarageCutBuyPrice
-        currentObj.pricesInBuyEx = [buyArr[0].priceInAskArr, buyArr[buyArr.length-1].priceInAskArr]
+        currentObj.pricesInBuyEx = [buyArr[0]?.priceInAskArr, buyArr[buyArr.length-1]?.priceInAskArr]
         currentObj.maxDealInBuyEx = sumUSDT.toFixed(3)
         currentObj.valueInBuyEx = Number(sumQtyWithFeeForBuy.toFixed(4))  //было sumQtyLength
         currentObj.ordersInBuyEx = askCount
 
         currentObj.avgPriceInSellEx = avarageCutSellPrice
-        currentObj.pricesInSellEx = [buyArr[0].priceInBidsArr, buyArr[buyArr.length-1].priceInBidsArr]
+        currentObj.pricesInSellEx = [buyArr[0]?.priceInBidsArr, buyArr[buyArr.length-1]?.priceInBidsArr]
         currentObj.maxDealInSellEx = sumUSDTInSellEXchange.toFixed(3)
         currentObj.valueInSellEx = Number(sumQtyAfterTransfer.toFixed(4))
         currentObj.ordersInSellEx = bidsCount
@@ -225,7 +224,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         if(status === 'refetch') { // если нажали на кнопку обновить
             return requestedCoinsArr[i]
         } else {
-            logReadyChain(requestedCoinsArr[i])
+            chains.data.push(requestedCoinsArr[i])
         }
     }
 }

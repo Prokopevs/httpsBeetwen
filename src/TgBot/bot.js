@@ -14,7 +14,8 @@ bot.on('callback_query', async (ctx) => {
     const names = parts.map(part => part.trim()) // ['babydogecoin', 'babydogecoin']
 
     const nickName = ctx.update.callback_query.data
-    const callback_dataArr = ctx.update.callback_query.data.split('_') // [XETAUSDT, gateIo, bitget]
+    const callback_dataArr = nickName.split('_') // [XETAUSDT, gateIo, bitget, f]
+    const hedging = callback_dataArr[3] === 't' ? true : false
 
     let baseAsset = dataArr[0].split('/')[0].slice(2)
     if(baseAsset[0] === ' ') baseAsset = baseAsset.slice(1)
@@ -28,7 +29,8 @@ bot.on('callback_query', async (ctx) => {
         quoteAsset: quoteAsset,
         buyFrom: callback_dataArr[1],
         sellTo: callback_dataArr[2],
-        nickName: nickName,
+        hedging: hedging,
+        nickName: nickName.slice(0, -2),
         names: names,
         time: dateTime,
     } 

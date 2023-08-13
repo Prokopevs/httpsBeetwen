@@ -1,4 +1,4 @@
-
+const chains = {data: []}
 let spotFee = {
     binance: 0.075,
     mexc: 0,
@@ -22,4 +22,4 @@ const extraFeeGateIo = [{coin:'BABYDOGE', withdraw:10, deposit:0},]
 
 const extraFeeHuobi = [{coin:'LUNC', withdraw:1.25, deposit:0}, {coin:'SOLO', withdraw:0.02, deposit:0}, {coin:'USTC', withdraw:1.25, deposit:0},]
 
-module.exports = { spotFee, extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo, extraFeeHuobi}
+module.exports = { chains, spotFee, extraFeeMexc, extraFeeLbank, extraFeeBitget, extraFeeGateIo, extraFeeHuobi}

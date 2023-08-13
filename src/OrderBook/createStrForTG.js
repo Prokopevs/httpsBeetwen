@@ -13,7 +13,13 @@ const createStrForTG = (chain) => {
     const extraFee = chain.extraFee == 0 ? '\n' : ` / доп *${chain.extraFee}%*\n`
     const commission = `Комиссия: спот *${chain.totalFeeSpot}*💲 / перевод *${chain.feeWithdraw}*💲 (${chain.feeWithdrawInCoins} ${chain.baseAsset})${extraFee}` 
 
-    const network = `🌐 Сеть: ${chain.withdrawInfo.firstTransferArr.network} `
+    let network = `🌐 Сеть: `
+    if(Object.keys(chain.withdrawInfo).length === 0) {
+        network = network + 'приостановлено❗️'
+    } else {
+        network = network + `${chain.withdrawInfo.firstTransferArr.network} `
+    }
+
     let thirdExchange = ''
     if(chain.withdrawInfo.secondTransferArr) {
         thirdExchange = `➡️ ${chain.withdrawInfo.betweenExchange} ➡️ ${chain.withdrawInfo.secondTransferArr.network}`
@@ -33,7 +39,8 @@ const createStrForTG = (chain) => {
             stablePrisesStr = stablePrisesStr + ', ' + oneStable
         }
     }
-    let time = `\n\n${chain.time}`
+    stablePrisesStr == '' ? stablePrisesStr = '' : stablePrisesStr = stablePrisesStr+'\n\n'
+    let time = `${chain.time}`
 
     const str = symbol+byFrom+priceInBuyExchange+volumeInBuyExchange+sellTo+priceInSellExchange+volumeInSellExchange+commission+network+thirdExchange+spred+hedging+stablePrisesStr+time
     return str

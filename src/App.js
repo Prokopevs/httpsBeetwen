@@ -6,6 +6,7 @@ const { fetchAllMargins } = require('./Margin/fetchAllMargins')
 const { fetchAllFees } = require('./Fee/fetchAllFees')
 const { mergeAllFeesAndExchangeInfo } = require('./Utils/mergeAllFeesAndExchangeInfo')
 const { getBestBidsAsksCoinbase } = require('./ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase')
+const { logReadyChain } = require('./OrderBook/logReadyChain')
 
 // let time = 0
 
@@ -42,6 +43,7 @@ const starter = async() => {
         }
     }, 2000);
     setInterval(() => fetchAllFees(), 120000);
+    setInterval(() => logReadyChain(), 1500);
 }
 
 starter()
