@@ -1,6 +1,6 @@
 const { searchLargestSubstr } = require('../Utils/searchLargestSubstr')
 const { checkSameStr } = require('./checkSameStr')
-let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee, poloniexFee} = require('./feeData')
+let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee, poloniexFee, bitmartFee} = require('./feeData')
 
 const isWithdrawEnable = (obj) => {
     const unicNames = {
@@ -15,6 +15,7 @@ const isWithdrawEnable = (obj) => {
         'bitget': ['chains', 'chain', 'rechargeable', 'withdrawable', 'withdrawFee'],
         'huobi': ['chains', 'network', 'depositStatus', 'withdrawStatus', 'withdrawFee'],
         'poloniex': ['networkList', 'blockchain', 'depositEnable', 'withdrawalEnable', 'withdrawFee'],
+        'bitmart': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
     }
 
     const feeObj = {
@@ -29,6 +30,7 @@ const isWithdrawEnable = (obj) => {
         bitget: bitgetFee.feeData,
         huobi: huobiFee.feeData,
         poloniex: poloniexFee.feeData,
+        bitmart: bitmartFee.feeData,
     }
     const coinName = obj.baseAsset            // BTC
     const withdrawArr = feeObj[obj.buyFrom]   // feeObj['mexc'] 

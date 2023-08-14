@@ -5,6 +5,7 @@ const { getMarginKuCoin } = require('./GetMarginInfo/getMarginKuCoin');
 const { getMarginOKX } = require('./GetMarginInfo/getMarginOKX');
 const { getMarginHuobi } = require('./GetMarginInfo/getMarginHuobi');
 const { getMarginPoloniex } = require('./GetMarginInfo/getMarginPoloniex');
+const { getMarginBitMart } = require('./GetMarginInfo/getMarginBitMart');
 
 const fetchAllMargins = async() => {
     console.log('запрос на Margin...')
@@ -16,6 +17,7 @@ const fetchAllMargins = async() => {
         getMarginBitget(),
         getMarginHuobi(),
         getMarginPoloniex(),
+        getMarginBitMart()
     ])
 }
 

@@ -1,28 +1,49 @@
-const axios = require("axios")
-const { format } = require('date-fns')
+const puppeteer = require('puppeteer');
 
+const coinArray = ['BTC', 'ETH', 'LTC']; // Массив криптомонет
 
-// https://api.mexc.com/api/v3/exchangeInfo
-const foo = async () => {
-    try {
-        const response = await axios.get('https://api.mexc.com/api/v3/exchangeInfo')
-        let data = response.data.symbols.length
-        const response1 = await axios.get('https://api.mexc.com/api/v3/ticker/bookTicker')
-        let data1 = response1.data.length
+async function run() {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
 
-        // let res =data.filter((elem) => elem.baseAsset === '1INCH')
-        console.log(data)
-        console.log(data1)
+  try {
+    await page.goto('https://www.bitmart.com/asset-withdrawal/en-US');
+    await page.waitForSelector('input#coin');
 
-    } catch (error) {
-        console.log(error)
+    for (let coin of coinArray) {
+      await page.type('input#coin', coin);
+      await page.waitForSelector(`ul.antd-select-dropdown-menu > li[data-value="${coin}"]`, {
+        visible: true,
+      });
+      await page.click(`ul.antd-select-dropdown-menu > li[data-value="${coin}"]`);
+
+      await page.click('button[type="submit"]');
+
+      await page.waitForSelector('div.network-list', {
+        visible: true,
+      });
+      const networks = await page.$$eval('div.network-list div.network', (elems) =>
+        elems.map((elem) => {
+          const name = elem.querySelector('.network-opera span').innerText;
+          const fee = elem.querySelector('.transfer-rate').innerText;
+          return { name, fee };
+        })
+      );
+
+      console.log(`Information for ${coin}:`);
+      for (let network of networks) {
+        console.log(`Network: ${network.name}`);
+        console.log(`Fee: ${network.fee}`);
+        console.log('---');
+      }
+
+      await page.goBack();
     }
-    
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await browser.close();
+  }
 }
-// foo()
 
-// setInterval(() => foo(), 2000)
-
-const dateTime = format(new Date(), 'HH:mm:ss')
-
-console.log('13:04:32' > '13:04:12')
+run();

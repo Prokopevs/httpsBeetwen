@@ -11,6 +11,7 @@ let okxArr = {data: []}
 let bitgetArr = {data: []}
 let huobiArr = {data: []}
 let poloniexArr = {data: []}
+let bitmartArr = {data: []}
 
 const mexcBlackList = ['MULTIUSDT', 'RUNEUSDT', 'MDXUSDT', ]
 const binanceBlackList = ['AXSBIDR', 'NBTBIDR', 'NBTUSDT', 'MULTIUSDT', 'RUNEUSDT', 'MDXUSDT', ]
@@ -21,7 +22,8 @@ const kucoinBlackList = ["JUPETH","POWRUSDT","ALBTUSDT","GOUSDT","CHSBBTC","TKOB
 const huobiBlackList = ['F1F2X8Z9', 'A8S8D8F8','H9H9X6Z7', 'A8S83LD8F8','H8H8X6Z7', 'TRX3SUSDT','W4J4X8Z9', 'E9F9X8Z9','C1D1X6Z7', 'H3H3X8Z9','Q1W2X8Z9', 'A8S83SD8F8','Y1Y2X8Z9', 'TRX3LUSDT','H6H6X6Z7', 'A3B4X8Z9','A3B4X6Z7']
 const bitgetBlackList = ['SBTCSUSDT', 'SETHSBTC']
 const poloniexBlackList = [' XRPBULLUSDT', 'CVTBTC', 'CVTUSDT', 'LIVEUSDT', 'MIDWITUSDT', 'POLOTEST2POLOTEST1', 'POLOTEST3POLOTEST4', 'POLOTEST2POLOTEST4', 'POLOTEST2POLOTEST3', 'POLOTEST1POLOTEST4', 'POLOTEST1POLOTEST3', 'POLOTEST1POLOTEST2']
+const bitmartBlackList = ['FUTURE-AI']
 
 // расбанить RUNEUSDT, MULTIUSDT, 'MDXUSDT'
 
-module.exports = { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr, bitgetArr, huobiArr, poloniexArr,    flag, mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, huobiBlackList, bitgetBlackList, poloniexBlackList}
+module.exports = { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr, bitgetArr, huobiArr, poloniexArr, bitmartArr,       flag, mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList}

@@ -1,7 +1,8 @@
-let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi, changePoloniex } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList } = require('./ExchangesArray')
+const { lbankFeeObj } = require('../Fee/feeData')
+let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi, changePoloniex, changeBitMart } = require('./differentExchanges')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList } = require('./ExchangesArray')
 const axios = require("axios")
-let kuCoinFlag = 0
+
 const addInfo = async(coins, num) => {
     if(num == 0) {  //binance
         for(let i=0; i<coins.length; i++) {
@@ -182,6 +183,19 @@ const addInfo = async(coins, num) => {
             }
         }  
         changePoloniex(coins)
+    }
+    if(num == 11) {   //BitMart
+        coins = coins.data.tickers
+        for(let i=0; i<coins.length; i++) {
+            coins[i].symbol = coins[i].symbol.replace(/_/g, "")
+            coins[i].askPrice = coins[i].best_ask
+            coins[i].bidPrice = coins[i].best_bid
+            if(bitmartBlackList.includes(coins[i].symbol)) {
+                coins.splice(i, 1)
+                i--
+            }
+        }  
+        changeBitMart(coins)
     }
 }
 

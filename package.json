@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/App.js",
-    "bot": "nodemon ./src/TgBot/bot.js"
+    "bot": "nodemon ./src/TgBot/bot.js",
+    "test": "nodemon getExchangeInfoTest.js"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +19,7 @@
     "js-big-decimal": "^1.4.1",
     "lz-string": "^1.5.0",
     "pg": "^8.11.1",
+    "puppeteer": "^21.0.3",
     "telegraf": "^4.12.2"
   },
   "devDependencies": {

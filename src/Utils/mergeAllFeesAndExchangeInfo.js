@@ -1,8 +1,8 @@
-let { binanceExchangeInfo, mexcExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo, poloniexExchangeInfo } = require('../ExtraInfo/ExchangeData')
-let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, kucoinFee, okxFee, poloniexFee, allInFullNameFromBitget } = require('../Fee/feeData')
+let { binanceExchangeInfo, mexcExchangeInfo, gateIoExchangeInfo, lbankExchangeInfo, kucoinExchangeInfo, okxExchangeInfo, bitgetExchangeInfo, poloniexExchangeInfo, bitmartExchangeInfo } = require('../ExtraInfo/ExchangeData')
+let { binanceFee, mexcFee, fullNameFromCMCArr, gateIoFee, kucoinFee, okxFee, poloniexFee, allInFullNameFromBitget, bitmartFee } = require('../Fee/feeData')
 
 
-const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], [kucoinExchangeInfo, kucoinFee, 'coin'], [okxExchangeInfo, okxFee, 'coin'], [bitgetExchangeInfo, fullNameFromCMCArr, 'symbol'], [poloniexExchangeInfo, poloniexFee, 'coin'], ] 
+const fullArr = [ [binanceExchangeInfo, binanceFee, 'coin'], [mexcExchangeInfo, mexcFee, 'coin'], [gateIoExchangeInfo, gateIoFee, 'coin'], [lbankExchangeInfo, fullNameFromCMCArr, 'symbol'], [kucoinExchangeInfo, kucoinFee, 'coin'], [okxExchangeInfo, okxFee, 'coin'], [bitgetExchangeInfo, fullNameFromCMCArr, 'symbol'], [poloniexExchangeInfo, poloniexFee, 'coin'], [bitmartExchangeInfo, bitmartFee, 'coin'],] 
 
 // 
 

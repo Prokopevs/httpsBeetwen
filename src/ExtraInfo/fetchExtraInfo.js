@@ -9,6 +9,7 @@ const { getExchangeInfoOKX } = require('./GetExchangeInfo/getExchangeInfoOKX')
 const { getExchangeInfoBitget } = require('./GetExchangeInfo/getExchangeInfoBitget')
 const { getExchangeInfoHuobi } = require('./GetExchangeInfo/getExchangeInfoHuobi')
 const { getExchangeInfoPoloniex } = require('./GetExchangeInfo/getExchangeInfoPoloniex')
+const { getExchangeInfoBitMart } = require('./GetExchangeInfo/getExchangeInfoBitMart')
 
 const fetchExtraInfo = async() => {
     console.log('запрос на ExchangeInfo...')
@@ -23,7 +24,8 @@ const fetchExtraInfo = async() => {
         getExchangeInfoOKX(),
         getExchangeInfoBitget(),
         getExchangeInfoHuobi(),
-        getExchangeInfoPoloniex()
+        getExchangeInfoPoloniex(),
+        getExchangeInfoBitMart()
     ])
 }
 
