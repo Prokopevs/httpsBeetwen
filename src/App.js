@@ -41,9 +41,9 @@ const starter = async() => {
         if(requestFlag.data === true) {
             Stream()
         }
-    }, 2000);
+    }, 3000);
     setInterval(() => fetchAllFees(), 120000);
-    setInterval(() => logReadyChain(), 1200);
+    setInterval(() => logReadyChain(), 1100);
 }
 
 starter()

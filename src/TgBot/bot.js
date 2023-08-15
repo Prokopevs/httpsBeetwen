@@ -56,6 +56,7 @@ bot.on('callback_query', async (ctx) => {
 
 // на сообщение CBL очистит черный лист
 bot.command('cbl', (ctx) => {
+    // console.log(ctx.update)
     const arr = telegramBlaskList.data 
     arr.splice(0,arr.length) // очищаем массив
     ctx.reply('successfully cleared telegramBlaskList')

@@ -2,6 +2,7 @@ const { temporary5minBlackArr } = require("../Data")
 const { chains } = require("./orderBookData")
 
 const checkSpred = (chain) => {
+    const closeExchangesToBuyFrom = ['bitmart']
     let flag = 0
     if(chain.stablePrices[100] > 0.9) { // при 100 доларов зароботок больше 0.9
         if((Number(chain.profitInUSDT) < 1) || (Number(chain.realPercent) < 0.4)) {   // если профит меньше 0.3 долларов c учетом коммисии или спред < 0.3
@@ -19,7 +20,9 @@ const checkSpred = (chain) => {
             }
         }
         if(flag === 0) {
-            chains.data.push(chain)
+            if(!closeExchangesToBuyFrom.includes(chain.buyFrom)) {
+                if(chain.symbol !== 'BABYDOGEUSDT') chains.data.push(chain) // ПОТОМ УБРАТЬ ЭТО УСЛОВИЕ
+            }
         }
     } else {
         chain.blockingTime = new Date() // сохраняем время блокировки

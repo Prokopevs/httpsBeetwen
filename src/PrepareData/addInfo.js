@@ -1,6 +1,6 @@
 const { lbankFeeObj } = require('../Fee/feeData')
 let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi, changePoloniex, changeBitMart } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList } = require('./ExchangesArray')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList, bitmartArr } = require('./ExchangesArray')
 const axios = require("axios")
 
 const addInfo = async(coins, num) => {
@@ -186,6 +186,7 @@ const addInfo = async(coins, num) => {
     }
     if(num == 11) {   //BitMart
         coins = coins.data.tickers
+        if(coins == undefined) console.log(coins)
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].symbol.replace(/_/g, "")
             coins[i].askPrice = coins[i].best_ask
@@ -193,6 +194,14 @@ const addInfo = async(coins, num) => {
             if(bitmartBlackList.includes(coins[i].symbol)) {
                 coins.splice(i, 1)
                 i--
+                continue
+            }
+            if(bitmartArr.data.length) {
+                const exiedCoin = bitmartArr.data.find((item) => item.symbol === coins[i].symbol)
+                if(!exiedCoin) {
+                    coins.splice(i, 1)
+                    i--
+                }
             }
         }  
         changeBitMart(coins)

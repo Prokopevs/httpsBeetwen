@@ -9,7 +9,7 @@ const logReadyChain = () => {
         let count = 0
         for(let i=0; i<chains.data.length; i++) {
             const chain = chains.data[i]
-            if(count == 2) { // если залогировали три связки, то прекращаем работу
+            if(count == 1) { // если залогировали три связки, то прекращаем работу
                 break
             }
             console.log(chain)

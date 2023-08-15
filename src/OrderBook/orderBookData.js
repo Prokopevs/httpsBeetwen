@@ -11,6 +11,7 @@ let spotFee = {
     bitget: 0.08,
     huobi: 0.15,
     poloniex: 0.14,
+    bitmart: 0.2,
 }
 
 const extraFeeMexc = [{coin:'LOOP', withdraw:10, deposit:10}, {coin:'KISHU', withdraw:2, deposit:4}, {coin:'QUACK', withdraw:12, deposit:24}, {coin:'BRISE', withdraw:12, deposit:24}, {coin:'FLOKICEO', withdraw:10, deposit:20}, {coin:'PIT', withdraw:4, deposit:8}, {coin:'SAFEMARS', withdraw:4, deposit:8}, {coin:'PIG', withdraw:5, deposit:10}, {coin: 'SQUIDGROW', withdraw:8, deposit:8}, {coin: 'SHIRYO', withdraw:10, deposit:20}, {coin: 'ASS', withdraw:10, deposit:20}, {coin: 'BABYDOGE', withdraw:10, deposit:0},]
