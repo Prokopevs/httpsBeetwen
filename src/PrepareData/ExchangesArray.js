@@ -12,6 +12,7 @@ let bitgetArr = {data: []}
 let huobiArr = {data: []}
 let poloniexArr = {data: []}
 let bitmartArr = {data: []}
+let uniswapArr = {data: []}
 
 const mexcBlackList = ['MULTIUSDT', 'RUNEUSDT', 'MDXUSDT', ]
 const binanceBlackList = ['AXSBIDR', 'NBTBIDR', 'NBTUSDT', 'MULTIUSDT', 'RUNEUSDT', 'MDXUSDT', ]
@@ -26,4 +27,4 @@ const bitmartBlackList = ['FUTURE-AI']
 
 // расбанить RUNEUSDT, MULTIUSDT, 'MDXUSDT'
 
-module.exports = { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr, bitgetArr, huobiArr, poloniexArr, bitmartArr,       flag, mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList}
+module.exports = { binanceArr, mexcArr, bybitArr, gateIoArr, coinbaseArr, lbankArr, kucoinArr, okxArr, bitgetArr, huobiArr, poloniexArr, bitmartArr, uniswapArr,       flag, mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList}

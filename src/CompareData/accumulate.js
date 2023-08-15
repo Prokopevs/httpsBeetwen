@@ -11,7 +11,7 @@ const accumulate = () => {
             oldMilkyArr[i].count++
             currentMilkyArr.splice(index, 1)
 
-            if(oldMilkyArr[i].count === 20) {
+            if(oldMilkyArr[i].count === 6) {
                 preBuyArr.push(oldMilkyArr[i])
 
                 oldMilkyArr.splice(i, 1)
@@ -28,7 +28,8 @@ const accumulate = () => {
 
     if(preBuyArr.length) {
         requestFlag.data = false
-        fetchOrderBookMain.fetchOrderBook(preBuyArr, 'ordinary')
+        console.log(preBuyArr.length)
+        // fetchOrderBookMain.fetchOrderBook(preBuyArr, 'ordinary')
     }
 
     clear5minBlackArr()

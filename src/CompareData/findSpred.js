@@ -27,7 +27,11 @@ const findSpred = (allCoins, mainData) => {
 }
 
 const checkPercent = (spred, coinBuy, coinSell) => {
-    if(spred > 0.4) {
+    let percent = 0.4
+    if((coinBuy.exchangeType==='DEX') || (coinSell.exchangeType==='DEX')) {
+        percent = 1.5
+    }
+    if(spred > percent) {
         const dateTime = format(new Date(), 'HH:mm:ss')
         const symbol = coinBuy.symbol
         const buyFrom = coinBuy.exchangeName
@@ -59,8 +63,8 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             names: [coinBuy.name, coinSell.name],
             time: dateTime,
             count: 1,
-            ...(coinBuy.originalSymbol && {originalCoinbaseSymbol: coinBuy.originalSymbol}),
-            ...(coinSell.originalSymbol && {originalCoinbaseSymbol: coinSell.originalSymbol}),
+            ...(coinBuy.originalSymbol && {originalSymbol: coinBuy.originalSymbol}),
+            ...(coinSell.originalSymbol && {originalSymbol: coinSell.originalSymbol}),
         }
 
         if(!superBlackArr.includes(obj.nickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов

@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/App.js",
-    "bot": "nodemon ./src/TgBot/bot.js",
     "test": "nodemon getExchangeInfoTest.js"
   },
   "author": "",

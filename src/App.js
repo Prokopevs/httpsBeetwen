@@ -7,6 +7,7 @@ const { fetchAllFees } = require('./Fee/fetchAllFees')
 const { mergeAllFeesAndExchangeInfo } = require('./Utils/mergeAllFeesAndExchangeInfo')
 const { getBestBidsAsksCoinbase } = require('./ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase')
 const { logReadyChain } = require('./OrderBook/logReadyChain')
+const { getPoolsUniswap } = require('./Dex/Uniswap/getPoolsUniswap')
 
 // let time = 0
 
@@ -32,16 +33,18 @@ const Stream = () => {
 }
 
 const starter = async() => {
+    // await getPoolsUniswap()
     await fetchExtraInfo()
     await fetchAllMargins()
     await fetchAllFees()
     mergeAllFeesAndExchangeInfo()
+    console.log('Закончил')
     
     setInterval(() => {
         if(requestFlag.data === true) {
             Stream()
         }
-    }, 3000);
+    }, 5000);
     setInterval(() => fetchAllFees(), 120000);
     setInterval(() => logReadyChain(), 1100);
 }
@@ -52,6 +55,7 @@ starter()
 
 function createRequest() {
     let arrRequest = urlsArr.map((url) => fetch(url).then((response) => response.json()))
+    arrRequest.splice(12, 0, getPoolsUniswap())
     // arrRequest.splice(4,0,getBestBidsAsksCoinbase())
     return arrRequest
 }

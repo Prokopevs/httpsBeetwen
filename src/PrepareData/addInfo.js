@@ -1,6 +1,6 @@
 const { lbankFeeObj } = require('../Fee/feeData')
 let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi, changePoloniex, changeBitMart } = require('./differentExchanges')
-let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList, bitmartArr } = require('./ExchangesArray')
+let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList, bitmartArr, uniswapArr, flag } = require('./ExchangesArray')
 const axios = require("axios")
 
 const addInfo = async(coins, num) => {
@@ -19,7 +19,6 @@ const addInfo = async(coins, num) => {
         }
         changeBinance(coins)
     }
-
     if(num == 1) {   //mexc
         for(let i=0; i<coins.length; i++) {
             if(mexcBlackList.includes(coins[i].symbol)) {
@@ -36,7 +35,6 @@ const addInfo = async(coins, num) => {
         }
         changeMexc(coins)
     }
-
     if(num == 2) {   //bybit
         coins = coins.result.list
         for(let i=0; i<coins.length; i++) {
@@ -59,7 +57,6 @@ const addInfo = async(coins, num) => {
         const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
         changeBybit(sortedArray)
     }
-
     if(num == 3) {   //gateIo
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].currency_pair.replace(/_/g, "")
@@ -205,6 +202,27 @@ const addInfo = async(coins, num) => {
             }
         }  
         changeBitMart(coins)
+    }
+    if(num == 12) {   //Uniswap
+        if(uniswapArr.data.length) {
+            const oldLength = uniswapArr.data.length
+            const newLength = coins.length
+            if(oldLength !== newLength) {
+                console.log(`uniswap пришла разная длина ${oldLength} ${newLength}`)
+                console.log('необходимо по новому создать mainData')
+                flag.value = 1
+            }
+            for(let i=0; i<coins.length; i++) {
+                if(coins[i].symbol !== uniswapArr.data[i].symbol) {
+                    flag.value = 1
+                    console.log(`uniswap символы не равны:` + coins[i].symbol + ' ≠ ' + uniswapArr.data[i]?.symbol)
+                    break
+                }
+            }
+        } else {
+            console.log(`uniswap пришла разная длина ${uniswapArr.data.length} ${coins.length}`)
+        }
+        uniswapArr.data = coins
     }
 }
 
