@@ -10,6 +10,8 @@ let huobiFee = {feeData: []}
 let poloniexFee = {feeData: []}
 let bitmartFee = {feeData: []}
 
+const dexExchanges = ['uniswap']
+
 let fullNameFromCMCArr = {feeData: []}
 let allInFullNameFromBitget = [{ symbol:'BMTC', name:'Metabit Network'},{ symbol: 'SHIB2', name:'Shib2.0'},{ symbol: 'BABYDOGE2', name: 'Babydoge 2.0'},{ symbol: '0X0', name: '0x0.ai: AI Smart Contract'},{ symbol: 'L', name: 'L' },{ symbol: 'TEST', name: 'Test' },{ symbol: 'EURT', name: 'Tether EURt' },{ symbol: 'XAUT', name: 'Tether Gold' },{ symbol: 'PRIME1', name: 'Echelon Prime' },{ symbol: 'OPTIMUS', name: 'Optimus' },{ symbol: 'VELO1', name: 'Velo' },{ symbol: 'AURA1', name: 'Aura Finance' },{ symbol: 'ARBETF', name: 'ARBETF' },{ symbol: 'LSDETF', name: 'Liquid Staking Derivatives ETF' },{ symbol: 'MEMEETF', name: 'MEMEETF' },{ symbol: 'POGAI', name: 'POGAI' },{ symbol: 'MONG', name: 'MongCoin' },{ symbol: 'WAXL', name: 'Axelar' },{ symbol: 'PEPE1', name: 'Pepe' },{ symbol: 'SPONGE', name: 'Sponge' },{ symbol: 'BIP1', name: 'BIP1' },{ symbol: 'FERC', name: 'FairERC20' },{ symbol: '3TH', name: 'Ethos' },{ symbol: 'ALPHA1', name: 'Alpha Shards' },{ symbol: 'PEPE2', name: 'Pepe 2.0' },{ symbol: 'VMPXERC20', name: 'VMPX-ERC20' },{ symbol: 'GALFAN', name: 'Galatasaray Fan Token' },{ symbol: 'TONCOIN', name: 'Toncoin' }]
 
@@ -23,4 +25,4 @@ const bitmartFeeObj = {"GGT":{"ERC20":0},"GAYPEPE":{"BEP20":0},"FELIX":{"BEP20":
 
 
 
-module.exports = { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee, poloniexFee, bitmartFee,         fullNameFromCMCArr, gateIoNetworkObj, mexcNetworkObj, lbankFeeObj, bitmartFeeObj, allInFullNameFromBitget }
+module.exports = { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee, poloniexFee, bitmartFee,         fullNameFromCMCArr, gateIoNetworkObj, mexcNetworkObj, lbankFeeObj, bitmartFeeObj, allInFullNameFromBitget, dexExchanges }

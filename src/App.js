@@ -6,7 +6,7 @@ const { fetchAllMargins } = require('./Margin/fetchAllMargins')
 const { fetchAllFees } = require('./Fee/fetchAllFees')
 const { mergeAllFeesAndExchangeInfo } = require('./Utils/mergeAllFeesAndExchangeInfo')
 const { getBestBidsAsksCoinbase } = require('./ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase')
-const { logReadyChain } = require('./OrderBook/logReadyChain')
+const { logReadyChain } = require('./TgBot/logReadyChain')
 const { getPoolsUniswap } = require('./Dex/Uniswap/getPoolsUniswap')
 
 // let time = 0
@@ -33,12 +33,10 @@ const Stream = () => {
 }
 
 const starter = async() => {
-    // await getPoolsUniswap()
     await fetchExtraInfo()
     await fetchAllMargins()
     await fetchAllFees()
     mergeAllFeesAndExchangeInfo()
-    console.log('Закончил')
     
     setInterval(() => {
         if(requestFlag.data === true) {

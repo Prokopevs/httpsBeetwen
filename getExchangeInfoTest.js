@@ -1,49 +1,70 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra')
 
-const coinArray = ['BTC', 'ETH', 'LTC']; // Массив криптомонет
+const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+puppeteer.use(StealthPlugin())
 
-async function run() {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+puppeteer.launch({ 
+    headless: true, 
+    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', 
+    userDataDir: 'C:/Users/proko/AppData/Local/Google/Chrome/User Data/Default'})
+    .then(async () => {
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
+  
+    const page = await browser.newPage()
+    await page.goto('https://app.uniswap.org/swap?chain=mainnet#/swap?chain=mainnet', {waitUntil: 'domcontentloaded'})
+    await page.waitForTimeout(400)
 
-  try {
-    await page.goto('https://www.bitmart.com/asset-withdrawal/en-US');
-    await page.waitForSelector('input#coin');
+    await page.click(".token-symbol-container:nth-child(2)")
+    await page.waitForTimeout(400)
+    await page.click('[data-testid="common-base-USDC"]')
+    await page.waitForTimeout(400)
+    await page.click(".token-symbol-container:nth-child(1)")
+    await page.waitForTimeout(400)
 
-    for (let coin of coinArray) {
-      await page.type('input#coin', coin);
-      await page.waitForSelector(`ul.antd-select-dropdown-menu > li[data-value="${coin}"]`, {
-        visible: true,
-      });
-      await page.click(`ul.antd-select-dropdown-menu > li[data-value="${coin}"]`);
+    await page.type('input[id="token-search-input"]', 'WBTC', {delay: 40})
+    await page.waitForTimeout(400)
 
-      await page.click('button[type="submit"]');
+    const is_enabled = (await page.$("div.css-kdspie")) == null
+    if(is_enabled) {
+    const fullName = await page.$eval('div[data-testid="currency-list-wrapper"] div[tabindex="0"] .css-vurnku', e => e.innerText)
+    const name = await page.$eval('div[data-testid="currency-list-wrapper"] div[tabindex="0"] .css-yfjwjl', e => e.innerText)
+    const arrOfName = [fullName, name]
 
-      await page.waitForSelector('div.network-list', {
-        visible: true,
-      });
-      const networks = await page.$$eval('div.network-list div.network', (elems) =>
-        elems.map((elem) => {
-          const name = elem.querySelector('.network-opera span').innerText;
-          const fee = elem.querySelector('.transfer-rate').innerText;
-          return { name, fee };
-        })
-      );
+    await page.click('div[data-testid="currency-list-wrapper"] div[tabindex="0"]')
+    await page.waitForTimeout(400)
 
-      console.log(`Information for ${coin}:`);
-      for (let network of networks) {
-        console.log(`Network: ${network.name}`);
-        console.log(`Fee: ${network.fee}`);
-        console.log('---');
-      }
+    const input = await page.$('input.token-amount-input')
+    await input.type('100', {delay: 40})
+    await page.waitForTimeout(400)
 
-      await page.goBack();
+    await page.waitForFunction(() => !document.querySelector('.fpyFdg'))
+    await page.waitForTimeout(500)
+
+    const inputsHTML = await page.$$('input.token-amount-input', e => e)
+    let outputValue = 0
+    let count = 0
+    for(let fieldHandle of inputsHTML) {
+    if(count === 1) {
+    outputValue = Number(await page.evaluate(x => x.value, fieldHandle))
     }
-  } catch (error) {
-    console.error(error);
-  } finally {
-    await browser.close();
-  }
-}
+    count++
+    }
+    const feeInString = await page.$eval('div.sc-bczRLJ .sc-nrd8cx-0 .hJYFVB .cTSGxd div', e => e.innerText)
+    const fee = Number(feeInString.slice(1))
 
-run();
+    console.log(outputValue, fee)
+    await browser.close()
+    } else {
+        console.log('После ввода ничего не нашёл')
+    }
+  })
+
+
+
+
+
+
+
+

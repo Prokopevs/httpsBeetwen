@@ -1,7 +1,7 @@
 const { temporary5minBlackArr } = require("../Data")
 const { isWithdrawEnable } = require("../Fee/isWithdrawEnable")
 const { checkSpred } = require("./checkSpred")
-const { extraFeeFunc } = require("./extraFeeFunc")
+const { extraFeeFunc } = require("../Fee/extraFeeFunc")
 let { spotFee } = require('./orderBookData')
 
 const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
@@ -113,8 +113,13 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
 
 
         //------------------------Fee----------------------------//
-        const transferInfo = isWithdrawEnable(requestedCoinsArr[i])
-    
+        let transferInfo
+        if(status === 'ordinary') {
+            transferInfo = requestedCoinsArr[i].transferInfo
+        } else {
+            transferInfo = isWithdrawEnable(requestedCoinsArr[i])
+        }
+
         let commissionForWithdraw = 0
         if(transferInfo.data?.betweenExchange) { // перевод через последника
             commissionForWithdraw = Number(transferInfo.data.firstTransferArr.fee) + Number(transferInfo.data.secondTransferArr.fee)
@@ -218,9 +223,6 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         currentObj.availableWithdraw = transferInfo.availableWithdraw
         currentObj.availableDeposit = transferInfo.availableDeposit
         
-        //  if((requestedCoinsArr[i].byFrom === 'bitget') || (requestedCoinsArr[i].sellTo === 'bitget')) {
-        //     console.log(requestedCoinsArr[i])   
-        //  }
         if(status === 'refetch') { // если нажали на кнопку обновить
             return requestedCoinsArr[i]
         } else {

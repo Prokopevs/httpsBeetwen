@@ -2,11 +2,12 @@ require('dotenv').config({path:__dirname+'/../.env'})
 const { Telegraf } = require('telegraf');
 const { format } = require('date-fns')
 const fetchOrderBookMain = require('../OrderBook/fetchOrderBook.js');
-const { createStrForTG } = require('../OrderBook/createStrForTG.js');
+const { createStrForTG } = require('./createStrForTG.js');
 const { chatId } = require('./botData.js');
 const { telegramBlaskList } = require('../Data.js');
 const botToken = process.env.bot
 const bot = new Telegraf(botToken);
+const georgeId = 518918480
 
 bot.on('callback_query', async (ctx) => {
     const dataArr = ctx.update.callback_query.message.text.split('\n')
@@ -35,10 +36,12 @@ bot.on('callback_query', async (ctx) => {
         names: names,
         time: dateTime,
     } 
+    console.log(finalObj)
 
     const chain = await fetchOrderBookMain.fetchOrderBook([finalObj], 'refetch')
     const NewMessageStr = createStrForTG(chain)
     const messageId = ctx.update.callback_query.message.message_id
+    const chatId = ctx.update.callback_query.message.chat.id
 
     bot.telegram.editMessageText(chatId, messageId, null, NewMessageStr, {
         reply_markup: {
@@ -56,7 +59,7 @@ bot.on('callback_query', async (ctx) => {
 
 // на сообщение CBL очистит черный лист
 bot.command('cbl', (ctx) => {
-    // console.log(ctx.update)
+    console.log(ctx.update)
     const arr = telegramBlaskList.data 
     arr.splice(0,arr.length) // очищаем массив
     ctx.reply('successfully cleared telegramBlaskList')

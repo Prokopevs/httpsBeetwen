@@ -1,6 +1,7 @@
 const { searchLargestSubstr } = require('../Utils/searchLargestSubstr')
 const { checkSameStr } = require('./checkSameStr')
-let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee, poloniexFee, bitmartFee} = require('./feeData')
+const { createFeeArrDex } = require('./createFeeArrDex')
+let { binanceFee, mexcFee, bybitFee, gateIoFee, lbankFee, kucoinFee, okxFee, bitgetFee, huobiFee, poloniexFee, bitmartFee, dexExchanges} = require('./feeData')
 
 const isWithdrawEnable = (obj) => {
     const unicNames = {
@@ -16,6 +17,7 @@ const isWithdrawEnable = (obj) => {
         'huobi': ['chains', 'network', 'depositStatus', 'withdrawStatus', 'withdrawFee'],
         'poloniex': ['networkList', 'blockchain', 'depositEnable', 'withdrawalEnable', 'withdrawFee'],
         'bitmart': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
+        'uniswap': ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee'],
     }
 
     const feeObj = {
@@ -33,8 +35,9 @@ const isWithdrawEnable = (obj) => {
         bitmart: bitmartFee.feeData,
     }
     const coinName = obj.baseAsset            // BTC
-    const withdrawArr = feeObj[obj.buyFrom]   // feeObj['mexc'] 
-    const depositArr = feeObj[obj.sellTo]     // feeObj['binance'] 
+
+    let withdrawArr = dexExchanges.includes(obj.buyFrom) ? createFeeArrDex(obj, 'b') : feeObj[obj.buyFrom] // feeObj['mexc'] 
+    let depositArr = dexExchanges.includes(obj.sellTo) ? createFeeArrDex(obj, 's') : feeObj[obj.sellTo]     // feeObj['binance']
 
     const wordsInExchangeBuyArr = unicNames[obj.buyFrom]  // ['networkList', 'network', 'depositEnable', 'withdrawEnable', 'withdrawFee']
     const wordsInExchangeSellArr = unicNames[obj.sellTo]  // ['networkList', 'name', 'depositEnable', 'withdrawEnable', 'withdrawFee']

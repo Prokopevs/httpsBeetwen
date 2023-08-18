@@ -18,7 +18,7 @@ const fetchExtraInfo = async() => {
         getExchangeInfoMexc(),
         getExchangeInfoBybit(),
         getExchangeInfoGateIo(),
-        getExchangeInfoCoinbase(),
+        // getExchangeInfoCoinbase(), // когд адобавим coinBase раскоментить
         getExchangeInfoLBank(),
         getExchangeInfoKuCoin(),
         getExchangeInfoOKX(),

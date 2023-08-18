@@ -1,6 +1,7 @@
-let { currentMilkyArr, superBlackArr, temporary5minBlackArr, fiatFilter, telegramBlaskList } = require('../Data')
+let { currentMilkyArr, superBlackArr, temporary5minBlackArr, fiatFilter, telegramBlaskList, requestFlag } = require('../Data')
 let { accumulate } = require('./accumulate')
 const { format } = require('date-fns')
+const { checkWithdraw } = require('./checkWithdraw')
 
 const findSpred = (allCoins, mainData) => {
     for(let i=0; i<mainData.length; i++) {                // mainData = [{ coinName: 'ETHBTC', indexesInAllCoins: [ 0, 3360 ] }, ...]
@@ -23,7 +24,9 @@ const findSpred = (allCoins, mainData) => {
             }
         }
     }
-    accumulate()
+    if(requestFlag.data === true) {
+        accumulate()
+    }
 }
 
 const checkPercent = (spred, coinBuy, coinSell) => {
@@ -31,11 +34,12 @@ const checkPercent = (spred, coinBuy, coinSell) => {
     if((coinBuy.exchangeType==='DEX') || (coinSell.exchangeType==='DEX')) {
         percent = 1.5
     }
-    if(spred > percent) {
+
+    const buyFrom = coinBuy.exchangeName
+    const sellTo = coinSell.exchangeName
+    if((spred > percent) && (buyFrom !== sellTo) && (spred < 100)) {
         const dateTime = format(new Date(), 'HH:mm:ss')
         const symbol = coinBuy.symbol
-        const buyFrom = coinBuy.exchangeName
-        const sellTo = coinSell.exchangeName
         const nickName = `${symbol}_${buyFrom}_${sellTo}`
 
         let hedging = false
@@ -63,15 +67,24 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             names: [coinBuy.name, coinSell.name],
             time: dateTime,
             count: 1,
-            ...(coinBuy.originalSymbol && {originalSymbol: coinBuy.originalSymbol}),
-            ...(coinSell.originalSymbol && {originalSymbol: coinSell.originalSymbol}),
+            ...(coinBuy.originalSymbol && {buyOriginalSymbol: coinBuy.originalSymbol}),
+            ...(coinSell.originalSymbol && {sellOriginalSymbol: coinSell.originalSymbol}),
+            ...(coinBuy.network && {buyNetwork: coinBuy.network}),
+            ...(coinSell.network && {sellNetwork: coinSell.network}),
+            ...(coinBuy.id && {buyId: coinBuy.id}),
+            ...(coinSell.id && {sellId: coinSell.id}),
         }
 
-        if(!superBlackArr.includes(obj.nickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов
-            if(!temporary5minBlackArr.data.some(item => item.nickName === nickName)) {
+        const buyId = obj.buyId === undefined ? '' : '_'+obj.buyId
+        const sellId = obj.sellId === undefined ? '' : '_'+obj.sellId
+        const newNickName = obj.nickName+buyId+sellId
+        obj.fullNickName = newNickName
+
+        if(!superBlackArr.data.includes(obj.fullNickName)) { // убираем связки которые не сходятся по имени и дают 500+ процентов
+            if(!temporary5minBlackArr.data.some(item => item.fullNickName === obj.fullNickName)) {
                 if(!fiatFilter.includes(obj.quoteAsset)) { // проверка на фиатные связки (eur и.т.д)
-                    if(!telegramBlaskList.data.includes(obj.nickName)) { // не проверяем залогированные связки
-                        currentMilkyArr.push(obj)
+                    if(!telegramBlaskList.data.includes(obj.fullNickName)) { // не проверяем залогированные связки
+                        checkWithdraw(obj)
                     }
                 }
             }

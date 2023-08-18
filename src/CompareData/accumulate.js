@@ -5,13 +5,13 @@ const { logEvents } = require('../middleware/logger')
 const accumulate = () => {
     let preBuyArr = []
     for(let i=0; i<oldMilkyArr.length; i++) {
-        let index = currentMilkyArr.findIndex((elem) => elem.nickName === oldMilkyArr[i].nickName)
+        let index = currentMilkyArr.findIndex((elem) => elem.fullNickName === oldMilkyArr[i].fullNickName)
         
         if(index !== -1) {
             oldMilkyArr[i].count++
             currentMilkyArr.splice(index, 1)
 
-            if(oldMilkyArr[i].count === 6) {
+            if(oldMilkyArr[i].count === 2) {
                 preBuyArr.push(oldMilkyArr[i])
 
                 oldMilkyArr.splice(i, 1)
@@ -29,7 +29,7 @@ const accumulate = () => {
     if(preBuyArr.length) {
         requestFlag.data = false
         console.log(preBuyArr.length)
-        // fetchOrderBookMain.fetchOrderBook(preBuyArr, 'ordinary')
+        fetchOrderBookMain.fetchOrderBook(preBuyArr, 'ordinary')
     }
 
     clear5minBlackArr()
