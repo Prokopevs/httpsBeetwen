@@ -36,7 +36,6 @@ bot.on('callback_query', async (ctx) => {
         names: names,
         time: dateTime,
     } 
-    console.log(finalObj)
 
     const chain = await fetchOrderBookMain.fetchOrderBook([finalObj], 'refetch')
     const NewMessageStr = createStrForTG(chain)

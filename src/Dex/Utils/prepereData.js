@@ -39,10 +39,17 @@ const prepareData = (data, first, second, network) => {
         const tFirst = 'token'+first
         const tSecond = 'token'+second
         const priceSecond = tSecond+'Price'
+        let name = data[i][tFirst].name
+        
+        while ((name.endsWith('Token')) || (name.endsWith('token')) || (name.endsWith('(PoS)'))) {
+            const words = name.split(' ')
+            words.pop()
+            name = words.join(' ')
+        }
 
         data[i].symbol = data[i][tFirst].symbol+'USDT'
         data[i].originalSymbol = data[i][tFirst].symbol+data[i][tSecond].symbol
-        data[i].name = data[i][tFirst].name
+        data[i].name = name
         data[i].exchangeName = 'uniswap'
         data[i].exchangeType = 'DEX'
 

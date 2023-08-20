@@ -4,9 +4,9 @@ const { fetchExtraInfo } = require('./ExtraInfo/fetchExtraInfo')
 const { collectAllCoins } = require('./PrepareData/AfterPrepareData/collectAllCoins')
 const { fetchAllMargins } = require('./Margin/fetchAllMargins')
 const { fetchAllFees } = require('./Fee/fetchAllFees')
+const { logReadyChain } = require('./TgBot/logReadyChain')
 const { mergeAllFeesAndExchangeInfo } = require('./Utils/mergeAllFeesAndExchangeInfo')
 const { getBestBidsAsksCoinbase } = require('./ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase')
-const { logReadyChain } = require('./TgBot/logReadyChain')
 const { getPoolsUniswap } = require('./Dex/Uniswap/getPoolsUniswap')
 
 // let time = 0
@@ -53,7 +53,7 @@ starter()
 
 function createRequest() {
     let arrRequest = urlsArr.map((url) => fetch(url).then((response) => response.json()))
-    arrRequest.splice(12, 0, getPoolsUniswap())
+    // arrRequest.splice(12, 0, getPoolsUniswap())
     // arrRequest.splice(4,0,getBestBidsAsksCoinbase())
     return arrRequest
 }

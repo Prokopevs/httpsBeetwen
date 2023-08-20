@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/App.js",
-    "test": "nodemon getExchangeInfoTest.js"
+    "test": "nodemon Test.js"
   },
   "author": "",
   "license": "ISC",

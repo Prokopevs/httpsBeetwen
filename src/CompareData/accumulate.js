@@ -28,7 +28,6 @@ const accumulate = () => {
 
     if(preBuyArr.length) {
         requestFlag.data = false
-        console.log(preBuyArr.length)
         fetchOrderBookMain.fetchOrderBook(preBuyArr, 'ordinary')
     }
 

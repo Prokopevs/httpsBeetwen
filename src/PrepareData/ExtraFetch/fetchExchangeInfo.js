@@ -26,11 +26,10 @@ const fetchExchangeInfo = async (exchangeName) => {
         await Promise.all([
             getExchangeInfoBinance(),
             getFeeBinance(),
-    
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(binanceExchangeInfo.exchangeData, binanceFee.feeData, 'coin')
-            return binanceExchangeInfo.exchangeData
         }) 
+        return binanceExchangeInfo.exchangeData
     }
 
     if(exchangeName === 'mexc') {
@@ -40,8 +39,8 @@ const fetchExchangeInfo = async (exchangeName) => {
     
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(mexcExchangeInfo.exchangeData, mexcFee.feeData, 'coin')
-            return mexcExchangeInfo.exchangeData
         }) 
+        return mexcExchangeInfo.exchangeData
     }
 
     if(exchangeName === 'bybit') {
@@ -49,8 +48,8 @@ const fetchExchangeInfo = async (exchangeName) => {
             getExchangeInfoBybit(),
             getFeeBybit()
         ]).then(() => { 
-            return bybitExchangeInfo.exchangeData
         }) 
+        return bybitExchangeInfo.exchangeData
     }
 
     if(exchangeName === 'gateIo') {
@@ -59,16 +58,16 @@ const fetchExchangeInfo = async (exchangeName) => {
             getFeeGateIo()
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(gateIoExchangeInfo.exchangeData, gateIoFee.feeData, 'coin')
-            return gateIoExchangeInfo.exchangeData
         }) 
+        return gateIoExchangeInfo.exchangeData
     }
 
     if(exchangeName === 'coinbase') {
         await Promise.all([
             getExchangeInfoCoinbase(),
         ]).then(() => { 
-            return coinbaseExchangeInfo.exchangeData
         }) 
+        return coinbaseExchangeInfo.exchangeData
     }
 
     if(exchangeName === 'lbank') {
@@ -77,8 +76,8 @@ const fetchExchangeInfo = async (exchangeName) => {
             getFeeLBank()
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(lbankExchangeInfo.exchangeData, fullNameFromCMCArr, 'symbol')
-            return lbankExchangeInfo.exchangeData
         }) 
+        return lbankExchangeInfo.exchangeData
     }
 
     if(exchangeName === 'kucoin') {
@@ -91,8 +90,8 @@ const fetchExchangeInfo = async (exchangeName) => {
             getFeeOKX()
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(okxExchangeInfo.exchangeData, okxFee.feeData, 'coin')
-            return okxExchangeInfo.exchangeData
         }) 
+        return okxExchangeInfo.exchangeData
     }
     if(exchangeName === 'bitget') {
         await Promise.all([
@@ -100,8 +99,8 @@ const fetchExchangeInfo = async (exchangeName) => {
             getFeeBitget()
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(bitgetExchangeInfo.exchangeData, bitgetFee.feeData, 'symbol')
-            return bitgetExchangeInfo.exchangeData
         }) 
+        return bitgetExchangeInfo.exchangeData
     }
     if(exchangeName === 'poloniex') {
         await Promise.all([
@@ -109,8 +108,8 @@ const fetchExchangeInfo = async (exchangeName) => {
             getFeePoloniex()
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(poloniexExchangeInfo.exchangeData, poloniexFee.feeData, 'coin')
-            return poloniexExchangeInfo.exchangeData
         }) 
+        return poloniexExchangeInfo.exchangeData
     }
     if(exchangeName === 'bitmart') {
         await Promise.all([
@@ -118,8 +117,8 @@ const fetchExchangeInfo = async (exchangeName) => {
             getFeeBitMart()
         ]).then(() => { 
             mergeSingleFeeAndExchangeInfo(bitmartExchangeInfo.exchangeData, bitmartFee.feeData, 'coin')
-            return bitmartExchangeInfo.exchangeData
         }) 
+        return bitmartExchangeInfo.exchangeData
     }
 }
 

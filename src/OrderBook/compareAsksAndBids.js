@@ -97,6 +97,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
                 continue
             }
         }
+
         //----------------------------------------------------------//
         const avarageBuyPrice = (sumUSDT/sumQty)
         const avarageSellPrice = (sumSellUSDT/sumQty)

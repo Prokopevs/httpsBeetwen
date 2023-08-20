@@ -2,6 +2,7 @@ require('dotenv').config({path:__dirname+'/../../.env'})
 const axios = require('axios') 
 let { kucoinFee } = require('../feeData')
 let { feeKuCoinStable } = require('./utils/feeKuCoin')
+const { logEvents } = require('../../middleware/logger')
 
 const getFeeKuCoin = async () => {
     // const res = await axios.get('https://api.kucoin.com/api/v1/currencies') 
@@ -45,7 +46,10 @@ const getFeeKuCoin = async () => {
     // for(let i=0; i<fullArr.length; i++) {
     //     fullArr[i].coin = fullArr[i].currency
     //     fullArr[i].name = fullArr[i].fullName
+    //     fullArr[i].chains = fullArr[i].chains === null ? [] : fullArr[i].chains
     // }
+
+    // logEvents(JSON.stringify(fullArr), 'coins.log')
 
     // kucoinFee.feeData = fullArr
     // return fullArr

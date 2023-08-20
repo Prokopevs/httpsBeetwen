@@ -1,6 +1,8 @@
 const { requestFlag } = require("../Data")
 const { getOrderBookCoinbase } = require("../ExtraInfo/GetExchangeInfo/getExchangeInfoCoinbase")
+const { uniswapPup } = require("./DexRequest/UniswapPup")
 const { compareAsksAndBids } = require("./compareAsksAndBids")
+const { filterResults } = require("./utils/helper")
 
 const fetchOrderBook = async (preBuyArr, status) => {
     console.log(preBuyArr.length)
@@ -19,16 +21,13 @@ const fetchOrderBook = async (preBuyArr, status) => {
     const bitmartFetch = 'https://api-cloud.bitmart.com/spot/v1/symbols/book?symbol='
 
     let count = 0
-    const arrForCoinbase = []
+    const arrForDifferentWay = []
     //-------------------подготавливаем строки для запроса----------------------------------------//
     const createUrl = (url, symbol, limit) => {
         let finalUrl = url+symbol+`&${limit}=40`
         if(limit === 'kucoin') finalUrl = url+symbol
         if(limit === 'huobi') finalUrl = url+symbol+'&type=step0'
         if(limit === 'poloniex') finalUrl = url+symbol+'/orderBook?limit=50'
-        
-        
-
         urlsArr.push(finalUrl)
     }
 
@@ -42,7 +41,7 @@ const fetchOrderBook = async (preBuyArr, status) => {
         if(coinObj.buyFrom === 'mexc') createUrl(mexcFetch, coinObj.symbol, 'limit')
         if(coinObj.buyFrom === 'bybit') createUrl(bybitFetch, coinObj.symbol, 'limit')
         if(coinObj.buyFrom === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'limit')
-        if(coinObj.buyFrom === 'coinbase') arrForCoinbase.push({req: getOrderBookCoinbase(coinObj.originalSymbol, 40), index: urlsArr.length})
+        if(coinObj.buyFrom === 'coinbase') arrForDifferentWay.push({req: getOrderBookCoinbase(coinObj.originalSymbol, 40), index: urlsArr.length})
         if(coinObj.buyFrom === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
         if(coinObj.buyFrom === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
         if(coinObj.buyFrom === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
@@ -50,13 +49,14 @@ const fetchOrderBook = async (preBuyArr, status) => {
         if(coinObj.buyFrom === 'huobi') createUrl(huobiFetch, coinObj.symbol.toLowerCase(), 'huobi')
         if(coinObj.buyFrom === 'poloniex') createUrl(poloniexFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'poloniex')
         if(coinObj.buyFrom === 'bitmart') createUrl(bitmartFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'size')
+        if(coinObj.buyFrom === 'uniswap') arrForDifferentWay.push({req: uniswapPup(coinObj), index: urlsArr.length})
         
 
         if(coinObj.sellTo === 'binance') createUrl(binanceFetch, coinObj.symbol, 'limit')
         if(coinObj.sellTo === 'mexc') createUrl(mexcFetch, coinObj.symbol, 'limit')
         if(coinObj.sellTo === 'bybit') createUrl(bybitFetch, coinObj.symbol, 'limit')
         if(coinObj.sellTo === 'gateIo') createUrl(gateIoFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'limit')
-        if(coinObj.sellTo === 'coinbase') arrForCoinbase.push({req: getOrderBookCoinbase(coinObj.originalSymbol, 40), index: urlsArr.length}) 
+        if(coinObj.sellTo === 'coinbase') arrForDifferentWay.push({req: getOrderBookCoinbase(coinObj.originalSymbol, 40), index: urlsArr.length}) 
         if(coinObj.sellTo === 'lbank') createUrl(lbankFetch, coinObj.baseAsset.toLowerCase()+'_'+coinObj.quoteAsset.toLowerCase(), 'size')
         if(coinObj.sellTo === 'kucoin') createUrl(kucoinFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'kucoin')
         if(coinObj.sellTo === 'okx') createUrl(okxFetch, coinObj.baseAsset+'-'+coinObj.quoteAsset, 'sz')
@@ -64,11 +64,11 @@ const fetchOrderBook = async (preBuyArr, status) => {
         if(coinObj.sellTo === 'huobi') createUrl(huobiFetch, coinObj.symbol.toLowerCase(), 'huobi')
         if(coinObj.sellTo === 'poloniex') createUrl(poloniexFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'poloniex')
         if(coinObj.sellTo === 'bitmart') createUrl(bitmartFetch, coinObj.baseAsset+'_'+coinObj.quoteAsset, 'size')
+        if(coinObj.sellTo === 'uniswap') arrForDifferentWay.push({req: uniswapPup(coinObj), index: urlsArr.length})
 
         requestedCoinsArr.push(coinObj)  // пушим в массив те монеты, на которые сделаем запрос
         preBuyArr.splice(i, 1)
         i--
-
         count++
     }
     
@@ -76,8 +76,9 @@ const fetchOrderBook = async (preBuyArr, status) => {
 
     //------------------------делаем запрос-----------------------
     let requests = urlsArr.map((url) => fetch(url).then((response) => response.json()))
-    for(let i=0; i<arrForCoinbase.length; i++) {
-        requests.splice(arrForCoinbase[i].index+i, 0, arrForCoinbase[i].req)
+    const sortedArr = arrForDifferentWay.sort((a, b) => b.index - a.index)
+    for(let i=0; i<sortedArr.length; i++) {
+        requests.splice(sortedArr[i].index, 0, sortedArr[i].req)
     }
 
     if(status === 'refetch') {
@@ -92,22 +93,31 @@ const fetchOrderBook = async (preBuyArr, status) => {
         }) 
         return result
     } else {
-        Promise.all(requests)
+        Promise.allSettled(requests)
         .then(results => { 
-            const newResult = combineOrderBooks(results, requestedCoinsArr)
+            const filResult = filterResults(results, requestedCoinsArr) // 24 12
+            const newResult = combineOrderBooks(filResult[0], filResult[1])
             compareAsksAndBids(newResult, requestedCoinsArr, status)
+
+            // если элементы в массиве остались, то запрашиваем снова
+            if(preBuyArr.length) {
+                fetchOrderBook( preBuyArr, 'ordinary')
+            } else {
+                requestFlag.data = true
+            }
         }) 
         .catch(error => {
             console.log(error)
+            // если элементы в массиве остались, то запрашиваем снова
+            if(preBuyArr.length) {
+                fetchOrderBook( preBuyArr, 'ordinary')
+            } else {
+                requestFlag.data = true
+            }
         }) 
     }
     
-    // если элементы в массиве остались, то через 1000 запрашиваем снова
-    if(preBuyArr.length) {
-        setTimeout(fetchOrderBook, 1000, preBuyArr, 'ordinary')
-    } else {
-        requestFlag.data = true
-    }
+    
     //-------------------------------------------------------------
 }
 

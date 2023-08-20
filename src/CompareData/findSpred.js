@@ -69,8 +69,13 @@ const checkPercent = (spred, coinBuy, coinSell) => {
             count: 1,
             ...(coinBuy.originalSymbol && {buyOriginalSymbol: coinBuy.originalSymbol}),
             ...(coinSell.originalSymbol && {sellOriginalSymbol: coinSell.originalSymbol}),
+
+            ...(coinBuy.originalQuoteAsset && {buyOriginalQuoteAsset: coinBuy.originalQuoteAsset}),
+            ...(coinSell.originalQuoteAsset && {sellOriginalQuoteAsset: coinSell.originalQuoteAsset}),
+
             ...(coinBuy.network && {buyNetwork: coinBuy.network}),
             ...(coinSell.network && {sellNetwork: coinSell.network}),
+
             ...(coinBuy.id && {buyId: coinBuy.id}),
             ...(coinSell.id && {sellId: coinSell.id}),
         }

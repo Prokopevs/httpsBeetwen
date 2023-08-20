@@ -7,7 +7,7 @@ const UniswapPolygon_0_USDC = async () => {
 
     const result = await axios.post(url, {query: query})
     const data = result.data.data.pools0
-    const preparedData = prepareData(data, 1, 0, 'polygon/MATIC')
+    const preparedData = prepareData(data, 1, 0, 'POLYGON/MATIC')
     return preparedData
 }
 
@@ -17,7 +17,7 @@ const UniswapPolygon_1_USDC = async () => {
 
     const result = await axios.post(url, {query: query})
     const data = result.data.data.pools0
-    const preparedData = prepareData(data, 0, 1, 'polygon/MATIC')
+    const preparedData = prepareData(data, 0, 1, 'POLYGON/MATIC')
     return preparedData
 }
 
