@@ -42,7 +42,7 @@ const starter = async() => {
         if(requestFlag.data === true) {
             Stream()
         }
-    }, 5000);
+    }, 10000);
     setInterval(() => fetchAllFees(), 120000);
     setInterval(() => logReadyChain(), 1100);
 }

@@ -1,14 +1,16 @@
-const createMainArr = (allCoins, mainData) => {
+let { mainData } = require('../../Data')
+
+const createMainArr = (allCoins) => {
     for(let i=0; i<allCoins.length; i++) {        
-        let index = mainData.findIndex(item => item.coinName == allCoins[i].symbol)
+        let index = mainData.data.findIndex(item => item.coinName == allCoins[i].symbol)
         if(index !== -1) {
-            mainData[index].indexesInAllCoins.push(i)
+            mainData.data[index].indexesInAllCoins.push(i)
         } else {
             let obj = {
                 coinName: allCoins[i].symbol,
                 indexesInAllCoins: [i]
             }
-            mainData.push(obj)
+            mainData.data.push(obj)
         }
     }
 }

@@ -27,7 +27,7 @@ const createRequest = (config) => {
       headers: {
         'Content-Type': 'application/json',
         [header]: apiKey,
-        ...(header == 'X-MEXC-APIKEY' && {recvWindow: 15000}),
+        ...(header == 'X-MEXC-APIKEY' && {recvWindow: 9000}),
       }
     }).request({
       method,

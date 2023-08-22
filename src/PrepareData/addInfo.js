@@ -58,6 +58,11 @@ const addInfo = async(coins, num) => {
     }
     if(num == 3) {   //gateIo
         for(let i=0; i<coins.length; i++) {
+            if((coins[i].lowest_ask == '') || (coins[i].highest_bid== '')) {
+                coins.splice(i, 1)
+                i--
+                continue
+            }
             coins[i].symbol = coins[i].currency_pair.replace(/_/g, "")
             coins[i].askPrice = coins[i].lowest_ask
             coins[i].bidPrice = coins[i].highest_bid
@@ -157,16 +162,21 @@ const addInfo = async(coins, num) => {
     }
     if(num == 9) {   //Huobi
         coins = coins.data
-        for(let i=0; i<coins.length; i++) {
-            coins[i].symbol = coins[i].symbol.toUpperCase()
-            coins[i].askPrice = coins[i].ask
-            coins[i].bidPrice = coins[i].bid
-            if(huobiBlackList.includes(coins[i].symbol)) {
-                coins.splice(i, 1)
-                i--
-            }
-        }  
-        changeHuobi(coins)
+        if(coins) {
+            for(let i=0; i<coins.length; i++) {
+                coins[i].symbol = coins[i].symbol.toUpperCase()
+                coins[i].askPrice = coins[i].ask
+                coins[i].bidPrice = coins[i].bid
+                if(huobiBlackList.includes(coins[i].symbol)) {
+                    coins.splice(i, 1)
+                    i--
+                }
+            }  
+            changeHuobi(coins)
+        } else {
+            console.log('нету ответа с huobi')
+        }
+        
     }
     if(num == 10) {   //Poloniex
         for(let i=0; i<coins.length; i++) {

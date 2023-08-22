@@ -10,9 +10,15 @@ const findSpred = (allCoins, mainData) => {
             let askPrice = Number(allCoins[indexesArr[j]].askPrice)
             let bidPrice = Number(allCoins[indexesArr[j]].bidPrice)
 
-            for(let n=j+1; n<indexesArr.length; n++) {                 
+            for(let n=j+1; n<indexesArr.length; n++) { 
+                if(!allCoins[indexesArr[n]]) {
+                    console.log(indexesArr)
+                    console.log(n)
+                    console.log(indexesArr[n])
+                    console.log(allCoins.length)
+                }
                 let NextaskPrice = Number(allCoins[indexesArr[n]].askPrice)
-                let NextbidPrice = Number(allCoins[indexesArr[n]].bidPrice)
+                let NextbidPrice = Number(allCoins[indexesArr[n]].bidPrice)     
 
                 let firstSpred = NextbidPrice*100/askPrice - 100         
                 if(firstSpred > 0) {                               // в случае если цена из индекса 3360 больше чем из индекса 0

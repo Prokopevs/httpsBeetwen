@@ -26,67 +26,73 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         const extraFeeSell = extraFeeFunc(sellExchangeName, requestedCoinsArr[i], 'sell')
         const sumExtraFee = Number(extraFeeBuy) + Number(extraFeeSell)
 
-        for(let j=0; j<asks.length; j++) {
-            const priceInAskArr = Number(asks[j][0])
-            const qtyInAskArr = Number(asks[j][1])
-
-            for(let k=0; k<bids.length; k++) { 
-                const priceInBidsArr = Number(bids[k][0])
-                const qtyInBidsArr = Number(bids[k][1])
-
-                const spred = priceInBidsArr*100/priceInAskArr-100
-
-                if(spred >= 0.3+sumExtraFee) {
-                    // случай 1
-                    if(qtyInAskArr < qtyInBidsArr) {
-                        const left = qtyInBidsArr-qtyInAskArr
-                        
-                        const newBidsElem = [bids[k][0], String(left)]
-                        bids.splice(k, 1, newBidsElem)
-                        askCount++                                          // исполнило аску
-                        
-                        const sum = priceInAskArr*qtyInAskArr               
-                        sumUSDT += sum                                        // для avarageBuyPrice
-                        sumSellUSDT += priceInBidsArr*qtyInAskArr            // для avarageSellPrice
-                        sumQty += qtyInAskArr                               // avarageBuyPrice и avarageSellPrice делим на sumQty
-                        
-                        generalUSDTSpred = generalUSDTSpred + (sum*spred/100)   // сколько можно заработать
-                        
-                        const obj = {spred, priceInAskArr, qty: qtyInAskArr, priceInBidsArr, sum, left}
-                        buyArr.push(obj)
-                        break
-                    }
-
-                    // случай 2 и 3
-                    if(qtyInBidsArr <= qtyInAskArr) {
-                        const left = qtyInAskArr - qtyInBidsArr
-                        
-                        if(left !== 0) {
-                            const newAskElem = [asks[j][0], String(left)]
-                            asks.splice(j, 1, newAskElem)
-                            j--
-                        } else {
-                            askCount++
+        // try {
+            for(let j=0; j<asks.length; j++) {
+                const priceInAskArr = Number(asks[j][0])
+                const qtyInAskArr = Number(asks[j][1])
+    
+                for(let k=0; k<bids.length; k++) { 
+                    const priceInBidsArr = Number(bids[k][0])
+                    const qtyInBidsArr = Number(bids[k][1])
+    
+                    const spred = priceInBidsArr*100/priceInAskArr-100
+    
+                    if(spred >= 0.3+sumExtraFee) {
+                        // случай 1
+                        if(qtyInAskArr < qtyInBidsArr) {
+                            const left = qtyInBidsArr-qtyInAskArr
+                            
+                            const newBidsElem = [bids[k][0], String(left)]
+                            bids.splice(k, 1, newBidsElem)
+                            askCount++                                          // исполнило аску
+                            
+                            const sum = priceInAskArr*qtyInAskArr               
+                            sumUSDT += sum                                        // для avarageBuyPrice
+                            sumSellUSDT += priceInBidsArr*qtyInAskArr            // для avarageSellPrice
+                            sumQty += qtyInAskArr                               // avarageBuyPrice и avarageSellPrice делим на sumQty
+                            
+                            generalUSDTSpred = generalUSDTSpred + (sum*spred/100)   // сколько можно заработать
+                            
+                            const obj = {spred, priceInAskArr, qty: qtyInAskArr, priceInBidsArr, sum, left}
+                            buyArr.push(obj)
+                            break
                         }
-                        
-                        bids.splice(k, 1)
-                        bidsCount++
-                        
-                        const sum = priceInAskArr*qtyInBidsArr
-                        sumUSDT += sum
-                        sumSellUSDT += priceInBidsArr*qtyInBidsArr
-                        sumQty += qtyInBidsArr
-                        
-                        generalUSDTSpred = generalUSDTSpred + (sum*spred/100)
-                        
-                        const obj = {spred, priceInAskArr, qty: qtyInBidsArr, priceInBidsArr, sum, left: 0}
-
-                        buyArr.push(obj)
-                        break
+    
+                        // случай 2 и 3
+                        if(qtyInBidsArr <= qtyInAskArr) {
+                            const left = qtyInAskArr - qtyInBidsArr
+                            
+                            if(left !== 0) {
+                                const newAskElem = [asks[j][0], String(left)]
+                                asks.splice(j, 1, newAskElem)
+                                j--
+                            } else {
+                                askCount++
+                            }
+                            
+                            bids.splice(k, 1)
+                            bidsCount++
+                            
+                            const sum = priceInAskArr*qtyInBidsArr
+                            sumUSDT += sum
+                            sumSellUSDT += priceInBidsArr*qtyInBidsArr
+                            sumQty += qtyInBidsArr
+                            
+                            generalUSDTSpred = generalUSDTSpred + (sum*spred/100)
+                            
+                            const obj = {spred, priceInAskArr, qty: qtyInBidsArr, priceInBidsArr, sum, left: 0}
+    
+                            buyArr.push(obj)
+                            break
+                        }
                     }
                 }
-            }
-        }
+            } 
+        // } catch (error) {
+        //     console.log(error)
+        //     console.log('ошибка здесь')
+        // }
+        
 
         //---------------------BlackList 1-------------------------//
         if(status === 'ordinary') { // спатус ordinary когда идут простые запросы и в них проверяем что профит нужен больше 1

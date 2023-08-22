@@ -8,7 +8,7 @@ const collectAllCoins = () => {
     allCoins.data = [...binanceArr.data, ...mexcArr.data, ...bybitArr.data, ...gateIoArr.data, ...coinbaseArr.data, ...lbankArr.data, ...kucoinArr.data, ...okxArr.data, ...bitgetArr.data, ...huobiArr.data, ...poloniexArr.data, ...bitmartArr.data, ...uniswapArr.data]
     if (flag.value === 1) {
         mainData.data = []
-        createMainArr(allCoins.data, mainData.data)
+        createMainArr(allCoins.data)
         console.log("по новому создаю mainData")
         console.log("ловись связка большая и маленькая")
         flag.value = 0
