@@ -10,50 +10,54 @@ const bot = new Telegraf(botToken);
 const georgeId = 518918480
 
 bot.on('callback_query', async (ctx) => {
-    const dataArr = ctx.update.callback_query.message.text.split('\n')
+    try{
+        const dataArr = ctx.update.callback_query.message.text.split('\n')
 
-    const parts = dataArr[0].split('/')[1].split('[')[1].split(']')[0].split('|')
-    const names = parts.map(part => part.trim()) // ['babydogecoin', 'babydogecoin']
+        const parts = dataArr[0].split('/')[1].split('[')[1].split(']')[0].split('|')
+        const names = parts.map(part => part.trim()) // ['babydogecoin', 'babydogecoin']
 
-    const nickName = ctx.update.callback_query.data
-    const callback_dataArr = nickName.split('_') // [XETAUSDT, gateIo, bitget, f]
-    const hedging = callback_dataArr[3] === 't' ? true : false
+        const nickName = ctx.update.callback_query.data
+        const callback_dataArr = nickName.split('_') // [XETAUSDT, gateIo, bitget, f]
+        const hedging = callback_dataArr[3] === 't' ? true : false
 
-    let baseAsset = dataArr[0].split('/')[0].slice(2)
-    if(baseAsset[0] === ' ') baseAsset = baseAsset.slice(1)
-    const quoteAsset = dataArr[0].split('/')[1].split(' ')[0]
+        let baseAsset = dataArr[0].split('/')[0].slice(2)
+        if(baseAsset[0] === ' ') baseAsset = baseAsset.slice(1)
+        const quoteAsset = dataArr[0].split('/')[1].split(' ')[0]
 
-    const dateTime = format(new Date(), 'HH:mm:ss')
+        const dateTime = format(new Date(), 'HH:mm:ss')
 
-    const finalObj = {
-        symbol: callback_dataArr[0],
-        baseAsset: baseAsset,
-        quoteAsset: quoteAsset,
-        buyFrom: callback_dataArr[1],
-        sellTo: callback_dataArr[2],
-        hedging: hedging,
-        nickName: nickName.slice(0, -2),
-        names: names,
-        time: dateTime,
-    } 
+        const finalObj = {
+            symbol: callback_dataArr[0],
+            baseAsset: baseAsset,
+            quoteAsset: quoteAsset,
+            buyFrom: callback_dataArr[1],
+            sellTo: callback_dataArr[2],
+            hedging: hedging,
+            nickName: nickName.slice(0, -2),
+            names: names,
+            time: dateTime,
+        } 
 
-    const chain = await fetchOrderBookMain.fetchOrderBook([finalObj], 'refetch')
-    const NewMessageStr = createStrForTG(chain)
-    const messageId = ctx.update.callback_query.message.message_id
-    const chatId = ctx.update.callback_query.message.chat.id
+        const chain = await fetchOrderBookMain.fetchOrderBook([finalObj], 'refetch')
+        const NewMessageStr = createStrForTG(chain)
+        const messageId = ctx.update.callback_query.message.message_id
+        const chatId = ctx.update.callback_query.message.chat.id
 
-    bot.telegram.editMessageText(chatId, messageId, null, NewMessageStr, {
-        reply_markup: {
-            inline_keyboard:
-            [
+        bot.telegram.editMessageText(chatId, messageId, null, NewMessageStr, {
+            reply_markup: {
+                inline_keyboard:
                 [
-                    {text: 'обновить', callback_data: nickName}
+                    [
+                        {text: 'обновить', callback_data: nickName}
+                    ]
                 ]
-            ]
-        },
-        parse_mode: 'Markdown'
-        })
-    ctx.answerCbQuery()
+            },
+            parse_mode: 'Markdown'
+            })
+        ctx.answerCbQuery()
+    } catch {
+        console.log('не получилось обновить')
+    }
 })
 
 // на сообщение CBL очистит черный лист

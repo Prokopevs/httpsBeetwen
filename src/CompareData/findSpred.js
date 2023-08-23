@@ -38,6 +38,7 @@ const findSpred = (allCoins, mainData) => {
 const checkPercent = (spred, coinBuy, coinSell) => {
     let percent = 0.4
     if((coinBuy.exchangeType==='DEX') || (coinSell.exchangeType==='DEX')) {
+        console.log('here')
         percent = 1.5
     }
 

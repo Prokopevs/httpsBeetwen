@@ -1,4 +1,4 @@
-let { flag } = require('./ExchangesArray')
+let { flag, bitmartArr } = require('./ExchangesArray')
 const { fetchExchangeInfo } = require('./ExtraFetch/fetchExchangeInfo')
 
 const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, margin) => {
@@ -65,7 +65,14 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
         }
     }
     
-    if(localFlag === 1) oldCoinsArr.data = [...coins]
+    if(localFlag === 1) {
+        oldCoinsArr.data = [...coins]
+
+        if(exchangeName === 'bitmart') {
+            console.log('oldCoinsArr.data.length= ' + oldCoinsArr.data.length)
+            console.log('bitmartArr.data.length= ' + bitmartArr.data.length)
+        }
+    }
     // console.log(oldCoinsArr.data)
 }
 

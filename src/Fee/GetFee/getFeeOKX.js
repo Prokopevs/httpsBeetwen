@@ -16,6 +16,7 @@ const getFeeOKX = async () => {
         const coinItem = feeArr.find((item) => item.coin === ccy)
         let NewNetwork = data[i].chain.split('-').slice(1).join('-') //ERC20
         if(NewNetwork === 'BSC') NewNetwork = 'BSC(BEP20)'
+        if(NewNetwork === 'POLYGON') NewNetwork = 'POLYGON/MATIC'
 
         if(coinItem !== undefined) {
             const networkObj = {
