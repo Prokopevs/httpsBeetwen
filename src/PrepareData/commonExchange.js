@@ -64,11 +64,10 @@ const commonExchange = async (coins, oldCoinsArr, exchangeName, exchangeInfo, ma
             break
         }
     }
-    
     if(localFlag === 1) {
         oldCoinsArr.data = [...coins]
-
         if(exchangeName === 'bitmart') {
+            console.log('3') // УБРАТЬ
             console.log('oldCoinsArr.data.length= ' + oldCoinsArr.data.length)
             console.log('bitmartArr.data.length= ' + bitmartArr.data.length)
         }

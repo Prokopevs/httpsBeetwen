@@ -7,6 +7,7 @@ let { allCoins, mainData } = require('../../Data')
 const collectAllCoins = () => {
     if (flag.value === 1) {
         console.log('--------------')
+        console.log('2 collectAllCoins') // УБРАТЬ
         console.log(allCoins.data.length)
         console.log(bitmartArr.data.length)
         console.log('--------------')
@@ -14,6 +15,7 @@ const collectAllCoins = () => {
     allCoins.data = [...binanceArr.data, ...mexcArr.data, ...bybitArr.data, ...gateIoArr.data, ...coinbaseArr.data, ...lbankArr.data, ...kucoinArr.data, ...okxArr.data, ...bitgetArr.data, ...huobiArr.data, ...poloniexArr.data, ...bitmartArr.data]
     if (flag.value === 1) {
         console.log('--------------')
+        console.log('allCoins') // УБРАТЬ
         console.log(allCoins.data.length)
         console.log('--------------')
         mainData.data = []

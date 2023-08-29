@@ -2,8 +2,8 @@ const { lbankFeeObj } = require('../Fee/feeData')
 let { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi, changePoloniex, changeBitMart } = require('./differentExchanges')
 let { mexcBlackList, binanceBlackList, bybitBlackList, gateIoBlackList, lbankBlackList, kucoinBlackList, kucoinArr, huobiBlackList, bitgetBlackList, poloniexBlackList, bitmartBlackList, bitmartArr, uniswapArr, flag } = require('./ExchangesArray')
 
-const addInfo = async(coins, num) => {
-    if(num == 0) {  //binance
+const addInfo = async (coins, num) => {
+    if(num === 0) {  //binance
         for(let i=0; i<coins.length; i++) {
             if(coins[i].askPrice == 0) {
                 coins.splice(i, 1)
@@ -16,9 +16,9 @@ const addInfo = async(coins, num) => {
                 continue
             }
         }
-        changeBinance(coins)
+        await changeBinance(coins)
     }
-    if(num == 1) {   //mexc
+    if(num === 1) {   //mexc
         for(let i=0; i<coins.length; i++) {
             if(mexcBlackList.includes(coins[i].symbol)) {
                 coins.splice(i, 1)
@@ -32,9 +32,9 @@ const addInfo = async(coins, num) => {
                 continue
             }
         }
-        changeMexc(coins)
+        await changeMexc(coins)
     }
-    if(num == 2) {   //bybit
+    if(num === 2) {   //bybit
         coins = coins.result.list
         for(let i=0; i<coins.length; i++) {
             coins[i].askPrice = coins[i].ask1Price
@@ -54,9 +54,9 @@ const addInfo = async(coins, num) => {
             }
         }
         const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
-        changeBybit(sortedArray)
+        await changeBybit(sortedArray)
     }
-    if(num == 3) {   //gateIo
+    if(num === 3) {   //gateIo
         for(let i=0; i<coins.length; i++) {
             if((coins[i].lowest_ask == '') || (coins[i].highest_bid== '')) {
                 coins.splice(i, 1)
@@ -79,9 +79,9 @@ const addInfo = async(coins, num) => {
             }
         }
         const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
-        changeGateIo(sortedArray)
+        await changeGateIo(sortedArray)
     }
-    if(num == 4) {   //coinbase
+    if(num === 4) {   //coinbase
         // for(let i=0; i<coins.length; i++) {
         //     const symbolArr = coins[i].product_id.split('-')
         //     if(symbolArr[1] === 'USDC') {
@@ -97,7 +97,7 @@ const addInfo = async(coins, num) => {
         // const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
         // changeCoinbase(sortedArray)
     }
-    if(num == 5) {   //LBank
+    if(num === 5) {   //LBank
         coins = coins.data
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].symbol.replace(/_/g, "").toUpperCase()
@@ -115,9 +115,9 @@ const addInfo = async(coins, num) => {
                 continue
             }
         }  
-        changeLBank(coins)
+        await changeLBank(coins)
     }
-    if(num == 6) {   //KuCoin
+    if(num === 6) {   //KuCoin
         coins = coins.data.ticker
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].symbol.replace(/-/g, "")
@@ -137,18 +137,18 @@ const addInfo = async(coins, num) => {
             }
         }  
         const sortedArray = coins.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
-        changeKuCoin(sortedArray)
+        await changeKuCoin(sortedArray)
     }
-    if(num == 7) {   //OKX
+    if(num === 7) {   //OKX
         coins = coins.data
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].instId.replace(/-/g, "")
             coins[i].askPrice = coins[i].askPx
             coins[i].bidPrice = coins[i].bidPx
         }  
-        changeOKX(coins)
+        await changeOKX(coins)
     }
-    if(num == 8) {   //Bitget
+    if(num === 8) {   //Bitget
         coins = coins.data
         for(let i=0; i<coins.length; i++) {
             coins[i].askPrice = coins[i].sellOne
@@ -158,9 +158,9 @@ const addInfo = async(coins, num) => {
                 i--
             }
         }  
-        changeBitget(coins)
+        await changeBitget(coins)
     }
-    if(num == 9) {   //Huobi
+    if(num === 9) {   //Huobi
         coins = coins.data
         if(coins) {
             for(let i=0; i<coins.length; i++) {
@@ -172,13 +172,13 @@ const addInfo = async(coins, num) => {
                     i--
                 }
             }  
-            changeHuobi(coins)
+            await changeHuobi(coins)
         } else {
             console.log('нету ответа с huobi')
         }
         
     }
-    if(num == 10) {   //Poloniex
+    if(num === 10) {   //Poloniex
         for(let i=0; i<coins.length; i++) {
             coins[i].symbol = coins[i].symbol.replace(/_/g, "")
             coins[i].askPrice = coins[i].ask
@@ -188,9 +188,9 @@ const addInfo = async(coins, num) => {
                 i--
             }
         }  
-        changePoloniex(coins)
+        await changePoloniex(coins)
     }
-    if(num == 11) {   //BitMart
+    if(num === 11) {   //BitMart
         coins = coins.data.tickers
         if(coins == undefined) console.log(coins)
         for(let i=0; i<coins.length; i++) {
@@ -210,9 +210,9 @@ const addInfo = async(coins, num) => {
                 }
             }
         }  
-        changeBitMart(coins)
+        await changeBitMart(coins)
     }
-    if(num == 12) {   //Uniswap
+    if(num === 12) {   //Uniswap
         if(uniswapArr.data.length) {
             const oldLength = uniswapArr.data.length
             const newLength = coins.length

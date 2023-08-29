@@ -4,52 +4,52 @@ let { binanceExchangeInfo, mexcExchangeInfo, bybitExchangeInfo, gateIoExchangeIn
 let { binanceMargin, gateIoMargin, bybitMargin, kucoinMargin, okxMargin, bitgetMargin, huobiMargin, poloniexMargin, bitmartMargin } = require('.././Margin/marginData')
 
 
-const changeBinance = (coins) => {
-    commonExchange(coins, binanceArr, 'binance', binanceExchangeInfo.exchangeData, binanceMargin.marginData)
+const changeBinance = async (coins) => {
+    await commonExchange(coins, binanceArr, 'binance', binanceExchangeInfo.exchangeData, binanceMargin.marginData)
 }
 
-const changeMexc = (coins) => {
-    commonExchange(coins, mexcArr, 'mexc', mexcExchangeInfo.exchangeData, [])
+const changeMexc = async (coins) => {
+    await commonExchange(coins, mexcArr, 'mexc', mexcExchangeInfo.exchangeData, [])
 }
 
-const changeBybit = (coins) => {
-    commonExchange(coins, bybitArr, 'bybit', bybitExchangeInfo.exchangeData, bybitMargin.marginData)
+const changeBybit = async (coins) => {
+    await commonExchange(coins, bybitArr, 'bybit', bybitExchangeInfo.exchangeData, bybitMargin.marginData)
 }
 
-const changeGateIo = (coins) => {
-    commonExchange(coins, gateIoArr, 'gateIo', gateIoExchangeInfo.exchangeData, gateIoMargin.marginData)
+const changeGateIo = async (coins) => {
+    await commonExchange(coins, gateIoArr, 'gateIo', gateIoExchangeInfo.exchangeData, gateIoMargin.marginData)
 }
 
-const changeCoinbase = (coins) => {
-    // commonExchange(coins, coinbaseArr, 'coinbase', coinbaseExchangeInfo.exchangeData, [])
+const changeCoinbase = async (coins) => {
+    // await commonExchange(coins, coinbaseArr, 'coinbase', coinbaseExchangeInfo.exchangeData, [])
 }
 
-const changeLBank = (coins) => {
-    commonExchange(coins, lbankArr, 'lbank', lbankExchangeInfo.exchangeData, [])
+const changeLBank = async (coins) => {
+    await commonExchange(coins, lbankArr, 'lbank', lbankExchangeInfo.exchangeData, [])
 }
 
-const changeKuCoin = (coins) => {
-    commonExchange(coins, kucoinArr, 'kucoin', kucoinExchangeInfo.exchangeData, kucoinMargin.marginData)
+const changeKuCoin = async (coins) => {
+    await commonExchange(coins, kucoinArr, 'kucoin', kucoinExchangeInfo.exchangeData, kucoinMargin.marginData)
 }
 
-const changeOKX = (coins) => {
-    commonExchange(coins, okxArr, 'okx', okxExchangeInfo.exchangeData, okxMargin.marginData)
+const changeOKX = async (coins) => {
+    await commonExchange(coins, okxArr, 'okx', okxExchangeInfo.exchangeData, okxMargin.marginData)
 }
 
-const changeBitget = (coins) => {
-    commonExchange(coins, bitgetArr, 'bitget', bitgetExchangeInfo.exchangeData, bitgetMargin.marginData)
+const changeBitget = async (coins) => {
+    await commonExchange(coins, bitgetArr, 'bitget', bitgetExchangeInfo.exchangeData, bitgetMargin.marginData)
 }
 
-const changeHuobi = (coins) => {
-    commonExchange(coins, huobiArr, 'huobi', huobiExchangeInfo.exchangeData, huobiMargin.marginData)
+const changeHuobi = async (coins) => {
+    await commonExchange(coins, huobiArr, 'huobi', huobiExchangeInfo.exchangeData, huobiMargin.marginData)
 }
 
-const changePoloniex = (coins) => {
-    commonExchange(coins, poloniexArr, 'poloniex', poloniexExchangeInfo.exchangeData, poloniexMargin.marginData)
+const changePoloniex = async (coins) => {
+    await commonExchange(coins, poloniexArr, 'poloniex', poloniexExchangeInfo.exchangeData, poloniexMargin.marginData)
 }
 
-const changeBitMart = (coins) => {
-    commonExchange(coins, bitmartArr, 'bitmart', bitmartExchangeInfo.exchangeData, bitmartMargin.marginData)
+const changeBitMart = async (coins) => {
+    await commonExchange(coins, bitmartArr, 'bitmart', bitmartExchangeInfo.exchangeData, bitmartMargin.marginData)
 }
 
 module.exports = { changeBinance, changeMexc, changeBybit, changeGateIo, changeCoinbase, changeLBank, changeKuCoin, changeOKX, changeBitget, changeHuobi, changePoloniex, changeBitMart}

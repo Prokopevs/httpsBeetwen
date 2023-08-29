@@ -11,25 +11,27 @@ const { getPoolsUniswap } = require('./Dex/Uniswap/getPoolsUniswap')
 
 // let time = 0
 
-const Stream = () => {
+const Stream = async () => {
+    requestFlag.data = false
     const requests = createRequest()
-    Promise.allSettled(requests)
-        .then(results => { 
-            const start= new Date().getTime();
-            results.forEach((result, num) => {
-                if (result.status == "fulfilled") {
-                    addInfo(result.value, num)
+    await Promise.allSettled(requests)
+        .then(async (results) => { 
+            const start= new Date().getTime()
+            for(let i=0; i<results.length; i++) {
+                if (results[i].status == "fulfilled") {
+                    await addInfo(results[i].value, i)
                 }
-                if (result.status == "rejected") {
-                    console.log(result.reason)
+                if (results[i].status == "rejected") {
+                    console.log(results[i].reason)
                 }
-            })
-
-            collectAllCoins()
-            // const end = new Date().getTime();
-            // time = end - start
-            // console.log(time)
+            }
         })
+       
+
+    collectAllCoins()
+    // const end = new Date().getTime();
+    // time = end - start
+    // console.log(time)
 }
 
 const starter = async() => {
@@ -38,11 +40,12 @@ const starter = async() => {
     await fetchAllFees()
     mergeAllFeesAndExchangeInfo()
     
-    setInterval(() => {
+    setInterval(async () => {
         if(requestFlag.data === true) {
-            Stream()
+            await Stream()
         }
-    }, 10000);
+    }, 10000)
+
     setInterval(() => fetchAllFees(), 120000);
     setInterval(() => logReadyChain(), 1100);
 }

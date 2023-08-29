@@ -107,7 +107,7 @@ const compareAsksAndBids = (orders, requestedCoinsArr, status) => {
         //----------------------------------------------------------//
         const avarageBuyPrice = (sumUSDT/sumQty)
         const avarageSellPrice = (sumSellUSDT/sumQty)
-        if(buyArr[buyArr.length-1]?.left == 0) {
+        if(buyArr[buyArr.length-1]?.left == 0) { // закончился бид 
             askCount = askCount+1
             sumUSDTInSellEXchange = sumUSDT
         } else {

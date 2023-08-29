@@ -30,9 +30,8 @@ const findSpred = (allCoins, mainData) => {
             }
         }
     }
-    if(requestFlag.data === true) {
-        accumulate()
-    }
+  
+    accumulate()
 }
 
 const checkPercent = (spred, coinBuy, coinSell) => {

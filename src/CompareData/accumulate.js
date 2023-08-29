@@ -27,8 +27,9 @@ const accumulate = () => {
     currentMilkyArr.splice(0, currentMilkyArr.length)
 
     if(preBuyArr.length) {
-        requestFlag.data = false
         fetchOrderBookMain.fetchOrderBook(preBuyArr, 'ordinary')
+    } else {
+        requestFlag.data = true
     }
 
     clear5minBlackArr()
